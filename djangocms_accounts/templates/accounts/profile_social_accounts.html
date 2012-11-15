@@ -1,0 +1,23 @@
+{% extends 'accounts/base.html' %}
+{% load cms_tags menu_tags sekizai_tags %}
+{% load url from future %}
+
+{% block content %}
+<h3>Associated Accounts</h3>
+<ul>
+{% if request.user.has_usable_password %}<li>regular password login ({{ request.user.email }}) - <a href="{% url 'accounts_change_password' %}">change password</a></li>{% endif %}
+{% for backend in social_auth.associated %}
+    <li><span class="btn-auth btn-{{ backend.provider }} large">connected to <strong>{{ backend.provider }}</strong> as <strong>{{ backend.uid }}</strong></span> <a href="{% url 'socialauth_disconnect' backend.provider %}">disconnect</a></li>
+{% endfor %}
+</ul>
+
+<h3>Associate other Accounts</h3>
+<ul>
+	{% if not request.user.has_usable_password %}<li>You don't have a password for {{ request.user.email }} yet. <a href="{% url 'accounts_create_password' %}">create a password now</a></li>{% endif %}
+	{% for backend in social_auth.not_associated %}
+		<li>{% include 'accounts/inc/social_auth_connect_link.html' %}</li>
+	{% endfor %}
+</ul>
+{% include 'accounts/inc/social_auth_styles.html' %}
+
+{% endblock %}

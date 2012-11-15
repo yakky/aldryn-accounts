@@ -41,3 +41,9 @@ class ChangePasswordForm(forms.Form):
     def save(self, user):
         user.set_password(self.cleaned_data["password_new"])
         user.save()
+
+
+class CreatePasswordForm(ChangePasswordForm):
+    def __init__(self, *args, **kwargs):
+        super(CreatePasswordForm, self).__init__(*args, **kwargs)
+        del self.fields['password_current']

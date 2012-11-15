@@ -2,6 +2,7 @@
 from class_based_auth_views.utils import default_redirect
 import class_based_auth_views.views
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import get_current_site
 from django.core import urlresolvers
 from django.conf import settings
@@ -9,9 +10,10 @@ from django.core.mail import send_mail
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django.views.generic import FormView, TemplateView
 from djangocms_accounts import conf, signals
-from djangocms_accounts.forms import EmailAuthenticationForm, ChangePasswordForm
+from djangocms_accounts.forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm
 from django.utils.translation import ugettext_lazy as _
 import password_reset.views
 
@@ -142,3 +144,15 @@ class ChangePasswordView(FormView):
         subject = "".join(subject.splitlines())
         message = render_to_string(self.email_subject_template_name, ctx)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+
+
+class CreatePasswordView(ChangePasswordView):
+    form_class = CreatePasswordForm
+
+
+class ProfileAssociationsView(TemplateView):
+    template_name = 'accounts/profile_social_accounts.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProfileAssociationsView, self).dispatch(*args, **kwargs)

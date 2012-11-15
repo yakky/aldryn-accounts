@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import patterns, include, url
-from djangocms_accounts.views import LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView
-from djangocms_accounts.views import PasswordResetChangeView, PasswordResetChangeDoneView, ChangePasswordView
-from djangocms_accounts.views import ProfileView
-#from social_auth.views import auth, complete, disconnect
+from djangocms_accounts.views import LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,\
+    ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView, ChangePasswordView, \
+    ProfileView, CreatePasswordView
+import social_auth.views
 
 
 
@@ -18,7 +18,9 @@ urlpatterns = patterns('',
 
 #    url(r"^signup/$", SignupView.as_view(), name="accounts_signup"),
     url(r"^me/$", ProfileView.as_view(), name="accounts_profile"),
+    url(r"^me/associations/$", ProfileAssociationsView.as_view(), name="accounts_profile_associations"),
     url(r"^me/password/change/$", ChangePasswordView.as_view(), name="accounts_change_password"),
+    url(r"^me/password/create/$", CreatePasswordView.as_view(), name="accounts_create_password"),
 
 #    url(r"^signup/$", SignupView.as_view(), name="account_signup"), #
 #    url(r"^confirm_email/(?P<key>\w+)/$", ConfirmEmailView.as_view(), name="account_confirm_email"),
@@ -34,10 +36,10 @@ urlpatterns = patterns('',
 #
 #
 #
-#    # Social Auth
-#    url(r'^login/(?P<backend>[^/]+)/$', auth, name='socialauth_begin'),
-#    url(r'^complete/(?P<backend>[^/]+)/$', complete, name='socialauth_complete'),
-#    url(r'^disconnect/(?P<backend>[^/]+)/$', disconnect, name='socialauth_disconnect'),
-#    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$', disconnect, name='socialauth_disconnect_individual'),
+    # Social Auth
+    url(r'^login/(?P<backend>[^/]+)/$', social_auth.views.auth, name='socialauth_begin'),
+    url(r'^complete/(?P<backend>[^/]+)/$', social_auth.views.complete, name='socialauth_complete'),
+    url(r'^disconnect/(?P<backend>[^/]+)/$', social_auth.views.disconnect, name='socialauth_disconnect'),
+    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$', social_auth.views.disconnect, name='socialauth_disconnect_individual'),
 
 )

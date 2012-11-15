@@ -12,9 +12,15 @@
 		{% if redirect_field_value %}
 		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 		{% endif %}
+		<ul>
+			{% for backend in social_auth.backends %}
+				<li>{% include 'accounts/inc/social_auth_connect_link.html' %}</li>
+			{% endfor %}
+		</ul>
 		<div class="form-actions">
 			<button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
 			<a href="{% url 'accounts_password_reset_recover' %}">{% trans "Forgot your password?" %}</a>
 		</div>
 	</form>
+	{% include 'accounts/inc/social_auth_styles.html' %}
 {% endblock %}
