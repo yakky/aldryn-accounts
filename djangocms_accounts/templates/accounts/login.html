@@ -1,0 +1,20 @@
+{% extends "accounts/base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Log in" %}{% endblock %}
+
+{% block content %}
+	<form method="POST" action="{# leave this empty so we don't loose the 'next' get parameter #}" autocapitalize="off">
+		{% csrf_token %}
+		{{ form.as_p }}
+		{% if redirect_field_value %}
+		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+		{% endif %}
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
+			<a href="{% url 'accounts_password_reset_recover' %}">{% trans "Forgot your password?" %}</a>
+		</div>
+	</form>
+{% endblock %}
