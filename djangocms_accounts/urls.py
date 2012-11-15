@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import patterns, include, url
-from djangocms_accounts.views import LoginView, LogoutView, PasswordResetRecover, PasswordResetRecoverSent, PasswordResetChange, PasswordResetChangeDone
+from djangocms_accounts.views import LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView, PasswordResetChangeView, PasswordResetChangeDoneView
 #from social_auth.views import auth, complete, disconnect
 
 
@@ -9,12 +9,12 @@ urlpatterns = patterns('',
     url(r"^login/$", LoginView.as_view(), name="accounts_login"), #
     url(r"^logout/$", LogoutView.as_view(), name="accounts_logout"),
 
-    url(r'^password/reset/$', PasswordResetRecover.as_view(), name='accounts_password_reset_recover'),
-    url(r'^password/reset/sent/(?P<signature>.+)/$', PasswordResetRecoverSent.as_view(), name='accounts_password_reset_recover_sent'),
-    url(r'^password/reset/change/(?P<token>[\w:-]+)/$', PasswordResetChange.as_view(), name='accounts_password_reset_change'),
-    url(r'^password/reset/done/$', PasswordResetChangeDone.as_view(), name='accounts_password_reset_change_done'),
+    url(r'^password/reset/$', PasswordResetRecoverView.as_view(), name='accounts_password_reset_recover'),
+    url(r'^password/reset/sent/(?P<signature>.+)/$', PasswordResetRecoverSentView.as_view(), name='accounts_password_reset_recover_sent'),
+    url(r'^password/reset/change/(?P<token>[\w:-]+)/$', PasswordResetChangeView.as_view(), name='accounts_password_reset_change'),
+    url(r'^password/reset/done/$', PasswordResetChangeDoneView.as_view(), name='accounts_password_reset_change_done'),
 
-
+#    url(r"^signup/$", SignupView.as_view(), name="accounts_signup"),
 
 
     #    url(r"^signup/$", SignupView.as_view(), name="account_signup"), #

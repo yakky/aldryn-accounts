@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 import class_based_auth_views.views
 from django.core import urlresolvers
+from djangocms_accounts.forms import EmailAuthenticationForm
 import password_reset.views
 
 
 class LoginView(class_based_auth_views.views.LoginView):
     template_name = 'accounts/login.html'
+    form_class = EmailAuthenticationForm
 
 
 class LogoutView(class_based_auth_views.views.LogoutView):
     template_name = 'accounts/logout.html'
 
 
-class PasswordResetRecover(password_reset.views.Recover):
+class PasswordResetRecoverView(password_reset.views.Recover):
     case_sensitive = False
     template_name = 'accounts/password_reset_recover.html'
     email_template_name = 'accounts/email/password_reset_recover.body.txt'
@@ -21,21 +23,22 @@ class PasswordResetRecover(password_reset.views.Recover):
 
     def send_notification(self):
         # TODO: send HTML email
-        super(PasswordResetRecover, self).send_notification()
+        super(PasswordResetRecoverView, self).send_notification()
 
     def get_success_url(self):
         return urlresolvers.reverse('accounts_password_reset_recover_sent', args=[self.mail_signature])
 
-class PasswordResetRecoverSent(password_reset.views.RecoverDone):
+class PasswordResetRecoverSentView(password_reset.views.RecoverDone):
     template_name = "accounts/password_reset_recover_sent.html"
 
 
-class PasswordResetChange(password_reset.views.Reset):
+class PasswordResetChangeView(password_reset.views.Reset):
     template_name = 'accounts/password_reset_change.html'
 
     def get_success_url(self):
         return urlresolvers.reverse('accounts_password_reset_change_done')
 
 
-class PasswordResetChangeDone(password_reset.views.ResetDone):
+class PasswordResetChangeDoneView(password_reset.views.ResetDone):
     template_name = 'accounts/password_reset_change_done.html'
+
