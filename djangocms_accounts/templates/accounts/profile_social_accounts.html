@@ -1,11 +1,11 @@
 {% extends 'accounts/base.html' %}
-{% load cms_tags menu_tags sekizai_tags %}
+{% load cms_tags menu_tags sekizai_tags accounts_tags %}
 {% load url from future %}
 
 {% block content %}
 <h3>Associated Accounts</h3>
 <ul>
-{% if request.user.has_usable_password %}<li>regular password login ({{ request.user.email }}) - <a href="{% url 'accounts_change_password' %}">change password</a></li>{% endif %}
+{% if request.user.has_usable_password %}<li>regular password login (<strong>{% pretty_username %}</strong>) - <a href="{% url 'accounts_change_password' %}">change password</a></li>{% endif %}
 {% for backend in social_auth.associated %}
     <li><span class="btn-auth btn-{{ backend.provider }} large">connected to <strong>{{ backend.provider }}</strong> as <strong>{{ backend.uid }}</strong></span> <a href="{% url 'socialauth_disconnect' backend.provider %}">disconnect</a></li>
 {% endfor %}

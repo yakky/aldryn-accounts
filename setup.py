@@ -19,6 +19,8 @@ setup(
         'django-class-based-auth-views',
         'django-password-reset',
         'django-absolute',
+        'django-classy-tags',
+        'django-sekizai',
     ),
     include_package_data=True,
     zip_safe=False,

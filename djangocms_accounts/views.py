@@ -149,6 +149,13 @@ class ChangePasswordView(FormView):
 class CreatePasswordView(ChangePasswordView):
     form_class = CreatePasswordForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.has_usable_password():
+            # user who already have a password must use ChangePasswordView
+            return redirect(urlresolvers.reverse('accounts_change_password'))
+        else:
+            return super(CreatePasswordView, self).dispatch(request, *args, **kwargs)
+
 
 class ProfileAssociationsView(TemplateView):
     template_name = 'accounts/profile_social_accounts.html'
