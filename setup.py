@@ -21,6 +21,8 @@ setup(
         'django-absolute',
         'django-classy-tags',
         'django-sekizai',
+        'django-appconf',
+        'dj.chain',
     ),
     include_package_data=True,
     zip_safe=False,

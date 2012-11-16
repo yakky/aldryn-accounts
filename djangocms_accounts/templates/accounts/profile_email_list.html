@@ -1,0 +1,21 @@
+{% extends "accounts/base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Email addresses" %}{% endblock %}
+
+{% block content %}
+	<ul>
+		{% for obj in object_list %}
+			<li><p>{% if obj.is_verified %}
+					verified{% if obj.is_primary %} <strong>primary</strong>{% endif %}: <strong style="color: green;">{{ obj.email }}</strong>{% if not obj.is_primary %} <a class="btn" href="{% url 'accounts_email_make_primary' pk=obj.pk %}">make primary</a> <a class="btn" href="{% url 'accounts_email_delete' pk=obj.pk %}">delete</a>{% endif %}
+				{% else %}
+					not verified yet: <strong>{{ obj.email }}</strong> <a class="btn" href="{% url 'accounts_email_confirmation_cancel' pk=obj.pk %}">cancel</a>
+				{% endif %}
+				<small>[{{ obj.user.username }} {{ obj.user.email }} {{ obj.user.pk }}]</small>
+			</p></li>
+		{% endfor %}
+	</ul>
+	<a href="{% url 'accounts_email_create' %}">add another email address</a>
+{% endblock %}

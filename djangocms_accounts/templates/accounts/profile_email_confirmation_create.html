@@ -1,0 +1,13 @@
+{% extends "accounts/base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Add an email address" %}{% endblock %}
+
+{% block content %}
+	<form method="post" action="" spellcheck="false">{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">add it</button>
+	</form>
+{% endblock %}

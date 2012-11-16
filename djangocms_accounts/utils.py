@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import hashlib
+from django.utils.crypto import random
 
 
 def user_display(user):
@@ -14,3 +16,10 @@ def user_display(user):
         return user.pk
     else:
         return '<unknown user>'
+
+
+def random_token(extra=None, hash_func=hashlib.sha256):
+    if extra is None:
+        extra = []
+    bits = extra + [str(random.getrandbits(512))]
+    return hash_func("".join(bits)).hexdigest()

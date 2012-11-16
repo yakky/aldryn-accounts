@@ -17,5 +17,6 @@
 			<li>You don't have a password yet. <a href="{% url 'accounts_create_password' %}">create a password now</a>.</li>
 		{% endif %}
 		<li><a href="{% url 'accounts_profile_associations' %}">social accounts</a></li>
+		<li><a href="{% url 'accounts_email_list' %}">emails</a></li>
 	</ul>
 {% endblock %}

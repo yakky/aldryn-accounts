@@ -2,7 +2,7 @@
 from django.conf.urls.defaults import patterns, include, url
 from djangocms_accounts.views import LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,\
     ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView, ChangePasswordView, \
-    ProfileView, CreatePasswordView
+    ProfileView, CreatePasswordView, ProfileEmailListView, ProfileEmailConfirmationCreateView, ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView, ConfirmEmailView
 import social_auth.views
 
 
@@ -16,11 +16,19 @@ urlpatterns = patterns('',
     url(r'^password/reset/change/(?P<token>[\w:-]+)/$', PasswordResetChangeView.as_view(), name='accounts_password_reset_change'),
     url(r'^password/reset/done/$', PasswordResetChangeDoneView.as_view(), name='accounts_password_reset_change_done'),
 
-#    url(r"^signup/$", SignupView.as_view(), name="accounts_signup"),
+    url(r"^email/confirm/(?P<key>\w+)/$", ConfirmEmailView.as_view(), name="accounts_confirm_email"),
+
+    #    url(r"^signup/$", SignupView.as_view(), name="accounts_signup"),
     url(r"^me/$", ProfileView.as_view(), name="accounts_profile"),
     url(r"^me/associations/$", ProfileAssociationsView.as_view(), name="accounts_profile_associations"),
     url(r"^me/password/change/$", ChangePasswordView.as_view(), name="accounts_change_password"),
     url(r"^me/password/create/$", CreatePasswordView.as_view(), name="accounts_create_password"),
+
+    url(r"^me/emails/$", ProfileEmailListView.as_view(), name="accounts_email_list"),
+    url(r"^me/email/add/$", ProfileEmailConfirmationCreateView.as_view(), name="accounts_email_create"),
+    url(r"^me/email/confirmation/(?P<pk>\d+)/cancel/$", ProfileEmailConfirmationCancelView.as_view(), name="accounts_email_confirmation_cancel"),
+    url(r"^me/email/(?P<pk>\d+)/delete/$", ProfileEmailDeleteView.as_view(), name="accounts_email_delete"),
+    url(r"^me/email/(?P<pk>\d+)/make_primary/$", ProfileEmailMakePrimaryView.as_view(), name="accounts_email_make_primary"),
 
 #    url(r"^signup/$", SignupView.as_view(), name="account_signup"), #
 #    url(r"^confirm_email/(?P<key>\w+)/$", ConfirmEmailView.as_view(), name="account_confirm_email"),

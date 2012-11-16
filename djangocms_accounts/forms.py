@@ -2,11 +2,11 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from django import forms
+from djangocms_accounts.models import EmailAddress
 
 
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.CharField(label=_("Email"), max_length=100)
-
 
 
 class ChangePasswordForm(forms.Form):
@@ -47,3 +47,8 @@ class CreatePasswordForm(ChangePasswordForm):
     def __init__(self, *args, **kwargs):
         super(CreatePasswordForm, self).__init__(*args, **kwargs)
         del self.fields['password_current']
+
+
+class EmailForm(forms.Form):
+    email = forms.EmailField(label=_("Email"), required=True)
+
