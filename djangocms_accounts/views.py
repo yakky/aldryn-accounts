@@ -16,7 +16,7 @@ from django.views.generic import FormView, TemplateView, ListView, DeleteView, U
 from django.views.generic.base import TemplateResponseMixin
 from djangocms_accounts import signals
 from djangocms_accounts.conf import settings
-from djangocms_accounts.forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm
+from djangocms_accounts.forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm
 from django.utils.translation import ugettext_lazy as _
 import password_reset.views
 from djangocms_accounts.models import EmailAddress, EmailConfirmation
@@ -34,6 +34,7 @@ class LogoutView(class_based_auth_views.views.LogoutView):
 
 
 class PasswordResetRecoverView(password_reset.views.Recover):
+    form_class = PasswordRecoveryForm
     case_sensitive = False
     template_name = 'accounts/password_reset_recover.html'
     email_template_name = 'accounts/email/password_reset_recover.body.txt'

@@ -50,6 +50,9 @@ class EmailAddress(models.Model):
         verbose_name = _("email address")
         verbose_name_plural = _("email addresses")
 
+    def clean(self):
+        self.email = self.email.lower()
+
     def __unicode__(self):
         return u"%s (%s)" % (self.email, self.user)
 
@@ -95,6 +98,9 @@ class EmailConfirmation(models.Model):
 
     def __unicode__(self):
         return u"confirmation for %s (%s)" % (self.email, self.user)
+
+    def clean(self):
+        self.email = self.email.lower()
 
     def key_expired(self):
         expiration_date = self.sent_at + datetime.timedelta(days=settings.ACCOUNTS_EMAIL_CONFIRMATION_EXPIRE_DAYS)

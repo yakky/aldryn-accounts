@@ -1,12 +1,33 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 from djangocms_accounts.models import EmailAddress
+import password_reset.forms
 
 
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.CharField(label=_("Email"), max_length=100)
+
+
+class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
+    def get_user_by_both(self, username):
+        """
+        we care about case with the username, but not for the email (emails are save all lowercase).
+        we check the email in the EmailAddress model (those are validated).
+        """
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            pass
+        try:
+            email = EmailAddress.objects.get(email=username.lower())
+            user = email.user
+        except EmailAddress.DoesNotExist:
+            raise forms.ValidationError(_("Sorry, this user doesn't exist."))
+        return user
 
 
 class ChangePasswordForm(forms.Form):
