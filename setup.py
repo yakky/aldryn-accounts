@@ -14,7 +14,7 @@ setup(
     author_email = 'developers@divio.ch',
     packages=find_packages(),
     install_requires = (
-        'Django>=1.3,<1.5',
+#        'Django>=1.3,<1.5',
         'django-social-auth',
         'django-class-based-auth-views',
         'django-password-reset',
