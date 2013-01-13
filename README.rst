@@ -32,12 +32,12 @@ Some assumptions:
 Installation
 ============
 
-package (make sure to use ``--extra-index-url http://...`` to use the internal divio package server::
+as package (make sure to use ``--extra-index-url http://...`` to use the internal divio package server)::
 
     pip install djangocms-accounts
 
 
-from source (whilst in the project virtualenv)::
+from source for local development (*whilst in the project virtualenv*)::
 
     git clone git@github.com:divio/djangocms-accounts.git
     cd djangocms-accounts
