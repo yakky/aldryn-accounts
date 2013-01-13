@@ -3,9 +3,9 @@
 {% load url from future %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Confirm Email" %}{% endblock %}
+{% block title_extra %}{% trans "Confirm Email" %}{% endblock %}
 
-{% block content %}
+{% block content_primary %}
 	<form method="post" action="{% url 'accounts_confirm_email' key=confirmation.key %}">
 		<legend>{% trans "Confirm Email" %}</legend>
 		<fieldset>

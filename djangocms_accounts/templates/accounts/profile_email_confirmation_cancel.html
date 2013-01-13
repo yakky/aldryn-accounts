@@ -1,11 +1,11 @@
-{% extends "accounts/base.html" %}
+{% extends "accounts/base_profile.html" %}
 
 {% load url from future %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Cancel an email confirmation" %}{% endblock %}
+{% block title_extra %}{% trans "Cancel an email confirmation" %}{% endblock %}
 
-{% block content %}
+{% block content_primary %}
 	<form method="post" action="" spellcheck="false">{% csrf_token %}
 		<p>Do you really want to cancel the confirmation request for <strong>{{ object.email }}</strong>?</p>
 		<a href="{% url 'accounts_email_list' %}">back</a>

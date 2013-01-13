@@ -15,7 +15,7 @@ class Command(BaseCommand):
                     self.stdout.info('apphook already attached to %s (%s)' % (title, site))
                 # TODO: check if they are all on the some page and issue a warning otherwise
             else:
-                page, created = Page.objects.get_or_create(site=site, reverse_id='accounts', defaults={'is_published': True})
+                page, created = Page.objects.get_or_create(site=site, reverse_id='accounts', defaults={'published': True})
                 for language in dict(settings.LANGUAGES).keys():
                     defaults = {
                         'title': 'Accounts',

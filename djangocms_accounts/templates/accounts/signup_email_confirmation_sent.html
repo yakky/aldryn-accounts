@@ -1,0 +1,12 @@
+{% extends "accounts/base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{% block title_extra %}{% trans "Confirm your email address" %}{% endblock %}
+
+{% block content_primary %}
+    <h2>{% trans "Confirm your email address" %}</h2>
+    
+    <p>{% blocktrans %}We have sent you an email to <b>{{ email }}</b> for verification. Follow the link provided to finalize the signup process.{% endblocktrans %}</p>
+{% endblock %}

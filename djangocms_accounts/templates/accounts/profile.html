@@ -1,11 +1,11 @@
-{% extends "accounts/base.html" %}
+{% extends "accounts/base_profile.html" %}
 
 {% load url from future %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Log in" %}{% endblock %}
+{% block title_extra %}{% trans "Log in" %}{% endblock %}
 
-{% block content %}
+{% block content_primary %}
 	username: {{ request.user.username }}<br/>
 	email: {{ request.user.email }}<br/>
 	name: {{ request.user.first_name }} {{ request.user.last_name }}<br/>

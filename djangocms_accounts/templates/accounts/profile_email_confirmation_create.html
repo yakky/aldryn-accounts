@@ -1,9 +1,9 @@
-{% extends "accounts/base.html" %}
+{% extends "accounts/base_profile.html" %}
 
 {% load url from future %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Add an email address" %}{% endblock %}
+{% block title_extra %}{% trans "Add an email address" %}{% endblock %}
 
 {% block content %}
 	<form method="post" action="" spellcheck="false">{% csrf_token %}

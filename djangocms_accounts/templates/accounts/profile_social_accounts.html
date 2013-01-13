@@ -1,8 +1,8 @@
-{% extends 'accounts/base.html' %}
+{% extends 'accounts/base_profile.html' %}
 {% load cms_tags menu_tags sekizai_tags accounts_tags %}
 {% load url from future %}
 
-{% block content %}
+{% block content_primary %}
 <h3>Associated Accounts</h3>
 <ul>
 {% if request.user.has_usable_password %}<li>regular password login (<strong>{% pretty_username %}</strong>) - <a href="{% url 'accounts_change_password' %}">change password</a></li>{% endif %}
