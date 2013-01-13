@@ -17,15 +17,16 @@ Warning:: this is still work in progress.
 Some assumptions:
 
 * Emails
+
   * User can have multiple email adresses. Each is verified individually.
-  * There is only one primary email at any given time.
-  * To change an email the user add a new one, verify it and then make it his new primary email. Then he can delete the old one.
+  * Each user only has one primary email at any given time.
+  * To change an email the user can add a new one, verify it and then make it his new primary email. Then he can delete the old one.
   * Users can use any of his email addresses to login (if he has defined a password)
 
 * Social Login
-  * User that login with an external service are not forced to have an email (TODO: bug the user to add/validate an email)
-  * Multiple external services and a local password can be assigned to the same user. Although only one account per service type.
 
+  * User that login with an external service are not forced to have an email (TODO: bug the user to add/validate an email)
+  * Multiple external services and a local password can all be assigned to the same user. Although only one account per service type is possible.
 
 
 Installation
@@ -33,7 +34,7 @@ Installation
 
 package (make sure to use ``--extra-index-url http://...`` to use the internal divio package server::
 
-    pip install djangocms-accounts``
+    pip install djangocms-accounts
 
 
 from source (whilst in the project virtualenv)::
