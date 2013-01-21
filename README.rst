@@ -74,7 +74,7 @@ Add any social-auth backends to ``AUTHENTICATION_BACKENDS`` you'd like to use.
 See http://django-social-auth.readthedocs.org/en/latest/backends/index.html on details how to configure the individual backends. Currently only
 Github, Gmail, Twitter and Facebook have been tested.
 
-Then either add ``AccountsApphook`` to a page or include ``accounts.urls``. Preferrably at ``/account/``.
+Then either add ``AccountsApphook`` to a page or include ``djangocms_accounts.urls``. Preferrably at ``/account/``.
 
 Run migrations.
 
