@@ -14,6 +14,7 @@ class AccountsAppConf(AppConf):
     EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'login'
     EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'accounts_profile'
     SOCIAL_BACKENDS_WITH_TRUSTED_EMAIL = ['google']  # which backends can be trusted to provide validated email addresses
+    SUPPORT_EMAIL = settings.DEFAULT_FROM_EMAIL
 
     LOGIN_REDIRECT_URL = '/'
 

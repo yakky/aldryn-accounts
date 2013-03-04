@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 import operator
 from djangocms_accounts import signals
 from djangocms_accounts.signals import signup_code_used, signup_code_sent
-from djangocms_accounts.utils import random_token
+from djangocms_accounts.utils import random_token, user_display
 from djangocms_accounts.conf import *
 
 
@@ -245,18 +245,21 @@ class EmailConfirmation(models.Model):
 
     def send(self, **kwargs):
         # TODO: send as HTML email
-        current_site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
+        site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
         activate_url = u"%s://%s%s" % (
             protocol,
-            unicode(current_site.domain),
+            unicode(site.domain),
             reverse("accounts_confirm_email", args=[self.key])
             )
         ctx = {
             "email": self.email,
             "user": self.user,
+            "name": user_display(self.user),
             "activate_url": activate_url,
-            "current_site": current_site,
+            "site": site,
+            "site_name": site.name,
+            "site_domain": site.domain,
             "key": self.key,
             }
         subject = render_to_string("accounts/email/email_confirmation.subject.txt", ctx)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
+from absolute.templatetags.absolute_future import site
 from django.contrib.auth.models import User
 from class_based_auth_views.utils import default_redirect
 import class_based_auth_views.views
@@ -395,7 +396,7 @@ class ChangePasswordView(FormView):
     def change_password(self, form):
         user = self.request.user
         form.save(user)
-        if settings.ACCOUNTS_NOTIFY_PASSWORD_CHANGE:
+        if settings.ACCOUNTS_NOTIFY_PASSWORD_CHANGE and user.email:
             self.send_email(user)
         if self.messages.get("password_changed"):
             messages.add_message(
@@ -442,12 +443,19 @@ class ChangePasswordView(FormView):
     def send_email(self, user):
         # TODO: send html mail
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
-        current_site = get_current_site(self.request)
+        site = get_current_site(self.request)
+        # TODO: use a shared tool to generate an absulute url
+        site_url = u"%s://%s%s" % (protocol, site.domain, '/')
         ctx = {
             "user": user,
+            "name": user_display(user),
             "now": datetime.datetime.now(),
             "protocol": protocol,
-            "current_site": current_site,
+            "current_site": site,
+            "site_url": site_url,
+            "site_name": site.name,
+            "site_domain": site.domain,
+            "support_email": settings.ACCOUNTS_SUPPORT_EMAIL,
         }
         subject = render_to_string(self.email_subject_template_name, ctx)
         subject = "".join(subject.splitlines())
