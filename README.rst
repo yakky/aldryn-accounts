@@ -82,6 +82,10 @@ Run migrations.
 see https://docs.djangoproject.com/en/dev/ref/contrib/messages/
 
 
+WARN:: make sure you have the correct domain set in ``django.contrib.sites``. It is used for redirect urls and will
+       result in ``redirect_uri_mismatch`` errors with many social auth backends.
+
+
 Related Apps:
 
 * https://github.com/omab/django-social-auth
