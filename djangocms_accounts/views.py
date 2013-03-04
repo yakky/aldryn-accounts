@@ -30,9 +30,9 @@ from dj.chain import chain
 
 
 class SignupView(FormView):
-    template_name = "accounts/signup.html"
-    template_name_email_confirmation_sent = "accounts/signup_email_confirmation_sent.html"
-    template_name_signup_closed = "accounts/signup_closed.html"
+    template_name = "djangocms_accounts/signup.html"
+    template_name_email_confirmation_sent = "djangocms_accounts/signup_email_confirmation_sent.html"
+    template_name_signup_closed = "djangocms_accounts/signup_closed.html"
     form_class = SignupForm
     form_kwargs = {}
     redirect_field_name = "next"
@@ -223,7 +223,7 @@ class SignupView(FormView):
 
 
 class SignupEmailView(FormView):
-    template_name = 'accounts/signup_email.html'
+    template_name = 'djangocms_accounts/signup_email.html'
     form_class = EmailForm
 
     def get_initial(self):
@@ -256,25 +256,25 @@ class SignupEmailView(FormView):
 
 
 class SignupEmailSentView(TemplateView):
-    template_name = 'accounts/signup_email_sent.html'
+    template_name = 'djangocms_accounts/signup_email_sent.html'
 
 
 class LoginView(class_based_auth_views.views.LoginView):
-    template_name = 'accounts/login.html'
+    template_name = 'djangocms_accounts/login.html'
     form_class = EmailAuthenticationForm
 
 
 class LogoutView(class_based_auth_views.views.LogoutView):
-    template_name = 'accounts/logout.html'
+    template_name = 'djangocms_accounts/logout.html'
 
 
 class PasswordResetRecoverView(password_reset.views.Recover):
     form_class = PasswordRecoveryForm
     case_sensitive = False
-    template_name = 'accounts/password_reset_recover.html'
-    email_template_name = 'accounts/email/password_reset_recover.body.txt'
-    email_html_template_name = 'accounts/email/password_reset_recover.body.html'
-    email_subject_template_name = 'accounts/email/password_reset_recover.subject.txt'
+    template_name = 'djangocms_accounts/password_reset_recover.html'
+    email_template_name = 'djangocms_accounts/email/password_reset_recover.body.txt'
+    email_html_template_name = 'djangocms_accounts/email/password_reset_recover.body.html'
+    email_subject_template_name = 'djangocms_accounts/email/password_reset_recover.subject.txt'
 
     def send_notification(self):
         # TODO: send HTML email
@@ -284,22 +284,22 @@ class PasswordResetRecoverView(password_reset.views.Recover):
         return urlresolvers.reverse('accounts_password_reset_recover_sent', args=[self.mail_signature])
 
 class PasswordResetRecoverSentView(password_reset.views.RecoverDone):
-    template_name = "accounts/password_reset_recover_sent.html"
+    template_name = "djangocms_accounts/password_reset_recover_sent.html"
 
 
 class PasswordResetChangeView(password_reset.views.Reset):
-    template_name = 'accounts/password_reset_change.html'
+    template_name = 'djangocms_accounts/password_reset_change.html'
 
     def get_success_url(self):
         return urlresolvers.reverse('accounts_password_reset_change_done')
 
 
 class PasswordResetChangeDoneView(password_reset.views.ResetDone):
-    template_name = 'accounts/password_reset_change_done.html'
+    template_name = 'djangocms_accounts/password_reset_change_done.html'
 
 
 class ConfirmEmailView(TemplateResponseMixin, View):
-    template_name = "accounts/email_confirm.html"
+    template_name = "djangocms_accounts/email_confirm.html"
     messages = {
         "email_confirmed": {
             "level": messages.SUCCESS,
@@ -362,7 +362,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
 
 
 class ProfileView(TemplateView):
-    template_name = 'accounts/profile.html'
+    template_name = 'djangocms_accounts/profile.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -370,10 +370,10 @@ class ProfileView(TemplateView):
 
 
 class ChangePasswordView(FormView):
-    template_name = "accounts/profile_change_password.html"
-    email_template_name = "accounts/email/change_password.body.txt"
-    email_html_template_name = "accounts/email/change_password.body.html"
-    email_subject_template_name = "accounts/email/change_password.subject.txt"
+    template_name = "djangocms_accounts/profile_change_password.html"
+    email_template_name = "djangocms_accounts/email/change_password.body.txt"
+    email_html_template_name = "djangocms_accounts/email/change_password.body.html"
+    email_subject_template_name = "djangocms_accounts/email/change_password.subject.txt"
     form_class = ChangePasswordForm
     redirect_field_name = "next"
     messages = {
@@ -476,7 +476,7 @@ class CreatePasswordView(ChangePasswordView):
 
 
 class ProfileAssociationsView(TemplateView):
-    template_name = 'accounts/profile_social_accounts.html'
+    template_name = 'djangocms_accounts/profile_social_accounts.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -484,7 +484,7 @@ class ProfileAssociationsView(TemplateView):
 
 
 class ProfileEmailListView(ListView):
-    template_name = 'accounts/profile_email_list.html'
+    template_name = 'djangocms_accounts/profile_email_list.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -495,7 +495,7 @@ class ProfileEmailListView(ListView):
 
 
 class ProfileEmailConfirmationCreateView(FormView):
-    template_name = 'accounts/profile_email_confirmation_create.html'
+    template_name = 'djangocms_accounts/profile_email_confirmation_create.html'
     form_class = EmailForm
 
     @method_decorator(login_required)
@@ -512,7 +512,7 @@ class ProfileEmailConfirmationCreateView(FormView):
 
 
 class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
-    template_name = 'accounts/profile_email_delete.html'
+    template_name = 'djangocms_accounts/profile_email_delete.html'
     model = EmailAddress
 
     @method_decorator(login_required)
@@ -528,7 +528,7 @@ class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
 
 
 class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
-    template_name = 'accounts/profile_email_confirmation_cancel.html'
+    template_name = 'djangocms_accounts/profile_email_confirmation_cancel.html'
     model = EmailConfirmation
 
     @method_decorator(login_required)
@@ -540,7 +540,7 @@ class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
 
 
 class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
-    template_name = 'accounts/profile_email_make_primary.html'
+    template_name = 'djangocms_accounts/profile_email_make_primary.html'
     model = EmailAddress
 
     @method_decorator(login_required)

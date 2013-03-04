@@ -1,0 +1,8 @@
+{% load i18n %}{% load url from future %}
+{% if request.user.is_authenticated %}
+<li><a href="{% url 'accounts_profile' %}" alt="{{ username }}">{% trans 'my profile' %}</a></li>
+<li><a href="{% url 'logout' %}">{% trans 'logout' %}</a></li>
+{% else %}
+<li><a href="{% url 'login' %}">{% trans 'login' %}</a></li>
+<li><a href="{% url 'accounts_signup' %}">{% trans 'signup' %}</a></li>
+{% endif %}

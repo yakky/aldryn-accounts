@@ -1,13 +1,13 @@
-{% extends "accounts/base.html" %}
+{% extends "djangocms_accounts/base.html" %}
 
 {% load url from future %}
 {% load i18n %}
 
-{% block title_extra %}{% trans "Sign up" %}{% endblock %}
+{% block title_extra %}{% trans "Validate Email" %}{% endblock %}
 
 {% block content_primary %}
 	<form id="signup_form" method="post" action="{# leave empty #}" autocapitalize="off" class="form-horizontal">
-		<legend>{% trans "Sign up" %}</legend>
+		<legend>{% trans "Enter your email" %}</legend>
 		<fieldset>
 			{% csrf_token %}
 			{{ form.as_p }}
@@ -15,12 +15,8 @@
 			<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 			{% endif %}
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
+				<button type="submit" class="btn btn-primary">{% trans "Use this email" %}</button>
 			</div>
 		</fieldset>
 	</form>
-
-	<h2><strong>OR</strong> signup with social auth</h2>
-	{% include 'accounts/inc/social_auth_signup_choices.html' %}
-	{% include 'accounts/inc/social_auth_styles.html' %}
 {% endblock %}

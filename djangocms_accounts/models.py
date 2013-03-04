@@ -262,9 +262,9 @@ class EmailConfirmation(models.Model):
             "site_domain": site.domain,
             "key": self.key,
             }
-        subject = render_to_string("accounts/email/email_confirmation.subject.txt", ctx)
+        subject = render_to_string("djangocms_accounts/email/email_confirmation.subject.txt", ctx)
         subject = "".join(subject.splitlines()) # remove superfluous line breaks
-        message = render_to_string("accounts/email/email_confirmation.body.txt", ctx)
+        message = render_to_string("djangocms_accounts/email/email_confirmation.body.txt", ctx)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
         self.sent_at = timezone.now()
         self.save()

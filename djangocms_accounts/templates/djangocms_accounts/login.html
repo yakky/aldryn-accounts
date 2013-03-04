@@ -1,4 +1,4 @@
-{% extends "accounts/base.html" %}
+{% extends "djangocms_accounts/base.html" %}
 
 {% load url from future %}
 {% load i18n %}
@@ -14,12 +14,12 @@
 		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 		{% endif %}
 		</fieldset>
-		{% include 'accounts/inc/social_auth_login_choices.html' %}
+		{% include 'djangocms_accounts/inc/social_auth_login_choices.html' %}
 		<div class="form-actions">
 			<button type="submit" class="btn">{% trans "Log in" %}</button>
 			<a href="{% url 'accounts_password_reset_recover' %}">{% trans "Forgot your password?" %}</a><br/>
 			<a href="{% url 'accounts_signup' %}">{% trans 'Signup for a new account' %}</a>
 		</div>
 	</form>
-	{% include 'accounts/inc/social_auth_styles.html' %}
+	{% include 'djangocms_accounts/inc/social_auth_styles.html' %}
 {% endblock %}
