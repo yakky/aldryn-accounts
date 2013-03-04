@@ -357,7 +357,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         if self.request.user.is_authenticated():
             return urlresolvers.reverse('accounts_email_list')
         else:
-            return urlresolvers.reverse('accounts_login')
+            return urlresolvers.reverse('login')
 
 
 class ProfileView(TemplateView):

@@ -14,8 +14,8 @@ urlpatterns = patterns('',
     url(r"^signup/email/$", SignupEmailView.as_view(), name="accounts_signup_email"),
     url(r"^signup/email/sent/$", SignupEmailSentView.as_view(), name="accounts_signup_email_sent"),
 
-    url(r"^login/$", LoginView.as_view(), name="accounts_login"), #
-    url(r"^logout/$", LogoutView.as_view(), name="accounts_logout"),
+    url(r"^login/$", LoginView.as_view(), name="login"), #
+    url(r"^logout/$", LogoutView.as_view(), name="logout"),
 
     url(r'^password/reset/$', PasswordResetRecoverView.as_view(), name='accounts_password_reset_recover'),
     url(r'^password/reset/sent/(?P<signature>.+)/$', PasswordResetRecoverSentView.as_view(), name='accounts_password_reset_recover_sent'),
