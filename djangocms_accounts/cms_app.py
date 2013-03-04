@@ -17,10 +17,12 @@ from menus.base import NavigationNode
 #        ]
 #        return nodes
 
-class AccountsApphook(CMSApp):
-    name = _("Accounts")
-#    urls = [patterns('', url('^', include('djangocms_accounts.urls', namespace='accounts')))]
-    urls = ['djangocms_accounts.urls']
-#    menus = [AccountsProfileMenu]
+# WARNING: don't use "AccountsApphook" as name, because it clashes with the shopplugnplay apphook.
+# There should be multiple hooks for different parts anyway
+# class AccountsStuffApphook(CMSApp):
+#     name = _("Accounts")
+# #    urls = [patterns('', url('^', include('djangocms_accounts.urls', namespace='accounts')))]
+#     urls = ['djangocms_accounts.urls']
+# #    menus = [AccountsProfileMenu]
 
-apphook_pool.register(AccountsApphook)
+# apphook_pool.register(AccountsApphook)
