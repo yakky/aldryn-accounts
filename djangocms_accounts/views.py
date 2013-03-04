@@ -362,7 +362,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
 
 
 class ProfileView(TemplateView):
-    template_name = 'djangocms_accounts/profile.html'
+    template_name = 'djangocms_accounts/profile/index.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -370,7 +370,7 @@ class ProfileView(TemplateView):
 
 
 class ChangePasswordView(FormView):
-    template_name = "djangocms_accounts/profile_change_password.html"
+    template_name = "djangocms_accounts/profile/change_password.html"
     email_template_name = "djangocms_accounts/email/change_password.body.txt"
     email_html_template_name = "djangocms_accounts/email/change_password.body.html"
     email_subject_template_name = "djangocms_accounts/email/change_password.subject.txt"
@@ -476,7 +476,7 @@ class CreatePasswordView(ChangePasswordView):
 
 
 class ProfileAssociationsView(TemplateView):
-    template_name = 'djangocms_accounts/profile_social_accounts.html'
+    template_name = 'djangocms_accounts/profile/social_accounts.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -484,7 +484,7 @@ class ProfileAssociationsView(TemplateView):
 
 
 class ProfileEmailListView(ListView):
-    template_name = 'djangocms_accounts/profile_email_list.html'
+    template_name = 'djangocms_accounts/profile/email_list.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -495,7 +495,7 @@ class ProfileEmailListView(ListView):
 
 
 class ProfileEmailConfirmationCreateView(FormView):
-    template_name = 'djangocms_accounts/profile_email_confirmation_create.html'
+    template_name = 'djangocms_accounts/profile/email_confirmation_create.html'
     form_class = EmailForm
 
     @method_decorator(login_required)
@@ -512,7 +512,7 @@ class ProfileEmailConfirmationCreateView(FormView):
 
 
 class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
-    template_name = 'djangocms_accounts/profile_email_delete.html'
+    template_name = 'djangocms_accounts/profile/email_delete.html'
     model = EmailAddress
 
     @method_decorator(login_required)
@@ -528,7 +528,7 @@ class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
 
 
 class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
-    template_name = 'djangocms_accounts/profile_email_confirmation_cancel.html'
+    template_name = 'djangocms_accounts/profile/email_confirmation_cancel.html'
     model = EmailConfirmation
 
     @method_decorator(login_required)
@@ -540,7 +540,7 @@ class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
 
 
 class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
-    template_name = 'djangocms_accounts/profile_email_make_primary.html'
+    template_name = 'djangocms_accounts/profile/email_make_primary.html'
     model = EmailAddress
 
     @method_decorator(login_required)

@@ -1,4 +1,4 @@
-{% extends "djangocms_accounts/base_profile.html" %}
+{% extends "djangocms_accounts/profile/base.html" %}
 
 {% load url from future %}
 {% load i18n %}
@@ -7,8 +7,8 @@
 
 {% block content_primary %}
 	<form method="post" action="" spellcheck="false">{% csrf_token %}
-		<p>Do you really want to make <strong>{{ object.email }}</strong> your primary account?</p>
+		<p>Do you really want to remove <strong>{{ object.email }}</strong> from your account?</p>
 		<a href="{% url 'accounts_email_list' %}">back</a>
-		<button type="submit">yep, do it</button>
+		<button type="submit">yes, remove it</button>
 	</form>
 {% endblock %}

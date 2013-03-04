@@ -1,0 +1,24 @@
+{% load i18n %}{% load url from future %}
+{# TODO: this should be replaced by some sort of more flexible cms menu/apphook powered system #}
+
+<a href="{% url 'accounts_profile' %}"><span>{{ username }}</span></a>
+<nav class="subnav">
+	<ul>
+		<li><a href=""><span>{% trans 'my account' %}</span></a>
+			<ul>
+				{% if request.user.has_usable_password %}
+					<li><a href="{% url 'accounts_change_password' %}"><span>{% trans 'change password' %}</span></a></li>
+				{% else %}
+					<li><a href="{% url 'accounts_create_password' %}">{% trans 'create a password' %}</a>.</li>
+				{% endif %}
+			</ul>
+		</li>
+		<li><a href="{% url 'accounts_profile_associations' %}"><span>social accounts</span></a></li>
+		<li><a href="{% url 'accounts_email_list' %}"><span>emails</span></a></li>
+		{% if request.user.has_usable_password %}
+			<li><a href="{% url 'accounts_change_password' %}">change password</a></li>
+		{% else %}
+			<li><a href="{% url 'accounts_create_password' %}">create a password</a>.</li>
+		{% endif %}
+	</ul>
+</nav>
