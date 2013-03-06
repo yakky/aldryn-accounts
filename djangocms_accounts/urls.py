@@ -17,10 +17,10 @@ urlpatterns = patterns('',
     url(r"^login/$", LoginView.as_view(), name="login"), #
     url(r"^logout/$", LogoutView.as_view(), name="logout"),
 
-    url(r'^password/reset/$', PasswordResetRecoverView.as_view(), name='accounts_password_reset_recover'),
-    url(r'^password/reset/sent/(?P<signature>.+)/$', PasswordResetRecoverSentView.as_view(), name='accounts_password_reset_recover_sent'),
-    url(r'^password/reset/change/(?P<token>[\w:-]+)/$', PasswordResetChangeView.as_view(), name='accounts_password_reset_change'),
-    url(r'^password/reset/done/$', PasswordResetChangeDoneView.as_view(), name='accounts_password_reset_change_done'),
+    url(r'^password_reset/$', PasswordResetRecoverView.as_view(), name='accounts_password_reset_recover'),
+    url(r'^password_reset/sent/(?P<signature>.+)/$', PasswordResetRecoverSentView.as_view(), name='accounts_password_reset_recover_sent'),
+    url(r'^password_reset/change/(?P<token>[\w:-]+)/$', PasswordResetChangeView.as_view(), name='accounts_password_reset_change'),
+    url(r'^password_reset/done/$', PasswordResetChangeDoneView.as_view(), name='accounts_password_reset_change_done'),
 
     url(r"^email/confirm/(?P<key>\w+)/$", ConfirmEmailView.as_view(), name="accounts_confirm_email"),
 
