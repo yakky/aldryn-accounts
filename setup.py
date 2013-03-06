@@ -23,6 +23,7 @@ setup(
         'django-classy-tags',
         'django-sekizai',
         'django-appconf',
+        'django-gravatar2',
         'dj.chain',
     ),
     include_package_data=True,

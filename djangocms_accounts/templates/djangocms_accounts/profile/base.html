@@ -1,11 +1,12 @@
 {% extends "sidebar_left.html" %}
-{% load i18n %}
+{% load i18n gravatar %}
 {% load url from future %}
 
 {% block title_prefix %}{% trans "My account" %}{% endblock %}
 
 {% block content_secondary %}
-	<div style="border: 1px dotted gray; width: 32px; height: 32px; float: left; border-radius: 5px;"></div>
+	<div class="left" style="margin-right: 5px;">{% gravatar user.email 48 %}</div>
+
 	<div><a href="{% url 'accounts_profile' %}"><span>{{ username }}</span></a></div>
 	<div class="clear"></div>
 	{% block profile_navigation %}

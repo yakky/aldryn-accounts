@@ -54,7 +54,7 @@ Configuration
     'password_reset',
     'social_auth',
     'absolute',
-
+    'django_gravatar',
 
 
 ``TEMPLATE_CONTEXT_PROCESSORS``::
