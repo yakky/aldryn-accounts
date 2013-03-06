@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 from djangocms_accounts.models import EmailAddress
@@ -9,10 +8,14 @@ import password_reset.forms
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(label=_("Email"), max_length=100)
+    username = forms.CharField(label=_("Email"), max_length=255)
 
 
 class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
+    def __init__(self, *args, **kwargs):
+        super(PasswordRecoveryForm, self).__init__(*args, **kwargs)
+        self.fields['username_or_email'].label = _('email')
+
     def get_user_by_both(self, username):
         """
         we care about case with the username, but not for the email (emails are save all lowercase).
