@@ -1,13 +1,18 @@
 {% extends "djangocms_accounts/profile/base.html" %}
 
 {% load url from future %}
-{% load i18n %}
+{% load i18n standard_form %}
 
 {% block title_extra %}{% trans "Add an email address" %}{% endblock %}
 
-{% block content %}
-	<form method="post" action="" spellcheck="false">{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit">add it</button>
+{% block profile_content_primary %}
+	<form method="post" action="" class="frm" spellcheck="false">
+		{% csrf_token %}
+		<fieldset class="frm-horizontal">
+			<ol>
+				{% standard_form form %}
+				<li><label></label><input type="submit" value="{% trans 'add' %}" class="btn" /></li>
+			</ol>
+		</fieldset>
 	</form>
 {% endblock %}

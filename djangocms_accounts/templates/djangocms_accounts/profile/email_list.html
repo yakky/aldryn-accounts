@@ -3,19 +3,28 @@
 {% load url from future %}
 {% load i18n %}
 
-{% block title_extra %}{% trans "Email addresses" %}{% endblock %}
+{% block title_extra %}{% trans "email addresses" %}{% endblock %}
 
-{% block content_primary %}
-	<ul>
+{% block profile_content_primary %}
+	<h3>{% trans "email addresses" %}</h3>
+	<ul class="reset-list tablish-list">
 		{% for obj in object_list %}
-			<li><p>{% if obj.is_verified %}
-					verified{% if obj.is_primary %} <strong>primary</strong>{% endif %}: <strong style="color: green;">{{ obj.email }}</strong>{% if not obj.is_primary %} <a class="btn" href="{% url 'accounts_email_make_primary' pk=obj.pk %}">make primary</a> <a class="btn" href="{% url 'accounts_email_delete' pk=obj.pk %}">delete</a>{% endif %}
+			<li>{{ obj.email }}
+				<div class="right">
+				{% if obj.is_verified %}
+					<span class="label label-success">{% trans 'verified' %}</span>
+					{% if obj.is_primary %}
+						<span class="label label-info">{% trans 'primary' %}</span>
+					{% else %}
+						<a href="{% url 'accounts_email_make_primary' pk=obj.pk %}">{% trans 'set as primary' %}</a> <a href="{% url 'accounts_email_delete' pk=obj.pk %}"><span class="icon icon-close"></span></a>
+					{% endif %}
 				{% else %}
-					not verified yet: <strong>{{ obj.email }}</strong> <a class="btn" href="{% url 'accounts_email_confirmation_cancel' pk=obj.pk %}">cancel</a>
+					<span class="label label-important">{% trans 'not verified yet' %}</span>
+					<a href="{% url 'accounts_email_confirmation_cancel' pk=obj.pk %}">{% trans 'cancel' %}</a>
 				{% endif %}
-				<small>[{{ obj.user.username }} {{ obj.user.email }} {{ obj.user.pk }}]</small>
-			</p></li>
+				</div>
+			</li>
 		{% endfor %}
 	</ul>
-	<a href="{% url 'accounts_email_create' %}">add another email address</a>
+	<a class="btn" href="{% url 'accounts_email_create' %}">{% trans 'add'|capfirst %}</a>
 {% endblock %}

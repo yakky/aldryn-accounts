@@ -1,5 +1,18 @@
 {% extends "sidebar_left.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title_prefix %}{% trans "My account" %}{% endblock %}
 
 {% block content_secondary %}
-	{% include "djangocms_accounts/profile/includes/nav.html" %}
+	<div style="border: 1px dotted gray; width: 32px; height: 32px; float: left; border-radius: 5px;"></div>
+	<div><a href="{% url 'accounts_profile' %}"><span>{{ username }}</span></a></div>
+	<div class="clear"></div>
+	{% block profile_navigation %}
+		{% include "djangocms_accounts/profile/includes/nav.html" %}
+	{% endblock profile_navigation %}
 {% endblock %}
+
+{% block content_primary %}
+	{% block profile_content_primary %}{% endblock profile_content_primary %}
+{% endblock content_primary %}

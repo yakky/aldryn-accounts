@@ -18,6 +18,7 @@ setup(
         'django-social-auth',
         'django-class-based-auth-views',
         'django-password-reset',
+        'django-standard-form',
         'django-absolute',
         'django-classy-tags',
         'django-sekizai',

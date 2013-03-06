@@ -3,12 +3,13 @@
 {% load url from future %}
 {% load i18n %}
 
-{% block title_extra %}{% trans "Cancel an email confirmation" %}{% endblock %}
+{% block title_extra %}{% trans "cancel an email confirmation" %}{% endblock %}
 
-{% block content_primary %}
-	<form method="post" action="" spellcheck="false">{% csrf_token %}
-		<p>Do you really want to cancel the confirmation request for <strong>{{ object.email }}</strong>?</p>
-		<a href="{% url 'accounts_email_list' %}">back</a>
-		<button type="submit">yes, cancel it</button>
-	</form>
+{% block profile_content_primary %}
+<h3>{% trans "cancel email confirmation" %}</h3>
+<form method="post" action="" spellcheck="false">{% csrf_token %}
+	<p>{% blocktrans with email=object.email %}Do you really want to cancel the confirmation request for {{ email }}?{% endblocktrans %}</p>
+	<a href="{% url 'accounts_email_list' %}">{% trans 'back' %}</a>
+	<button type="submit" class="btn">{% trans 'yes' %}</button>
+</form>
 {% endblock %}
