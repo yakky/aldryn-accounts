@@ -1,4 +1,4 @@
-{% load i18n %}{% load url from future %}
+{% load i18n menu_tags %}{% load url from future %}
 {# TODO: this should be replaced by some sort of more flexible cms menu/apphook powered system #}
 <nav class="subnav">
 	<ul>
@@ -15,5 +15,6 @@
 		<li{% if active == 'email' %} class="active"{% endif %}>
 			<a href="{% url 'accounts_email_list' %}"><span>{% trans 'email addresses' %}</span></a>
 		</li>
+	{% show_menu_below_id "profile_navigation" 0 100 100 100 "includes/menu/navigation.html" %}
 	</ul>
 </nav>

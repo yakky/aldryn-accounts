@@ -4,8 +4,9 @@
 {% load i18n %}
 
 {% block title_extra %}{% trans "cancel an email confirmation" %}{% endblock %}
+{% block profile_navigation %}{% include 'djangocms_accounts/profile/includes/nav.html' with active='email' %}{% endblock %}
 
-{% block profile_content_primary %}
+{% block content_primary %}
 <h3>{% trans "cancel email confirmation" %}</h3>
 <form method="post" action="" spellcheck="false">{% csrf_token %}
 	<p>{% blocktrans with email=object.email %}Do you really want to cancel the confirmation request for {{ email }}?{% endblocktrans %}</p>

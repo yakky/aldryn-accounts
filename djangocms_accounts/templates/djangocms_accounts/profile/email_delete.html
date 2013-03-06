@@ -4,11 +4,13 @@
 {% load i18n %}
 
 {% block title_extra %}{% trans "Add an email address" %}{% endblock %}
+{% block profile_navigation %}{% include 'djangocms_accounts/profile/includes/nav.html' with active='email' %}{% endblock %}
 
 {% block content_primary %}
+    <h3>{% trans "remove email" %}</h3>
 	<form method="post" action="" spellcheck="false">{% csrf_token %}
-		<p>Do you really want to remove <strong>{{ object.email }}</strong> from your account?</p>
-		<a href="{% url 'accounts_email_list' %}">back</a>
-		<button type="submit">yes, remove it</button>
+		<p>{% blocktrans with email=object.email %}Do you really want to remove {{ email }} from your account?{% endblocktrans %}</p>
+		<a href="{% url 'accounts_email_list' %}">{% trans 'back' %}</a>
+		<button class="btn" type="submit">{% trans 'yes' %}</button>
 	</form>
 {% endblock %}

@@ -86,6 +86,20 @@ WARN:: make sure you have the correct domain set in ``django.contrib.sites``. It
        result in ``redirect_uri_mismatch`` errors with many social auth backends.
 
 
+Extending
+=========
+
+Custom Profile
+--------------
+
+Currently the basic tabs for social auth, emails and passwords are hardcoded. But the profile navigation can be extended
+using django-cms apphooks. In order for this to work, create a cms page with the page_id ``profile_navigation`` and
+choose ``djangocms_accounts/profile/base.html`` as the template. To add an element to the navigation just create a
+subpage and assign your view logic as an AppHook.
+
+
+
+
 Related Apps:
 
 * https://github.com/omab/django-social-auth
