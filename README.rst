@@ -68,6 +68,7 @@ Configuration
 ``AUTHENTICATION_BACKENDS``::
 
     'djangocms_accounts.auth_backends.EmailBackend',
+    'djangocms_accounts.auth_backends.PermissionBackend',
 
 
 Add any social-auth backends to ``AUTHENTICATION_BACKENDS`` you'd like to use.

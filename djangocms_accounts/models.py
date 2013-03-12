@@ -156,6 +156,9 @@ class EmailAddressManager(models.Manager):
     def get_user_for(self, email):
         return self.get(email=email)
 
+    def has_verified_email(self, user):
+        return self.filter(user=user).exists()
+
 
 class EmailAddress(models.Model):
     """

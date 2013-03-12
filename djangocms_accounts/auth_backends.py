@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User
-from django.core.exceptions import MultipleObjectsReturned
 from djangocms_accounts.models import EmailAddress, EmailConfirmation
 
 
@@ -26,3 +25,16 @@ class EmailBackend(ModelBackend):
             if email_confirmation.user.check_password(password):
                 return email_confirmation.user
         return None
+
+
+class PermissionBackend(object):
+    def authenticate(self):
+        return None
+    
+    def has_perm(self, user_obj, perm, obj=None):
+        # TODO: cache
+        if perm == 'djangocms_accounts.has_verified_email':
+            if not user_obj or user_obj.is_anonymous():
+                return False
+            return EmailAddress.objects.has_verified_email(user_obj)
+        return False
