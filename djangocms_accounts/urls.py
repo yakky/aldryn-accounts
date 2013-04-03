@@ -4,7 +4,7 @@ from djangocms_accounts.views import LoginView, LogoutView, PasswordResetRecover
     ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView, ChangePasswordView, \
     ProfileView, CreatePasswordView, ProfileEmailListView, ProfileEmailConfirmationCreateView, \
     ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView, ConfirmEmailView, \
-    SignupView, SignupEmailView, SignupEmailSentView
+    SignupView, SignupEmailView, SignupEmailSentView, UserSettingsView
 import social_auth.views
 
 
@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r"^email/confirm/(?P<key>\w+)/$", ConfirmEmailView.as_view(), name="accounts_confirm_email"),
 
     url(r"^profile/$", ProfileView.as_view(), name="accounts_profile"),
+    url(r"^profile/settings/$", UserSettingsView.as_view(), name="accounts_settings"),
     url(r"^profile/associations/$", ProfileAssociationsView.as_view(), name="accounts_profile_associations"),
     url(r"^profile/password/change/$", ChangePasswordView.as_view(), name="accounts_change_password"),
     url(r"^profile/password/create/$", CreatePasswordView.as_view(), name="accounts_create_password"),

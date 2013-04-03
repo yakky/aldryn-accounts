@@ -2,6 +2,7 @@
 {# TODO: this should be replaced by some sort of more flexible cms menu/apphook powered system #}
 <nav class="subnav">
 	<ul>
+		<li><a href="{% url 'accounts_settings' %}"><span>{% trans 'settings' context "User Profile" %}</span></a></li>
 		<li{% if active == 'password_change' %} class="active"{% endif %}>
 			{% if request.user.has_usable_password %}
 				<a href="{% url 'accounts_change_password' %}"><span>{% trans 'change password' %}</span></a>

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django import forms
-from djangocms_accounts.models import EmailAddress
+from djangocms_accounts.models import EmailAddress, UserSettings
 import password_reset.forms
 
 
@@ -105,3 +105,9 @@ class SignupForm(forms.Form):
             if self.cleaned_data["password"] != self.cleaned_data["password_confirm"]:
                 raise forms.ValidationError(_("You must type the same password each time."))
         return self.cleaned_data
+
+
+class UserSettingsForm(forms.ModelForm):
+    class Meta:
+        model = UserSettings
+        fields = ('timezone',)

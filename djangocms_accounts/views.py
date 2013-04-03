@@ -9,22 +9,24 @@ from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import get_current_site
 from django.core import urlresolvers
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django import forms
-from django.http import HttpResponseForbidden, Http404
-from django.shortcuts import redirect
+from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
+from django.shortcuts import redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View
 from django.views.generic.base import TemplateResponseMixin
 from djangocms_accounts import signals
 from djangocms_accounts.conf import settings
+import pytz
 from social_auth.utils import setting as social_auth_setting
-from djangocms_accounts.forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm
+from djangocms_accounts.forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm
 from django.utils.translation import ugettext_lazy as _
 from djangocms_accounts.utils import user_display
 import password_reset.views
-from djangocms_accounts.models import EmailAddress, EmailConfirmation, SignupCode
+from djangocms_accounts.models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
 from djangocms_accounts.view_mixins import OnlyOwnedObjectsMixin
 from dj.chain import chain
 
@@ -560,3 +562,27 @@ class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
     def form_valid(self, form):
         self.object.set_as_primary()
         return redirect(self.get_success_url())
+
+
+class UserSettingsView(UpdateView):
+    model = UserSettings
+    form_class = UserSettingsForm
+    template_name = "djangocms_accounts/profile/usersettings_form.html"
+
+    def get_object(self, queryset=None):
+        if self.request.user.is_anonymous():
+            raise PermissionDenied()
+        if queryset is None:
+            queryset = self.get_queryset()
+        user_settings, created = queryset.get_or_create(user=self.request.user)
+        return user_settings
+
+    def form_valid(self, form):
+        self.object = form.save()
+        # set timezone
+        if self.object.timezone:
+            self.request.session['django_timezone'] = self.object.timezone
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return urlresolvers.reverse('accounts_profile')

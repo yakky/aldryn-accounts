@@ -1,7 +1,7 @@
 {% extends "djangocms_accounts/profile/base.html" %}
 
 {% load url from future %}
-{% load i18n %}
+{% load i18n tz %}
 
 {% block title_extra %}{% trans "Log in" %}{% endblock %}
 
@@ -11,4 +11,10 @@
 	email: {{ request.user.email }}<br/>
 	name: {{ request.user.first_name }} {{ request.user.last_name }}<br/>
 	<br/>
+	{% timezone 'UTC' %}
+		<strong>UTC</strong>: {% now "DATETIME_FORMAT" %}<br/>
+	{% endtimezone %}
+	{% timezone TIME_ZONE %}
+		<strong>{{ TIME_ZONE }}</strong>: {% now "DATETIME_FORMAT" %}  (your timezone)
+	{% endtimezone %}
 {% endblock %}

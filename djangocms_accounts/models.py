@@ -15,6 +15,7 @@ from djangocms_accounts import signals
 from djangocms_accounts.signals import signup_code_used, signup_code_sent
 from djangocms_accounts.utils import random_token, user_display
 from djangocms_accounts.conf import *
+import timezone_field
 
 
 class SignupCode(models.Model):
@@ -272,3 +273,8 @@ class EmailConfirmation(models.Model):
         self.sent_at = timezone.now()
         self.save()
         signals.email_confirmation_sent.send(sender=self.__class__, confirmation=self)
+
+
+class UserSettings(models.Model):
+    user = models.OneToOneField(User, related_name='settings', unique=True, db_index=True)
+    timezone = timezone_field.TimeZoneField(blank=True, null=True, default=None)

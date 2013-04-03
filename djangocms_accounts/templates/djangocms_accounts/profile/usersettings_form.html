@@ -1,0 +1,17 @@
+{% extends "djangocms_accounts/profile/base.html" %}
+
+{% load url from future %}
+{% load i18n standard_form %}
+
+{% block title_extra %}{% trans "Log in" %}{% endblock %}
+
+{% block content_primary %}
+	<form method="post" action="">{% csrf_token %}
+		<fieldset>
+			{% standard_form form %}
+		</fieldset>
+		<fieldset>
+			<input type="submit" value="{% trans 'save' %}" class="btn">
+		</fieldset>
+	</form>
+{% endblock %}
