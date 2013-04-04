@@ -1,6 +1,6 @@
 {% load i18n %}{% load url from future %}
 {% if request.user.is_authenticated %}
-	<li><a href="{% url 'accounts_profile' %}">{% trans 'my profile' %}</a></li>
+    <li><a href="{% url 'accounts_profile' %}" title="{{ username }}">{% trans 'my profile' %}</a></li>
 	{% if request.user.is_staff %}
 		<li><a href="{% url 'admin:index' %}">{% trans 'admin' %}</a></li>
 	{% endif %}
