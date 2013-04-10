@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import hashlib
 from django.utils.crypto import random
+from django.conf import settings
+import pygeoip
+import os
 
 
 def user_display(user):
@@ -23,3 +26,17 @@ def random_token(extra=None, hash_func=hashlib.sha256):
         extra = []
     bits = extra + [str(random.getrandbits(512))]
     return hash_func("".join(bits)).hexdigest()
+
+
+# TODO: make cache method configurable
+gi4 = pygeoip.GeoIP(os.path.join(settings.GEOIP_PATH, getattr(settings, 'GEOIP_CITY', 'GeoLiteCity.dat')))
+
+
+def geoip(ip):
+    # TODO: validate ip
+    data = gi4.record_by_addr(ip)
+    if data.get('city'):
+        data['pretty_name'] = u"%s, %s" % (data.get('city'), data.get('country_name'))
+    else:
+        data['pretty_name'] = u"%s" % data.get('country_name')
+    return data

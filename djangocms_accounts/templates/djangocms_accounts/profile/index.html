@@ -17,4 +17,9 @@
 	{% timezone TIME_ZONE %}
 		<strong>{{ TIME_ZONE }}</strong>: {% now "DATETIME_FORMAT" %}  (your timezone)
 	{% endtimezone %}
+	<br/>
+    geoip data:
+    <pre>
+{{ request.session.geoip|pprint }}
+    </pre>
 {% endblock %}

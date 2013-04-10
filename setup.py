@@ -26,6 +26,7 @@ setup(
         'django-standard-form',
         'django-timezone-field',
         'dj.chain',
+        'pygeoip',
     ),
     include_package_data=True,
     zip_safe=False,

@@ -577,6 +577,12 @@ class UserSettingsView(UpdateView):
         user_settings, created = queryset.get_or_create(user=self.request.user)
         return user_settings
 
+    def get_form_kwargs(self):
+        kwargs = super(UserSettingsView, self).get_form_kwargs()
+        if not self.object.timezone:
+            self.object.timezone = self.request.session.get('django_timezone')
+        return kwargs
+
     def form_valid(self, form):
         self.object = form.save()
         # set timezone
