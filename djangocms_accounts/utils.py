@@ -35,8 +35,10 @@ gi4 = pygeoip.GeoIP(os.path.join(settings.GEOIP_PATH, getattr(settings, 'GEOIP_C
 def geoip(ip):
     # TODO: validate ip
     data = gi4.record_by_addr(ip)
-    if data.get('city'):
+    if not data:  # empty dict
+        return data
+    if data.get('city') and data.get('country'):
         data['pretty_name'] = u"%s, %s" % (data.get('city'), data.get('country_name'))
-    else:
+    elif data.get('country'):
         data['pretty_name'] = u"%s" % data.get('country_name')
     return data
