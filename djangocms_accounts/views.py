@@ -20,6 +20,7 @@ from django.views.generic import FormView, TemplateView, ListView, DeleteView, U
 from django.views.generic.base import TemplateResponseMixin
 from djangocms_accounts import signals
 from djangocms_accounts.conf import settings
+from djangocms_accounts.context_processors import empty_login_and_signup_forms
 import pytz
 from social_auth.utils import setting as social_auth_setting
 from djangocms_accounts.forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm
@@ -81,10 +82,14 @@ class SignupView(FormView):
     def get_context_data(self, **kwargs):
         ctx = kwargs
         redirect_field_name = self.get_redirect_field_name()
+        # adds the empty login and signup forms to the context, so that
+        # the shared login/signup view works even if the context processor
+        # was not added globally
+        ctx.update(empty_login_and_signup_forms(self.request))  # TODO: make configurable?
         ctx.update({
             "redirect_field_name": redirect_field_name,
             "redirect_field_value": self.request.REQUEST.get(redirect_field_name),
-            })
+        })
         return ctx
 
     def get_form_kwargs(self):
@@ -98,7 +103,7 @@ class SignupView(FormView):
             email=form.data.get("email"),
             result=form.is_valid()
         )
-        return super(SignupView, self).form_invalid(form)
+        return self.render_to_response(self.get_context_data(form=form, signup_form=form))
 
     def form_valid(self, form):
         email_is_trusted = False
@@ -264,6 +269,17 @@ class SignupEmailSentView(TemplateView):
 class LoginView(class_based_auth_views.views.LoginView):
     template_name = 'djangocms_accounts/login.html'
     form_class = EmailAuthenticationForm
+
+    def get_context_data(self, **kwargs):
+        ctx = super(LoginView, self).get_context_data(**kwargs)
+        # add the empty login and signup forms to the context, so that
+        # the shared login/signup view works even if the context processor
+        # was not added globally
+        ctx.update(empty_login_and_signup_forms(self.request))  # TODO: make configurable?
+        return ctx
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form, login_form=form))
 
 
 class LogoutView(class_based_auth_views.views.LogoutView):

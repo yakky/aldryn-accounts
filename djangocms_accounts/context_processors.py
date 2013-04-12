@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 from djangocms_accounts.utils import user_display
-from djangocms_accounts.views import LoginView, SignupView
 from social_auth.backends import get_backends
 from social_auth.db.django_models import UserSocialAuth
-from social_auth.utils import LazyDict
 
 
 def account_info(request):
@@ -28,8 +26,9 @@ def social_auth_info(request):
     return {'social_auth': accounts}
 
 
-def login_and_signup_forms(request):
+def empty_login_and_signup_forms(request):
+    from djangocms_accounts.views import LoginView, SignupView  # TODO: make this configurable?
     return {
-        'login_form': LoginView.form_class(),
-        'signup_form': SignupView.form_class(),
+        'empty_login_form': LoginView.form_class(),
+        'empty_signup_form': SignupView.form_class(),
     }
