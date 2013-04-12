@@ -33,6 +33,23 @@ class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
         return user
 
 
+class PasswordResetForm(forms.Form):
+    password = forms.CharField(
+        label=_('New password'),
+        widget=forms.PasswordInput,
+        )
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(PasswordResetForm, self).__init__(*args, **kwargs)
+
+    def save(self):
+        self.user.set_password(self.cleaned_data['password'])
+        User.objects.filter(pk=self.user.pk).update(
+            password=self.user.password,
+            )
+
+
 class ChangePasswordForm(forms.Form):
     password_current = forms.CharField(
         label=_("Current Password"),

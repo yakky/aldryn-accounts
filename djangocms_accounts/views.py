@@ -23,7 +23,7 @@ from djangocms_accounts.conf import settings
 from djangocms_accounts.context_processors import empty_login_and_signup_forms
 import pytz
 from social_auth.utils import setting as social_auth_setting
-from djangocms_accounts.forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm
+from djangocms_accounts.forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm, PasswordResetForm
 from django.utils.translation import ugettext_lazy as _
 from djangocms_accounts.utils import user_display
 import password_reset.views
@@ -306,6 +306,7 @@ class PasswordResetRecoverSentView(password_reset.views.RecoverDone):
 
 
 class PasswordResetChangeView(password_reset.views.Reset):
+    form_class = PasswordResetForm
     template_name = 'djangocms_accounts/password_reset_change.html'
 
     def get_success_url(self):
