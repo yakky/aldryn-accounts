@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 from djangocms_accounts.utils import user_display
+from djangocms_accounts.views import LoginView, SignupView
 from social_auth.backends import get_backends
 from social_auth.db.django_models import UserSocialAuth
 from social_auth.utils import LazyDict
@@ -25,3 +26,10 @@ def social_auth_info(request):
         accounts.update((assoc.provider.replace('-', '_'), assoc)
                         for assoc in UserSocialAuth.get_social_auth_for_user(user))
     return {'social_auth': accounts}
+
+
+def login_and_signup_forms(request):
+    return {
+        'login_form': LoginView.form_class(),
+        'signup_form': SignupView.form_class(),
+    }
