@@ -13,7 +13,6 @@ password_changed = django.dispatch.Signal(providing_args=["user"])
 
 
 def set_user_timezone_on_login(sender, user, request, **kwargs):
-    print "SET TIMEZONE"
     from django.utils import timezone
     from django.db.models import ObjectDoesNotExist
 

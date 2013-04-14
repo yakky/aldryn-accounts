@@ -205,6 +205,9 @@ class EmailConfirmationManager(models.Manager):
     def request(self, user, email, is_primary=False, send=False):
         key = random_token([email])
         email_confirmation = self.create(user=user, email=email, key=key, is_primary=is_primary)
+        if not user.email:  #
+            user.email = email
+            user.save()
         if send:
             email_confirmation.send()
         return email_confirmation
@@ -214,6 +217,7 @@ class EmailConfirmation(models.Model):
     user = models.ForeignKey(User)
     email = models.EmailField()
     is_primary = models.BooleanField(default=True)
+    # TODO: rename this to EmailVerification
     created_at = models.DateTimeField(default=timezone.now())
     sent_at = models.DateTimeField(null=True)
     key = models.CharField(max_length=64, unique=True)

@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
 import hashlib
+from django.contrib.auth.models import User
 from django.utils.crypto import random
 from django.conf import settings
 import pygeoip
 import os
 
 
-def user_display(user):
+def user_display(user, fallback_to_username=False, fallback_to_pk=False):
     if user.is_anonymous():
         return 'Anonymous user'
     if user.email:
         return user.email
     elif user.first_name or user.last_name:
         return (u"%s %s" % (user.first_name, user.last_name)).strip()
-    elif user.username:
+    elif fallback_to_username and user.username:
         return user.username
-    elif user.pk:
+    elif fallback_to_pk and user.pk:
         return user.pk
-    else:
-        return '<unknown user>'
+    return None
 
 
 def random_token(extra=None, hash_func=hashlib.sha256):
@@ -42,3 +42,34 @@ def geoip(ip):
     elif data.get('country'):
         data['pretty_name'] = u"%s" % data.get('country_name')
     return data
+
+
+def get_most_qualified_user_for_email_and_password(email, password):
+    from djangocms_accounts.models import EmailAddress, EmailConfirmation
+    # try verified email addresses
+    for email in EmailAddress.objects.filter(email=email):
+        # (EmailAddress.email is unique, but using the forloop vs a .get removes the need for a try/except.
+        if email.user.check_password(password):
+            return email.user
+        # try the email field on the user
+    for user in User.objects.filter(email=email):
+        if user.check_password(password):
+            return user
+        # try unconfirmed email addresses
+    for email_confirmation in EmailConfirmation.objects.filter(email=email):
+        if email_confirmation.user.check_password(password):
+            return email_confirmation.user
+    return None
+
+
+def get_most_qualified_user_for_email(email):
+    from djangocms_accounts.models import EmailAddress, EmailConfirmation
+    # try verified email addresses
+    for email in EmailAddress.objects.filter(email=email):
+        # (EmailAddress.email is unique, but using the forloop vs a .get removes the need for a try/except.
+        return email.user
+    for user in User.objects.filter(email=email):
+        return user
+    for email_confirmation in EmailConfirmation.objects.filter(email=email):
+        return email_confirmation.user
+    return None
