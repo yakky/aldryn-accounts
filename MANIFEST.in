@@ -1,4 +1,4 @@
 include README.rst
-recursive-include djangocms_accounts/templates *
-recursive-include djangocms_accounts/static *
-recursive-include djangocms_accounts/locale *
+recursive-include aldryn_accounts/templates *
+recursive-include aldryn_accounts/static *
+recursive-include aldryn_accounts/locale *

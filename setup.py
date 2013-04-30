@@ -1,15 +1,12 @@
 from setuptools import setup, find_packages
-import os
-
-version = __import__('djangocms_accounts').__version__
 
 setup(
-    name = "djangocms-accounts",
-    version = __import__('djangocms_accounts').__version__,
-    url = 'http://github.com/divio/djangocms-accounts',
+    name = "aldryn-accounts",
+    version = __import__('aldryn_accounts').__version__,
+    url = 'http://github.com/aldryn/aldryn-accounts',
     license = 'BSD',
     platforms=['OS Independent'],
-    description = "A registration and authentication app for django CMS Cloud.",
+    description = "A registration and authentication app for Aldryn and the django CMS Cloud.",
     author = 'Divio AG',
     author_email = 'developers@divio.ch',
     packages=find_packages(),

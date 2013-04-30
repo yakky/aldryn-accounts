@@ -50,7 +50,7 @@ Configuration
 
 ``INSTALLED_APPS``::
 
-    'djangocms_accounts',
+    'aldryn_accounts',
     'password_reset',
     'social_auth',
     'absolute',
@@ -61,21 +61,21 @@ Configuration
 
     'social_auth.context_processors.social_auth_backends',
     'social_auth.context_processors.social_auth_login_redirect',
-    'djangocms_accounts.context_processors.account_info',
+    'aldryn_accounts.context_processors.account_info',
 
 
 
 ``AUTHENTICATION_BACKENDS``::
 
-    'djangocms_accounts.auth_backends.EmailBackend',
-    'djangocms_accounts.auth_backends.PermissionBackend',
+    'aldryn_accounts.auth_backends.EmailBackend',
+    'aldryn_accounts.auth_backends.PermissionBackend',
 
 
 Add any social-auth backends to ``AUTHENTICATION_BACKENDS`` you'd like to use.
 See http://django-social-auth.readthedocs.org/en/latest/backends/index.html on details how to configure the individual backends. Currently only
 Github, Gmail, Twitter and Facebook have been tested.
 
-Then either add ``AccountsApphook`` to a page or include ``djangocms_accounts.urls``. Preferrably at ``/accounts/``.
+Then either add ``AccountsApphook`` to a page or include ``aldryn_accounts.urls``. Preferrably at ``/accounts/``.
 
 Run migrations.
 
@@ -95,7 +95,7 @@ Custom Profile
 
 Currently the basic tabs for social auth, emails and passwords are hardcoded. But the profile navigation can be extended
 using django-cms apphooks. In order for this to work, create a cms page with the page_id ``profile_navigation`` and
-choose ``djangocms_accounts/profile/base.html`` as the template. To add an element to the navigation just create a
+choose ``aldryn_accounts/profile/base.html`` as the template. To add an element to the navigation just create a
 subpage and assign your view logic as an AppHook.
 
 

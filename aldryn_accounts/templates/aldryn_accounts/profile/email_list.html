@@ -1,0 +1,31 @@
+{% extends "aldryn_accounts/profile/base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{% block title_extra %}{% trans "email addresses" %}{% endblock %}
+{% block profile_navigation %}{% include 'aldryn_accounts/profile/includes/nav.html' with active='email' %}{% endblock %}
+
+{% block content_primary %}
+	<h3>{% trans "email addresses" %}</h3>
+	<ul class="reset-list tablish-list">
+		{% for obj in object_list %}
+			<li>{{ obj.email }}
+				<div class="right">
+				{% if obj.is_verified %}
+					<span class="label label-success">{% trans 'verified' %}</span>
+					{% if obj.is_primary %}
+						<span class="label label-info">{% trans 'primary' %}</span>
+					{% else %}
+						<a href="{% url 'accounts_email_make_primary' pk=obj.pk %}">{% trans 'set as primary' %}</a> <a href="{% url 'accounts_email_delete' pk=obj.pk %}"><span class="icon icon-close"></span></a>
+					{% endif %}
+				{% else %}
+					<span class="label label-important">{% trans 'not verified yet' %}</span>
+					<a href="{% url 'accounts_email_confirmation_cancel' pk=obj.pk %}">{% trans 'cancel' %}</a>
+				{% endif %}
+				</div>
+			</li>
+		{% endfor %}
+	</ul>
+	<a class="btn" href="{% url 'accounts_email_create' %}">{% trans 'add'|capfirst %}</a>
+{% endblock %}

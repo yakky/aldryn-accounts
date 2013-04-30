@@ -1,0 +1,22 @@
+{% extends "aldryn_accounts/base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{% block title_extra %}{% trans "Validate Email" %}{% endblock %}
+
+{% block content_primary %}
+	<form id="signup_form" method="post" action="{# leave empty #}" autocapitalize="off" class="form-horizontal">
+		<legend>{% trans "Enter your email" %}</legend>
+		<fieldset>
+			{% csrf_token %}
+			{{ form.as_p }}
+			{% if redirect_field_value %}
+			<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+			{% endif %}
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">{% trans "Use this email" %}</button>
+			</div>
+		</fieldset>
+	</form>
+{% endblock %}
