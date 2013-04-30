@@ -1,0 +1,19 @@
+{% extends "aldryn_accounts/profile/base.html" %}
+
+{% load url from future %}
+{% load i18n standard_form %}
+
+{% block title_extra %}{% trans "Settings" %}{% endblock %}
+{% block profile_navigation %}{% include 'aldryn_accounts/profile/includes/nav.html' with active='profile_settings' %}{% endblock %}
+
+{% block content_primary %}
+	<form method="post" action="">{% csrf_token %}
+		<fieldset>
+			{% standard_form form %}
+			TODO: language, location, name
+		</fieldset>
+		<fieldset>
+			<input type="submit" value="{% trans 'save' %}" class="btn">
+		</fieldset>
+	</form>
+{% endblock %}

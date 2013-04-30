@@ -1,0 +1,21 @@
+{% extends "aldryn_accounts/base.html" %}
+
+{% load url from future %}
+{% load i18n html_filter_tags %}
+
+{% block title_extra %}{% trans "Confirm Email" %}{% endblock %}
+
+{% block content_primary %}
+	<form method="post" action="{% url 'accounts_confirm_email' key=confirmation.key %}">
+		<legend>{% trans "Email Validation" %}</legend>
+		<fieldset>
+			{% csrf_token %}
+			<p>
+				{% blocktrans with email=confirmation.email|html_strong %}Is {{ email }} your email address?{% endblocktrans %}
+			</p>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">{% trans "confirm and login" %}</button>
+			</div>
+		</fieldset>
+	</form>
+{% endblock %}

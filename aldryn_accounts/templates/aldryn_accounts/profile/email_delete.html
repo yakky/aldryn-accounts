@@ -1,0 +1,16 @@
+{% extends "aldryn_accounts/profile/base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{% block title_extra %}{% trans "Add an email address" %}{% endblock %}
+{% block profile_navigation %}{% include 'aldryn_accounts/profile/includes/nav.html' with active='email' %}{% endblock %}
+
+{% block content_primary %}
+    <h3>{% trans "remove email" %}</h3>
+	<form method="post" action="" spellcheck="false">{% csrf_token %}
+		<p>{% blocktrans with email=object.email %}Do you really want to remove {{ email }} from your account?{% endblocktrans %}</p>
+		<a href="{% url 'accounts_email_list' %}">{% trans 'back' %}</a>
+		<button class="btn" type="submit">{% trans 'yes' %}</button>
+	</form>
+{% endblock %}
