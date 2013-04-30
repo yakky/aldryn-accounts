@@ -21,7 +21,7 @@ from django.views.generic import FormView, TemplateView, ListView, DeleteView, U
 from django.views.generic.base import TemplateResponseMixin
 from .conf import settings
 from .context_processors import empty_login_and_signup_forms
-from .signals import user_sign_up_attempt, user_signed_up
+from .signals import user_sign_up_attempt, user_signed_up, password_changed
 from social_auth.utils import setting as social_auth_setting
 from .forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm, PasswordResetForm
 from django.utils.translation import ugettext_lazy as _
@@ -418,7 +418,7 @@ class ChangePasswordView(FormView):
                 self.messages["password_changed"]["level"],
                 self.messages["password_changed"]["text"]
             )
-        signals.password_changed.send(sender=ChangePasswordForm, user=user)
+        password_changed.send(sender=ChangePasswordForm, user=user)
 
     def get_form_kwargs(self):
         """

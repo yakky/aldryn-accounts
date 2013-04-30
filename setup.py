@@ -22,7 +22,7 @@ setup(
         'django-social-auth',
         'django-standard-form',
         'django-timezone-field',
-        'djangocms-common',
+        'djangocms-common>=0.3.1',
         'dj.chain',
         'pygeoip',
     ),
