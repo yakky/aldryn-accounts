@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from uuid import uuid4
-from django.contrib.auth import login
-from django.contrib.auth.models import User
-from class_based_auth_views.utils import default_redirect
 import class_based_auth_views.views
 import datetime
+import password_reset.views
+from class_based_auth_views.utils import default_redirect
+from django.contrib.auth import login
+from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import get_current_site, RequestSite
@@ -13,23 +13,23 @@ from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django import forms
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.template import loader
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View
 from django.views.generic.base import TemplateResponseMixin
+from dj.chain import chain
+from social_auth.utils import setting as social_auth_setting
+from uuid import uuid4
 from .conf import settings
 from .context_processors import empty_login_and_signup_forms
 from .signals import user_sign_up_attempt, user_signed_up, password_changed
-from social_auth.utils import setting as social_auth_setting
 from .forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm, PasswordResetForm
-from django.utils.translation import ugettext_lazy as _
 from .utils import user_display
-import password_reset.views
 from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
 from .view_mixins import OnlyOwnedObjectsMixin
-from dj.chain import chain
 
 
 class SignupView(FormView):
