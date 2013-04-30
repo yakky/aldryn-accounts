@@ -19,7 +19,7 @@ setup(
         'django-gravatar2',
         'django-password-reset',
         'django-sekizai',
-        'django-social-auth',
+        'django-social-auth>=0.7.23',
         'django-standard-form',
         'django-timezone-field',
         'djangocms-common>=0.3.1',
