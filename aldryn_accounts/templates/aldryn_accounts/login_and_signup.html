@@ -17,7 +17,7 @@
 
 {% block content %}
 	<div class="container-24 clearfix">
-		<div class="grid-8">
+		<div class="grid-{% if settings.ALDRYN_ACCOUNTS_ENABLE_SOCIAL_AUTH %}8{% else %}12{% endif %}">
 			<div class="feature-box feature-box-small">
 				<div class="border-left"></div>
 				<div class="border-right"></div>
@@ -27,16 +27,18 @@
 				{% endwith %}
 			</div>
 		</div>
-		<div class="grid-8">
-			<div class="feature-box feature-box-small">
-				<div class="border-left"></div>
-				<div class="border-right"></div>
-				<h3>{% trans 'Login via Social' %}</h3>
-				{% include 'aldryn_accounts/inc/social_auth_signup_choices.html' %}
-				{% include 'aldryn_accounts/inc/social_auth_styles.html' %}
+		{% if settings.ALDRYN_ACCOUNTS_ENABLE_SOCIAL_AUTH %}
+			<div class="grid-8">
+				<div class="feature-box feature-box-small">
+					<div class="border-left"></div>
+					<div class="border-right"></div>
+					<h3>{% trans 'Login via Social' %}</h3>
+					{% include 'aldryn_accounts/inc/social_auth_signup_choices.html' %}
+					{% include 'aldryn_accounts/inc/social_auth_styles.html' %}
+				</div>
 			</div>
-		</div>
-		<div class="grid-8">
+		{% endif %}
+		<div class="grid-{% if settings.ALDRYN_ACCOUNTS_ENABLE_SOCIAL_AUTH %}8{% else %}12{% endif %}">
 			<div class="feature-box feature-box-small">
 				<div class="border-left"></div>
 				<div class="border-right"></div>

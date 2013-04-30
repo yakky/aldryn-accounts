@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
-from .utils import user_display
 from social_auth.backends import get_backends
 from social_auth.db.django_models import UserSocialAuth
+from .utils import user_display
+from .conf import settings
 
 
 def account_info(request):
@@ -17,7 +18,17 @@ def social_auth_info(request):
     but uses a OrderedDict and an easier format to use in templates.
     """
     # TODO: cache (LazyDict does not work well with key value iteration in templates
-    keys = get_backends().keys()
+    backends = get_backends()
+    all_keys = set(backends.keys())
+    keys = []
+    # order backends by setting
+    for key in settings.ALDRYN_ACCOUNTS_SOCIAL_BACKEND_ORDERING:
+        if key in all_keys:
+            keys.append(key)
+            all_keys.remove(key)
+    for key in all_keys:
+        keys.append(key)
+    # create accounts dictionary
     accounts = OrderedDict(zip(keys, [None] * len(keys)))
     user = request.user
     if hasattr(user, 'is_authenticated') and user.is_authenticated():
@@ -32,3 +43,7 @@ def empty_login_and_signup_forms(request):
         'empty_login_form': LoginView.form_class(),
         'empty_signup_form': SignupView.form_class(),
     }
+
+
+def django_settings(request):
+    return {'settings': settings}
