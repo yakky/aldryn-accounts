@@ -9,9 +9,9 @@ from social_auth.models import UserSocialAuth
 from social_auth.exceptions import AuthException
 from social_auth.signals import pre_update, socialauth_registered
 
-from aldryn_accounts.conf import settings
+from .conf import settings
 from social_auth.utils import setting as social_auth_setting
-from aldryn_accounts.models import EmailAddress
+from .models import EmailAddress
 
 # TODO: finish (the code here does not work yet)
 

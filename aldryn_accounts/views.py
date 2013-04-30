@@ -19,17 +19,16 @@ from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View
 from django.views.generic.base import TemplateResponseMixin
-from aldryn_accounts import signals
-from aldryn_accounts.conf import settings
-from aldryn_accounts.context_processors import empty_login_and_signup_forms
-import pytz
+from .conf import settings
+from .context_processors import empty_login_and_signup_forms
+from .signals import user_sign_up_attempt, user_signed_up
 from social_auth.utils import setting as social_auth_setting
-from aldryn_accounts.forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm, PasswordResetForm
+from .forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm, PasswordResetForm
 from django.utils.translation import ugettext_lazy as _
-from aldryn_accounts.utils import user_display
+from .utils import user_display
 import password_reset.views
-from aldryn_accounts.models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
-from aldryn_accounts.view_mixins import OnlyOwnedObjectsMixin
+from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
+from .view_mixins import OnlyOwnedObjectsMixin
 from dj.chain import chain
 
 
@@ -98,7 +97,7 @@ class SignupView(FormView):
         return kwargs
 
     def form_invalid(self, form):
-        signals.user_sign_up_attempt.send(
+        user_sign_up_attempt.send(
             sender=SignupForm,
             email=form.data.get("email"),
             result=form.is_valid()
@@ -158,7 +157,7 @@ class SignupView(FormView):
         return uuid4().get_hex()[:30]
 
     def after_signup(self, form):
-        signals.user_signed_up.send(sender=SignupForm, user=self.created_user, form=form)
+        user_signed_up.send(sender=SignupForm, user=self.created_user, form=form)
 
     def login_user(self, show_message=True):
         # set backend on User object to bypass needing to call auth.authenticate

@@ -2,7 +2,7 @@
 from classytags.core import Tag, Options
 from classytags.arguments import Argument
 from django import template
-from aldryn_accounts.utils import user_display
+from ..utils import user_display
 
 
 register = template.Library()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from aldryn_accounts.models import EmailConfirmation, EmailAddress
+from .models import EmailConfirmation, EmailAddress
 
 
 class EmailAddressAdmin(admin.ModelAdmin):

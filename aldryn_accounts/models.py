@@ -11,10 +11,9 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import operator
-from aldryn_accounts import signals
-from aldryn_accounts.signals import signup_code_used, signup_code_sent
-from aldryn_accounts.utils import random_token, user_display
-from aldryn_accounts.conf import *
+from .signals import signup_code_used, signup_code_sent, email_confirmed, email_confirmation_sent
+from .utils import random_token, user_display
+from .conf import *
 import timezone_field
 
 
@@ -247,7 +246,7 @@ class EmailConfirmation(models.Model):
             )
             email_address = EmailAddress.objects.add_email(
                 user=self.user, email=self.email, make_primary=self.is_primary, **data)
-            signals.email_confirmed.send(sender=self.__class__, email_address=email_address)
+            email_confirmed.send(sender=self.__class__, email_address=email_address)
             self.delete()
             return email_address
 
@@ -276,7 +275,7 @@ class EmailConfirmation(models.Model):
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
         self.sent_at = timezone.now()
         self.save()
-        signals.email_confirmation_sent.send(sender=self.__class__, confirmation=self)
+        email_confirmation_sent.send(sender=self.__class__, confirmation=self)
 
 
 class UserSettings(models.Model):

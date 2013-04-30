@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
-from aldryn_accounts.utils import user_display
+from .utils import user_display
 from social_auth.backends import get_backends
 from social_auth.db.django_models import UserSocialAuth
 
@@ -27,7 +27,7 @@ def social_auth_info(request):
 
 
 def empty_login_and_signup_forms(request):
-    from aldryn_accounts.views import LoginView, SignupView  # TODO: make this configurable?
+    from .views import LoginView, SignupView  # TODO: make this configurable?
     return {
         'empty_login_form': LoginView.form_class(),
         'empty_signup_form': SignupView.form_class(),

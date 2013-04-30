@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import patterns, include, url
-from aldryn_accounts.views import LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,\
+from .views import LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,\
     ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView, ChangePasswordView, \
     ProfileView, CreatePasswordView, ProfileEmailListView, ProfileEmailConfirmationCreateView, \
     ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView, ConfirmEmailView, \

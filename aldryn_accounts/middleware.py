@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import pprint
-from aldryn_accounts.utils import geoip
+from .utils import geoip
 from pytz import UnknownTimeZoneError
 import social_auth.middleware
 from django.utils import timezone
