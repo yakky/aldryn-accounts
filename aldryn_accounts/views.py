@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
-from absolute.templatetags.absolute_future import site
+from django.contrib.auth import login
 from django.contrib.auth.models import User
 from class_based_auth_views.utils import default_redirect
 import class_based_auth_views.views
 import datetime
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
-from django.contrib.sites.models import get_current_site
-from django.core import urlresolvers
+from django.contrib.sites.models import get_current_site, RequestSite
+from django.core import urlresolvers, signing
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django import forms
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
+from django.template import loader
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View
@@ -34,7 +35,6 @@ from dj.chain import chain
 
 class SignupView(FormView):
     template_name = "aldryn_accounts/signup.html"
-    template_name_email_confirmation_sent = "aldryn_accounts/signup_email_confirmation_sent.html"
     template_name_signup_closed = "aldryn_accounts/signup_closed.html"
     form_class = SignupForm
     form_kwargs = {}
@@ -108,38 +108,17 @@ class SignupView(FormView):
     def form_valid(self, form):
         email_is_trusted = False
         email = form.cleaned_data.get('email')
-        self.created_user = self.create_user(form, commit=False)
-        if settings.ALDRYN_ACCOUNTS_EMAIL_CONFIRMATION_REQUIRED:
-            self.created_user.is_active = False
-        self.created_user._disable_account_creation = True
-        self.created_user.save()
+        self.created_user = self.create_user(form)
         if self.signup_code:
             self.signup_code.use(self.created_user)
             if self.signup_code.email and self.created_user.email == self.signup_code.email:
                 email_is_trusted = True
-        if not email_is_trusted and settings.ALDRYN_ACCOUNTS_EMAIL_CONFIRMATION_REQUIRED:
-            email_address_verification = EmailConfirmation.objects.request(self.created_user, email=email, send=settings.ALDRYN_ACCOUNTS_EMAIL_CONFIRMATION_EMAIL)
-        elif email_is_trusted:
+        if email_is_trusted:
             email_address = EmailAddress.objects.add_email(self.created_user, self.created_user.email)
-        self.after_signup(form)
-        if settings.ALDRYN_ACCOUNTS_EMAIL_CONFIRMATION_REQUIRED and (email_is_trusted is False):
-            response_kwargs = {
-                "request": self.request,
-                "template": self.template_name_email_confirmation_sent,
-                "context": {
-                    "email": self.created_user.email,
-                    "success_url": self.get_success_url(),
-                    }
-            }
-            return self.response_class(**response_kwargs)
         else:
-            # we already know we can trust the provided email and can go ahead and log the user straight in.
-            show_message = [
-                settings.ALDRYN_ACCOUNTS_EMAIL_CONFIRMATION_EMAIL,
-                self.messages.get("email_confirmation_sent"),
-                not email_is_trusted,
-            ]
-            if all(show_message):
+            email_address_verification = EmailConfirmation.objects.request(self.created_user, email=email, send=True)
+            # send a verification email
+            if self.messages.get("email_confirmation_sent"):
                 messages.add_message(
                     self.request,
                     self.messages["email_confirmation_sent"]["level"],
@@ -147,15 +126,8 @@ class SignupView(FormView):
                         "email": form.cleaned_data["email"]
                     }
                 )
-            self.login_user()
-            if self.messages.get("logged_in"):
-                messages.add_message(
-                    self.request,
-                    self.messages["logged_in"]["level"],
-                    self.messages["logged_in"]["text"] % {
-                        "user": user_display(self.created_user)
-                    }
-                )
+        self.after_signup(form)
+        self.login_user()
         return redirect(self.get_success_url())
 
     def get_success_url(self, fallback_url=None, **kwargs):
@@ -173,7 +145,6 @@ class SignupView(FormView):
         if username is None:
             username = self.generate_username(form)
         user.username = username
-        #user.email = form.cleaned_data["email"].strip()  #  email must be confirmed first!
         password = form.cleaned_data.get("password")
         if password:
             user.set_password(password)
@@ -183,20 +154,26 @@ class SignupView(FormView):
             user.save()
         return user
 
-    def create_account(self, form):
-        return Account.create(request=self.request, user=self.created_user, create_email=False)
-
     def generate_username(self, form):
         return uuid4().get_hex()[:30]
 
     def after_signup(self, form):
         signals.user_signed_up.send(sender=SignupForm, user=self.created_user, form=form)
 
-    def login_user(self):
+    def login_user(self, show_message=True):
         # set backend on User object to bypass needing to call auth.authenticate
         self.created_user.backend = "django.contrib.auth.backends.ModelBackend"
         auth.login(self.request, self.created_user)
         self.request.session.set_expiry(0)
+
+        if show_message and self.messages.get("logged_in"):
+            messages.add_message(
+                self.request,
+                self.messages["logged_in"]["level"],
+                self.messages["logged_in"]["text"] % {
+                    "user": user_display(self.created_user)
+                }
+            )
 
     def is_open(self):
         code = self.request.REQUEST.get("code")
@@ -295,8 +272,25 @@ class PasswordResetRecoverView(password_reset.views.Recover):
     email_subject_template_name = 'aldryn_accounts/email/password_reset_recover.subject.txt'
 
     def send_notification(self):
-        # TODO: send HTML email
-        super(PasswordResetRecoverView, self).send_notification()
+        context = {
+            'site': RequestSite(self.request),
+            'user': self.user,
+            'token': signing.dumps(self.user.pk, salt=self.salt),
+            'secure': self.request.is_secure(),
+            }
+        body = loader.render_to_string(self.email_template_name,
+                                       context).strip()
+        subject = loader.render_to_string(self.email_subject_template_name,
+                                          context).strip()
+        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
+                  [self.email])
+
+    def form_valid(self, form):
+        self.user = form.cleaned_data['user']
+        self.email = form.cleaned_data['username_or_email']
+        self.send_notification()
+        self.mail_signature = signing.dumps(self.email, salt=self.url_salt)
+        return super(password_reset.views.Recover, self).form_valid(form)
 
     def get_success_url(self):
         return urlresolvers.reverse('accounts_password_reset_recover_sent', args=[self.mail_signature])
@@ -318,6 +312,7 @@ class PasswordResetChangeDoneView(password_reset.views.ResetDone):
 
 
 class ConfirmEmailView(TemplateResponseMixin, View):
+    # TODO: add edge case handling (see divio/djangocms-account#39 )
     template_name = "aldryn_accounts/email_confirm.html"
     messages = {
         "email_confirmed": {
@@ -338,13 +333,14 @@ class ConfirmEmailView(TemplateResponseMixin, View):
             if not self.object.user.is_active:
                 self.object.user.is_active = True
                 self.object.user.save()
+            user = email_address.user
+            user.backend = "django.contrib.auth.backends.ModelBackend"
+            login(self.request, user)
         else:
             # the key has expired
+            # TODO: prettier, more helpful error (see divio/djangocms-account#46 )
             raise Http404()
         redirect_url = self.get_redirect_url()
-        if not redirect_url:
-            ctx = self.get_context_data()
-            return self.render_to_response(ctx)
         if self.messages.get("email_confirmed"):
             messages.add_message(
                 self.request,

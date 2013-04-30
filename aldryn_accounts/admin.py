@@ -13,6 +13,7 @@ class EmailAddressAdmin(admin.ModelAdmin):
 class EmailConfirmationAdmin(admin.ModelAdmin):
     list_display = ('email', 'user')
     actions = ('manual_confirmation', )
+    raw_id_fields = ('user',)
 
     def manual_confirmation(self, request, queryset):
         for obj in queryset:
