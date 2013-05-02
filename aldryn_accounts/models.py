@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import urllib
+from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
@@ -134,18 +135,15 @@ class SignupCodeResult(models.Model):
 class EmailAddressManager(models.Manager):
 
     def add_email(self, user, email, make_primary=False, **kwargs):
-        try:
-            is_first_email = user and email and not self.filter(user=user).exists()
-            email_address, created = self.get_or_create(user=user, email=email, defaults=kwargs)
-            if not created:
-                for key, value in kwargs.items():
-                    setattr(email_address, key, value)
-                email_address.save()
-            if is_first_email or make_primary:
-                email_address.set_as_primary()
-            return email_address
-        except IntegrityError:
-            return None
+        is_first_email = user and email and not self.filter(user=user).exists()
+        email_address, created = self.get_or_create(user=user, email=email, defaults=kwargs)
+        if not created:
+            for key, value in kwargs.items():
+                setattr(email_address, key, value)
+            email_address.save()
+        if is_first_email or make_primary:
+            email_address.set_as_primary()
+        return email_address
 
     def get_primary(self, user):
         try:
@@ -240,6 +238,8 @@ class EmailConfirmation(models.Model):
 
     def confirm(self, verification_method='unknown', delete=True):
         if self.sent_at and not self.key_expired():
+            if EmailAddress.objects.filter(email=self.email).exists():
+                raise EmailAlreadyVerified(u"%s already exists" % self.email)
             data = dict(
                 verified_at=timezone.now(),
                 verification_method=verification_method,
@@ -249,6 +249,8 @@ class EmailConfirmation(models.Model):
             email_confirmed.send(sender=self.__class__, email_address=email_address)
             self.delete()
             return email_address
+        else:
+            raise VerificationKeyExpired()
 
     def send(self, **kwargs):
         # TODO: send as HTML email

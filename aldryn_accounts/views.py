@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 import class_based_auth_views.views
 import datetime
 import password_reset.views
@@ -327,18 +328,20 @@ class ConfirmEmailView(TemplateResponseMixin, View):
 
     def post(self, *args, **kwargs):
         self.object = confirmation = self.get_object()
-        email_address = confirmation.confirm(verification_method="email")
-        if email_address:
-            if not self.object.user.is_active:
-                self.object.user.is_active = True
-                self.object.user.save()
-            user = email_address.user
-            user.backend = "django.contrib.auth.backends.ModelBackend"
-            login(self.request, user)
-        else:
-            # the key has expired
-            # TODO: prettier, more helpful error (see divio/djangocms-account#46 )
-            raise Http404()
+        try:
+            email_address = confirmation.confirm(verification_method="email")
+        except EmailAlreadyVerified, e:
+            messages.error(self.request, _('This email has already been verified with an other account.'))
+            return HttpResponseRedirect(self.request.path)
+        except VerificationKeyExpired, e:
+            messages.error(self.request, _('The activation key has expired.'))
+            return HttpResponseRedirect(self.request.path)
+        if not self.object.user.is_active:
+            self.object.user.is_active = True
+            self.object.user.save()
+        user = email_address.user
+        user.backend = "django.contrib.auth.backends.ModelBackend"
+        login(self.request, user)
         redirect_url = self.get_redirect_url()
         if self.messages.get("email_confirmed"):
             messages.add_message(
