@@ -16,6 +16,7 @@ ADD_TO_INSTALLED_APPS = [
 ADD_TO_MIDDLEWARE_CLASSES = [
     'aldryn_accounts.middleware.GeoIPMiddleware',
     'aldryn_accounts.middleware.TimezoneMiddleware',  # TimezoneMiddleware relies on GeoIP location.
+    'aldryn_accounts.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ADD_TO_TEMPLATE_CONTEXT_PROCESSORS = [
@@ -102,3 +103,12 @@ class AccountsAppConf(AppConf):
             if not auth_backend in s.AUTHENTICATION_BACKENDS:
                 s.AUTHENTICATION_BACKENDS.append(auth_backend)
         return self.configured_data
+
+
+class SocialAuthConf(AppConf):
+    LOGIN_ERROR_URL = '/'  # TODO: make this something prettier (but needs changes in django-social-auth to allow multilingual urls)
+    SIGNUP_ERROR_URL = '/'  # TODO: make this something prettier (but needs changes in django-social-auth to allow multilingual urls)
+
+    class Meta:
+        prefix = ''
+

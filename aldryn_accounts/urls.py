@@ -42,4 +42,6 @@ urlpatterns = patterns('',
     url(r'^disconnect/(?P<backend>[^/]+)/$', social_auth.views.disconnect, name='socialauth_disconnect'),
     url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$', social_auth.views.disconnect, name='socialauth_disconnect_individual'),
 
+    # test
+    url(r'^my-exception-test/$', 'aldryn_accounts.views.my_exception_test_view'),
 )

@@ -607,3 +607,10 @@ class UserSettingsView(UpdateView):
 
     def get_success_url(self):
         return urlresolvers.reverse('accounts_profile')
+
+
+class MyExceptionTestView(View):
+    def dispatch(self, request, *args, **kwargs):
+        from social_auth.exceptions import SocialAuthBaseException
+        raise SocialAuthBaseException("This is an exception test")
+my_exception_test_view = MyExceptionTestView.as_view()
