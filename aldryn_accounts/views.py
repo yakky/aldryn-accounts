@@ -46,7 +46,7 @@ class SignupView(FormView):
         },
         "logged_in": {
             "level": messages.SUCCESS,
-            "text": _("Successfully logged in as %(user)s.")
+            "text": _("Logged in as %(user)s.")
         },
         "invalid_signup_code": {
             "level": messages.WARNING,

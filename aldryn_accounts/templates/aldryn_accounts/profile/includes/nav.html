@@ -10,9 +10,11 @@
 				<a href="{% url 'accounts_create_password' %}"><span>{% trans 'create a password' %}</span></a>
 			{% endif %}
 		</li>
-		<li{% if active == 'profile_associations' %} class="active"{% endif %}>
-			<a href="{% url 'accounts_profile_associations' %}"><span>{% trans 'connected accounts' %}</span></a>
-		</li>
+		{% if settings.ALDRYN_ACCOUNTS_ENABLE_SOCIAL_AUTH %}
+			<li{% if active == 'profile_associations' %} class="active"{% endif %}>
+				<a href="{% url 'accounts_profile_associations' %}"><span>{% trans 'connected accounts' %}</span></a>
+			</li>
+		{% endif %}
 		<li{% if active == 'email' %} class="active"{% endif %}>
 			<a href="{% url 'accounts_email_list' %}"><span>{% trans 'email addresses' %}</span></a>
 		</li>
