@@ -283,3 +283,7 @@ class EmailConfirmation(models.Model):
 class UserSettings(models.Model):
     user = models.OneToOneField(User, related_name='settings', unique=True, db_index=True)
     timezone = timezone_field.TimeZoneField(blank=True, null=True, default=None)
+
+    class Meta:
+        verbose_name = _('user settings')
+        verbose_name_plural = _('user settings')
