@@ -1,10 +1,10 @@
-==================
-djangocms-accounts
-==================
+===============
+aldryn-accounts
+===============
 
 Warning:: this is still work in progress.
 
-``djangocms-accounts`` provides a packaged and opinionated app to provide:
+``aldryn-accounts`` provides a packaged and opinionated app to provide:
 
 * user signup
 * login
@@ -22,6 +22,8 @@ Some assumptions:
   * Each user only has one primary email at any given time.
   * To change an email the user can add a new one, verify it and then make it his new primary email. Then he can delete the old one.
   * Users can use any of his email addresses to login (if he has defined a password)
+  * Users are not forced to validate their email right away. Instead we nag them about it and provide a permission
+    that can be checked to see if a user hat at least one validated email.
 
 * Social Login
 
