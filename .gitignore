@@ -1,0 +1,8 @@
+.*
+*.pyc
+*.pyo
+*~
+
+/docs/_build
+
+!.gitignore
