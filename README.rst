@@ -16,6 +16,8 @@ Warning:: this is still work in progress.
 
 Some assumptions:
 
+* Login works with social logins or email. But there is no custom username.
+
 * Emails
 
   * Users can have multiple email adresses. Each is verified individually.
