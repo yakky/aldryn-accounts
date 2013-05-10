@@ -284,6 +284,10 @@ class UserSettings(models.Model):
     user = models.OneToOneField(User, related_name='settings', unique=True, db_index=True)
     timezone = timezone_field.TimeZoneField(blank=True, null=True, default=None)
 
+    location_name = models.CharField(_('location'), blank=True, default='', max_length=255)
+    location_latitude = models.FloatField(null=True, blank=True, default=None)
+    location_longitude = models.FloatField(null=True, blank=True, default=None)
+
     class Meta:
         verbose_name = _('user settings')
         verbose_name_plural = _('user settings')

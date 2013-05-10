@@ -102,4 +102,8 @@ class SignupForm(forms.Form):
 class UserSettingsForm(forms.ModelForm):
     class Meta:
         model = UserSettings
-        fields = ('timezone',)
+        fields = ('timezone', 'location_name', 'location_latitude', 'location_longitude')
+        widgets = {
+            'location_latitude': forms.HiddenInput(),
+            'location_longitude': forms.HiddenInput(),
+        }
