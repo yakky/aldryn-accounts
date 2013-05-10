@@ -211,7 +211,7 @@ class EmailConfirmationManager(models.Manager):
 
 
 class EmailConfirmation(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name="email_verifications")
     email = models.EmailField()
     is_primary = models.BooleanField(default=True)
     # TODO: rename this to EmailVerification

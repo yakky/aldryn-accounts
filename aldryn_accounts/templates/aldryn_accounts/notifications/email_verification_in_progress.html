@@ -1,0 +1,6 @@
+{% load url from future %}
+{% for unverified_email in unverified_emails %}
+	<strong>We've sent you a verification email to {{ unverified_email.email }}. Please click on the link in the email to verify the address.</strong><br/>
+	If you're having trouble, see <a href="{% url 'accounts_email_list' %}">email settings</a> on your profile.
+	<br/>
+{% endfor %}

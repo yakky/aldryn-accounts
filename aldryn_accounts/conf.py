@@ -24,6 +24,7 @@ ADD_TO_TEMPLATE_CONTEXT_PROCESSORS = [
     'aldryn_accounts.context_processors.social_auth_info',
     'aldryn_accounts.context_processors.account_info',
     'aldryn_accounts.context_processors.django_settings',
+    'aldryn_accounts.context_processors.notifications',
 ]
 
 ADD_TO_AUTHENTICATION_BACKENDS = [

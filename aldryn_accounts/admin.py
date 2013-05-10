@@ -3,8 +3,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import EmailConfirmation, EmailAddress, UserSettings
-
-import social_auth
 from social_auth.db.django_models import UserSocialAuth
 
 
@@ -20,7 +18,12 @@ class UserSettingsInline(admin.StackedInline):
 
 
 class AccountsUserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'social_logins',)
+    list_filter = ('is_staff', 'is_superuser', 'is_active')
     inlines = [UserSettingsInline, UserSocialAuthInline]
+
+    def social_logins(self, obj):
+        return u", ".join([u"%s (%s)" % (i.provider, i.uid) for i in obj.social_auth.all()])
 
 
 class EmailAddressAdmin(admin.ModelAdmin):

@@ -1,0 +1,14 @@
+{% load string_tags %}
+{% if account_notifications %}
+<div class="messages">
+	{% for notification in account_notifications %}
+	<div class="message text-info">
+		<div class="container-24 clearfix">
+			<div class="grid-24">
+				<p class="nospace">{{ notification.body }}</p>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endif %}

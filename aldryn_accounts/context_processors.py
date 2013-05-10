@@ -47,3 +47,10 @@ def empty_login_and_signup_forms(request):
 
 def django_settings(request):
     return {'settings': settings}
+
+
+def notifications(request):
+    if request.user.is_anonymous():
+        return {}
+    from .notifications import check_notifications
+    return {'account_notifications': check_notifications(request.user)}
