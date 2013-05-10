@@ -288,6 +288,8 @@ class UserSettings(models.Model):
     location_latitude = models.FloatField(null=True, blank=True, default=None)
     location_longitude = models.FloatField(null=True, blank=True, default=None)
 
+    preferred_language = models.CharField(_('language'), blank=True, default='', choices=settings.LANGUAGES, max_length=32, )
+
     class Meta:
         verbose_name = _('user settings')
         verbose_name_plural = _('user settings')

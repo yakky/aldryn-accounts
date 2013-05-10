@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
+from django.utils import translation
 from django.contrib.auth import user_logged_in, user_logged_out
 import django.dispatch
 
@@ -25,3 +27,16 @@ def set_user_timezone_on_login(sender, user, request, **kwargs):
         pass
 
 user_logged_in.connect(set_user_timezone_on_login, dispatch_uid='aldryn_accounts:set_user_timezone_on_login')
+
+# TODO: figure this out. actually we'd need to redirect to a url with the language prefix.
+# def set_user_preferred_language_on_login(sender, user, request, **kwargs):
+#     from django.db.models import ObjectDoesNotExist
+#
+#     try:
+#         language = user.settings.preferred_language
+#         if language and language in dict(settings.LANGUAGES).keys():
+#             translation.activate(language)
+#     except ObjectDoesNotExist:
+#         pass
+#
+# user_logged_in.connect(set_user_preferred_language_on_login, dispatch_uid='aldryn_accounts:set_user_preferred_language_on_login')
