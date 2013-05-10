@@ -35,7 +35,7 @@ class GeoIPMiddleware(object):
         # ip = '213.189.154.40'  # Switzerland (Divio)
         data = geoip(ip)
         request.session['geoip'] = data
-        if not request.session.get('django_timezone') and data.get('time_zone') or True:
+        if not request.session.get('django_timezone') and data.get('time_zone'):
             request.session['django_timezone'] = data.get('time_zone')
         if not (request.session.get('django_location') or request.session.get('django_location_name')) \
             and data.get('pretty_name') and data.get('latitude') and data.get('longitude') or True:
