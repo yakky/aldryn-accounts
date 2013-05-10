@@ -45,7 +45,7 @@ def geoip(ip):
 
 
 def get_most_qualified_user_for_email_and_password(email, password):
-    from djangocms_accounts.models import EmailAddress, EmailConfirmation
+    from aldryn_accounts.models import EmailAddress, EmailConfirmation
     # try verified email addresses
     for email in EmailAddress.objects.filter(email=email):
         # (EmailAddress.email is unique, but using the forloop vs a .get removes the need for a try/except.
@@ -63,7 +63,7 @@ def get_most_qualified_user_for_email_and_password(email, password):
 
 
 def get_most_qualified_user_for_email(email):
-    from djangocms_accounts.models import EmailAddress, EmailConfirmation
+    from aldryn_accounts.models import EmailAddress, EmailConfirmation
     # try verified email addresses
     for email in EmailAddress.objects.filter(email=email):
         # (EmailAddress.email is unique, but using the forloop vs a .get removes the need for a try/except.
