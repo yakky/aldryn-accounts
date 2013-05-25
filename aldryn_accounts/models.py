@@ -282,7 +282,7 @@ class EmailConfirmation(models.Model):
 
 class UserSettings(models.Model):
     user = models.OneToOneField(User, related_name='settings', unique=True, db_index=True)
-    timezone = timezone_field.TimeZoneField(blank=True, null=True, default=None)
+    timezone = timezone_field.TimeZoneField(blank=True, null=True, default=None, verbose_name=_('time zone'))
 
     location_name = models.CharField(_('location'), blank=True, default='', max_length=255)
     location_latitude = models.FloatField(null=True, blank=True, default=None)

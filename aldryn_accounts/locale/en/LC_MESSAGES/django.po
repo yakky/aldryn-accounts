@@ -1,0 +1,479 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-05-25 17:48+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: forms.py:12 forms.py:83
+msgid "Email"
+msgstr ""
+
+#: forms.py:18
+msgid "email"
+msgstr ""
+
+#: forms.py:32
+msgid "Sorry, this user doesn't exist."
+msgstr ""
+
+#: forms.py:37
+msgid "New password"
+msgstr ""
+
+#: forms.py:54
+msgid "Current Password"
+msgstr ""
+
+#: forms.py:58
+msgid "New Password"
+msgstr ""
+
+#: forms.py:68
+msgid "Please type your current password."
+msgstr ""
+
+#: forms.py:99
+msgid "A user is already registered with this email address."
+msgstr ""
+
+#: models.py:175
+msgid "email address"
+msgstr ""
+
+#: models.py:176 templates/aldryn_accounts/profile/email_list.html:6
+#: templates/aldryn_accounts/profile/email_list.html:10
+#: templates/aldryn_accounts/profile/includes/nav.html:19
+msgid "email addresses"
+msgstr ""
+
+#: models.py:225
+msgid "email confirmation"
+msgstr ""
+
+#: models.py:226
+msgid "email confirmations"
+msgstr ""
+
+#: models.py:285
+msgid "time zone"
+msgstr ""
+
+#: models.py:287
+msgid "location"
+msgstr ""
+
+#: models.py:291
+msgid "language"
+msgstr ""
+
+#: models.py:294 models.py:295
+msgid "user settings"
+msgstr ""
+
+#: views.py:45
+#, python-format
+msgid "Confirmation email sent to %(email)s."
+msgstr ""
+
+#: views.py:49
+#, python-format
+msgid "Logged in as %(user)s."
+msgstr ""
+
+#: views.py:53
+#, python-format
+msgid "The code %(code)s is invalid."
+msgstr ""
+
+#: views.py:320
+#, python-format
+msgid "You have confirmed %(email)s."
+msgstr ""
+
+#: views.py:334
+msgid "This email has already been verified with an other account."
+msgstr ""
+
+#: views.py:337
+msgid "The activation key has expired."
+msgstr ""
+
+#: views.py:399
+msgid "Password successfully changed."
+msgstr ""
+
+#: templates/aldryn_accounts/email_confirm.html:6
+msgid "Confirm Email"
+msgstr ""
+
+#: templates/aldryn_accounts/email_confirm.html:10
+#: templates/aldryn_accounts/signup_email_sent.html:6
+#: templates/aldryn_accounts/signup_email_sent.html:9
+msgid "Email Validation"
+msgstr ""
+
+#: templates/aldryn_accounts/email_confirm.html:14
+#, python-format
+msgid "Is %(email)s your email address?"
+msgstr ""
+
+#: templates/aldryn_accounts/email_confirm.html:17
+msgid "confirm and login"
+msgstr ""
+
+#: templates/aldryn_accounts/login_and_signup.html:5
+#: templates/aldryn_accounts/logout.html:6
+#: templates/aldryn_accounts/profile/index.html:6
+msgid "Log in"
+msgstr ""
+
+#: templates/aldryn_accounts/login_and_signup.html:11
+msgctxt "login/signup view"
+msgid "Welcome"
+msgstr ""
+
+#: templates/aldryn_accounts/login_and_signup.html:12
+msgctxt "login/signup view"
+msgid "Let's get started!"
+msgstr ""
+
+#: templates/aldryn_accounts/login_and_signup.html:24
+msgid "Already a member?"
+msgstr ""
+
+#: templates/aldryn_accounts/login_and_signup.html:35
+msgid "Login via Social"
+msgstr ""
+
+#: templates/aldryn_accounts/login_and_signup.html:45
+msgid "New? Register now"
+msgstr ""
+
+#: templates/aldryn_accounts/logout.html:10
+msgid "Are you sure you want to logout?"
+msgstr ""
+
+#: templates/aldryn_accounts/logout.html:15
+msgid "Log out"
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_change.html:5
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_change.html:11
+#, python-format
+msgid "Hi, %(username)s. Please choose your new password."
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_change.html:14
+msgid "Please choose your new password."
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_change.html:20
+msgid "Set new password"
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_change_done.html:3
+msgid "New password set"
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_change_done.html:6
+#, python-format
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"<a href=\"%(login_url)s\">login page</a>."
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_recover.html:5
+msgid "Password recovery"
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_recover.html:11
+msgid "Recover my password"
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_recover_sent.html:4
+msgid "Password recovery sent"
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_recover_sent.html:7
+#, python-format
+msgid ""
+"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
+"it to set a new password."
+msgstr ""
+
+#: templates/aldryn_accounts/signup_email.html:6
+msgid "Validate Email"
+msgstr ""
+
+#: templates/aldryn_accounts/signup_email.html:10
+msgid "Enter your email"
+msgstr ""
+
+#: templates/aldryn_accounts/signup_email.html:18
+msgid "Use this email"
+msgstr ""
+
+#: templates/aldryn_accounts/signup_email_confirmation_sent.html:6
+#: templates/aldryn_accounts/signup_email_confirmation_sent.html:9
+msgid "Confirm your email address"
+msgstr ""
+
+#: templates/aldryn_accounts/signup_email_confirmation_sent.html:11
+#, python-format
+msgid ""
+"We have sent you an email to <b>%(email)s</b> for verification. Follow the "
+"link provided to finalize the signup process."
+msgstr ""
+
+#: templates/aldryn_accounts/email/change_password.body.txt:1
+#: templates/aldryn_accounts/email/email_confirmation.body.txt:1
+#, python-format
+msgid "Hi, %(name)s"
+msgstr ""
+
+#: templates/aldryn_accounts/email/change_password.body.txt:3
+#, python-format
+msgid ""
+"You recently changed the password associated with your %(site_name)s "
+"account.\n"
+"If you did not make this change and believe your account has been "
+"compromised, please contact support at %(support_email)s."
+msgstr ""
+
+#: templates/aldryn_accounts/email/change_password.subject.txt:1
+#, python-format
+msgid "Your %(site_name)s password has been changed"
+msgstr ""
+
+#: templates/aldryn_accounts/email/email_confirmation.body.txt:3
+#, python-format
+msgid ""
+"You recently added an email address associated with your %(site_name)s "
+"account.\n"
+"To confirm %(email)s as your email, click this link:\n"
+"\n"
+"%(activate_url)s\n"
+"\n"
+msgstr ""
+
+#: templates/aldryn_accounts/email/email_confirmation.subject.txt:1
+#, python-format
+msgid "Confirm your %(site_name)s email, %(name)s"
+msgstr ""
+
+#: templates/aldryn_accounts/email/password_reset_recover.body.html:1
+#: templates/aldryn_accounts/email/password_reset_recover.body.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr ""
+
+#: templates/aldryn_accounts/email/password_reset_recover.body.html:3
+#: templates/aldryn_accounts/email/password_reset_recover.body.txt:3
+#, python-format
+msgid ""
+"You -- or someone pretending to be you -- has requested a password reset on "
+"%(domain)s."
+msgstr ""
+
+#: templates/aldryn_accounts/email/password_reset_recover.body.html:5
+#: templates/aldryn_accounts/email/password_reset_recover.body.txt:5
+msgid "You can set your new password by following this link:"
+msgstr ""
+
+#: templates/aldryn_accounts/email/password_reset_recover.body.html:9
+#: templates/aldryn_accounts/email/password_reset_recover.body.txt:9
+msgid ""
+"If you don't want to reset your password, simply ignore this email and it "
+"will stay unchanged."
+msgstr ""
+
+#: templates/aldryn_accounts/email/password_reset_recover.subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr ""
+
+#: templates/aldryn_accounts/inc/login_form.html:9
+msgid "Login"
+msgstr ""
+
+#: templates/aldryn_accounts/inc/login_form.html:10
+msgid "Forgot your password?"
+msgstr ""
+
+#: templates/aldryn_accounts/inc/signup_form.html:10
+msgid "Register"
+msgstr ""
+
+#: templates/aldryn_accounts/inc/usernav.html:3
+msgid "my profile"
+msgstr ""
+
+#: templates/aldryn_accounts/inc/usernav.html:5
+msgid "admin"
+msgstr ""
+
+#: templates/aldryn_accounts/inc/usernav.html:7
+msgid "logout"
+msgstr ""
+
+#: templates/aldryn_accounts/inc/usernav.html:9
+msgid "login"
+msgstr ""
+
+#: templates/aldryn_accounts/inc/usernav.html:10
+msgid "signup"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/base.html:5
+#: templates/aldryn_accounts/profile/change_password.html:3
+msgid "My account"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/change_password.html:7
+msgid "Here you can change your account password."
+msgstr ""
+
+#: templates/aldryn_accounts/profile/change_password.html:13
+msgid "set new password"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:6
+msgid "cancel an email confirmation"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:10
+msgid "cancel email confirmation"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:12
+#, python-format
+msgid "Do you really want to cancel the confirmation request for %(email)s?"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:13
+#: templates/aldryn_accounts/profile/email_delete.html:13
+#: templates/aldryn_accounts/profile/email_make_primary.html:12
+msgid "back"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:14
+#: templates/aldryn_accounts/profile/email_delete.html:14
+#: templates/aldryn_accounts/profile/email_make_primary.html:13
+msgid "yes"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_confirmation_create.html:6
+#: templates/aldryn_accounts/profile/email_delete.html:6
+msgid "Add an email address"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_confirmation_create.html:10
+msgid "add email address"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_confirmation_create.html:16
+#: templates/aldryn_accounts/profile/email_list.html:30
+msgid "add"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_delete.html:10
+msgid "remove email"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_delete.html:12
+#, python-format
+msgid "Do you really want to remove %(email)s from your account?"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_list.html:16
+msgid "verified"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_list.html:18
+msgid "primary"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_list.html:20
+msgid "set as primary"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_list.html:23
+msgid "not verified yet"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_list.html:24
+msgid "cancel"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_make_primary.html:6
+#: templates/aldryn_accounts/profile/email_make_primary.html:9
+msgid "set as primary email"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_make_primary.html:11
+#, python-format
+msgid "Do you really want to make %(email)s your primary email?"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/social_accounts.html:5
+#: templates/aldryn_accounts/profile/social_accounts.html:9
+#: templates/aldryn_accounts/profile/includes/nav.html:15
+msgid "connected accounts"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/social_accounts.html:14
+#: templates/aldryn_accounts/profile/includes/nav.html:8
+msgid "change password"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/social_accounts.html:17
+msgid "you don't have a password yet"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/social_accounts.html:18
+msgid "set a password"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/social_accounts.html:27
+msgid "connected"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/social_accounts.html:34
+msgid "connect"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/usersettings_form.html:6
+msgid "Settings"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/usersettings_form.html:16
+msgid "save"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/includes/nav.html:5
+msgctxt "User Profile"
+msgid "settings"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/includes/nav.html:10
+msgid "create a password"
+msgstr ""
