@@ -2,11 +2,11 @@
 {% load i18n cms_tags menu_tags sekizai_tags accounts_tags staticfiles %}
 {% load url from future %}
 
+{% block profile_title %}{% trans "connected accounts" %}{% endblock %}
 {% block title_extra %}{% trans "connected accounts" %}{% endblock %}
 {% block profile_navigation %}{% include 'aldryn_accounts/profile/includes/nav.html' with active='profile_associations' %}{% endblock %}
 
 {% block content_primary %}
-	<h3>{% trans 'connected accounts' %}</h3>
 	<ul class="reset-list tablish-list">
 		<li>
 			<img src="{% static 'favicon.png' %}" style="width: 24px;" /> {{ site_settings.site.name }}

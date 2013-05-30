@@ -2,7 +2,7 @@
 {% load i18n gravatar %}
 {% load url from future %}
 
-{% block title_prefix %}{% trans "My account" %}{% endblock %}
+{% block title_prefix %}{% trans "My account" %} - {% endblock %}
 
 {% block content_secondary %}
 	<div class="left" style="margin-right: 5px;">{% gravatar user.email 48 %}</div>
@@ -15,5 +15,6 @@
 {% endblock %}
 
 {% block content_primary %}
+	<h3>{% block profile_title %}{% endblock %}</h3>
 	{{ block.super }}
 {% endblock content_primary %}
