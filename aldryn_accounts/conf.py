@@ -8,7 +8,6 @@ ADD_TO_INSTALLED_APPS = [
     'social_auth',
     'absolute',
     'django_gravatar',
-    'my_account',
     'djangocms_common',
     'standard_form',
 ]
