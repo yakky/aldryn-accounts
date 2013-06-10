@@ -202,7 +202,7 @@ class SignupView(FormView):
         response_kwargs = {
             "request": self.request,
             "template": self.template_name_signup_closed,
-            }
+        }
         return self.response_class(**response_kwargs)
 
 
@@ -277,7 +277,7 @@ class PasswordResetRecoverView(password_reset.views.Recover):
             'user': self.user,
             'token': signing.dumps(self.user.pk, salt=self.salt),
             'secure': self.request.is_secure(),
-            }
+        }
         body = loader.render_to_string(self.email_template_name,
                                        context).strip()
         subject = loader.render_to_string(self.email_subject_template_name,
@@ -294,6 +294,7 @@ class PasswordResetRecoverView(password_reset.views.Recover):
 
     def get_success_url(self):
         return urlresolvers.reverse('accounts_password_reset_recover_sent', args=[self.mail_signature])
+
 
 class PasswordResetRecoverSentView(password_reset.views.RecoverDone):
     template_name = "aldryn_accounts/password_reset_recover_sent.html"
@@ -330,10 +331,10 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         self.object = confirmation = self.get_object()
         try:
             email_address = confirmation.confirm(verification_method="email")
-        except EmailAlreadyVerified, e:
+        except EmailAlreadyVerified:
             messages.error(self.request, _('This email has already been verified with an other account.'))
             return HttpResponseRedirect(self.request.path)
-        except VerificationKeyExpired, e:
+        except VerificationKeyExpired:
             messages.error(self.request, _('The activation key has expired.'))
             return HttpResponseRedirect(self.request.path)
         if not self.object.user.is_active:
@@ -432,7 +433,7 @@ class ChangePasswordView(FormView):
             kwargs.update({
                 "data": self.request.POST,
                 "files": self.request.FILES,
-                })
+            })
         return kwargs
 
     def form_valid(self, form):
@@ -445,7 +446,7 @@ class ChangePasswordView(FormView):
         ctx.update({
             "redirect_field_name": redirect_field_name,
             "redirect_field_value": self.request.REQUEST.get(redirect_field_name),
-            })
+        })
         return ctx
 
     def get_redirect_field_name(self):

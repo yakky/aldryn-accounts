@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django import forms
-from .models import EmailAddress, UserSettings, EmailConfirmation
+
+from .models import EmailAddress, UserSettings
 from .utils import get_most_qualified_user_for_email
 import password_reset.forms
 
@@ -36,7 +37,7 @@ class PasswordResetForm(forms.Form):
     password = forms.CharField(
         label=_('New password'),
         widget=forms.PasswordInput,
-        )
+    )
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
@@ -46,7 +47,7 @@ class PasswordResetForm(forms.Form):
         self.user.set_password(self.cleaned_data['password'])
         User.objects.filter(pk=self.user.pk).update(
             password=self.user.password,
-            )
+        )
 
 
 class ChangePasswordForm(forms.Form):
@@ -106,6 +107,7 @@ class UserSettingsForm(forms.ModelForm):
     location_city = forms.CharField()
     location_country = forms.CharField()
     profile_image = forms.ImageField()
+
     class Meta:
         model = UserSettings
         fields = ('preferred_language', 'timezone', 'location_name', 'location_latitude', 'location_longitude')

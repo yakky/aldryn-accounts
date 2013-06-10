@@ -1,21 +1,23 @@
 # -*- coding: utf-8 -*-
 import datetime
+import operator
 import urllib
+
 from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
-from django.db import models, IntegrityError
+from django.db import models
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-import operator
+import timezone_field
+
+from .conf import settings
 from .signals import signup_code_used, signup_code_sent, email_confirmed, email_confirmation_sent
 from .utils import random_token, user_display
-from .conf import *
-import timezone_field
 
 
 class SignupCode(models.Model):
@@ -107,12 +109,12 @@ class SignupCode(models.Model):
             unicode(current_site.domain),
             reverse("account_signup"),
             urllib.urlencode({"code": self.code})
-            )
+        )
         ctx = {
             "signup_code": self,
             "current_site": current_site,
             "signup_url": signup_url,
-            }
+        }
         subject = render_to_string("account/email/invite_user_subject.txt", ctx)
         message = render_to_string("account/email/invite_user.txt", ctx)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
@@ -260,7 +262,7 @@ class EmailConfirmation(models.Model):
             protocol,
             unicode(site.domain),
             reverse("accounts_confirm_email", args=[self.key])
-            )
+        )
         ctx = {
             "email": self.email,
             "user": self.user,
@@ -270,9 +272,9 @@ class EmailConfirmation(models.Model):
             "site_name": site.name,
             "site_domain": site.domain,
             "key": self.key,
-            }
+        }
         subject = render_to_string("aldryn_accounts/email/email_confirmation.subject.txt", ctx)
-        subject = "".join(subject.splitlines()) # remove superfluous line breaks
+        subject = "".join(subject.splitlines())  # remove superfluous line breaks
         message = render_to_string("aldryn_accounts/email/email_confirmation.body.txt", ctx)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
         self.sent_at = timezone.now()

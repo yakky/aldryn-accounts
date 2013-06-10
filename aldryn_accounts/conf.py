@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import pprint
 from django.conf import settings
 from appconf import AppConf
 
@@ -46,7 +45,7 @@ class AccountsAppConf(AppConf):
 
     SOCIAL_BACKEND_ORDERING = []
 
-    ENABLE_SOCIAL_AUTH=False  # controls visibility of social auth related things in the UI
+    ENABLE_SOCIAL_AUTH = False  # controls visibility of social auth related things in the UI
     ENABLE_GITHUB_LOGIN = False
     ENABLE_FACEBOOK_LOGIN = False
     ENABLE_TWITTER_LOGIN = False
@@ -111,4 +110,3 @@ class SocialAuthConf(AppConf):
 
     class Meta:
         prefix = ''
-
