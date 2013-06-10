@@ -101,17 +101,29 @@ class SignupForm(forms.Form):
 
 
 class UserSettingsForm(forms.ModelForm):
-    first_name = forms.CharField()
-    last_name = forms.CharField()
-    birth_date = forms.CharField()
-    location_city = forms.CharField()
-    location_country = forms.CharField()
-    profile_image = forms.ImageField()
+    first_name = forms.CharField(label=_("First name"), required=True)
+    last_name = forms.CharField(label=_("Last name"), required=True)
 
     class Meta:
         model = UserSettings
-        fields = ('preferred_language', 'timezone', 'location_name', 'location_latitude', 'location_longitude')
+        fields = ('birth_date', 'preferred_language', 'timezone',
+                  'location_name', 'location_latitude', 'location_longitude', 'profile_image')
         widgets = {
             'location_latitude': forms.HiddenInput(),
             'location_longitude': forms.HiddenInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(UserSettingsForm, self).__init__(*args, **kwargs)
+        user = self.instance.user
+        self.fields['first_name'].initial = user.first_name
+        self.fields['last_name'].initial = user.last_name
+
+    def save(self):
+        first_name = self.cleaned_data['first_name']
+        last_name = self.cleaned_data['last_name']
+        user = self.instance.user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        return super(UserSettingsForm, self).save()
