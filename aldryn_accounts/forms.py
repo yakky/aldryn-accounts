@@ -100,6 +100,12 @@ class SignupForm(forms.Form):
 
 
 class UserSettingsForm(forms.ModelForm):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    birth_date = forms.CharField()
+    location_city = forms.CharField()
+    location_country = forms.CharField()
+    profile_image = forms.ImageField()
     class Meta:
         model = UserSettings
         fields = ('preferred_language', 'timezone', 'location_name', 'location_latitude', 'location_longitude')
