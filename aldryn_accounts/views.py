@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
-import class_based_auth_views.views
+from uuid import uuid4
 import datetime
-import password_reset.views
+
+from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from class_based_auth_views.utils import default_redirect
-from django.contrib.auth import login
-from django.contrib.auth.models import User
+from dj.chain import chain
+from django import forms
 from django.contrib import messages, auth
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.sites.models import get_current_site, RequestSite
 from django.core import urlresolvers, signing
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
-from django import forms
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.template import loader
@@ -21,15 +22,16 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View
 from django.views.generic.base import TemplateResponseMixin
-from dj.chain import chain
 from social_auth.utils import setting as social_auth_setting
-from uuid import uuid4
+import class_based_auth_views.views
+import password_reset.views
+
 from .conf import settings
 from .context_processors import empty_login_and_signup_forms
-from .signals import user_sign_up_attempt, user_signed_up, password_changed
 from .forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm, PasswordResetForm
-from .utils import user_display
 from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
+from .signals import user_sign_up_attempt, user_signed_up, password_changed
+from .utils import user_display
 from .view_mixins import OnlyOwnedObjectsMixin
 
 
