@@ -293,7 +293,7 @@ class UserSettings(models.Model):
 
     profile_image = models.ImageField(verbose_name=_('profile image'), blank=True, default='', max_length=255,
                                       upload_to=profile_image_upload_to)
-    preferred_language = models.CharField(_('language'), blank=True, default='', choices=settings.LANGUAGES, max_length=32, )
+    preferred_language = models.CharField(_('language'), blank=True, default='', choices=settings.LANGUAGES, max_length=32)
 
     class Meta:
         verbose_name = _('user settings')
