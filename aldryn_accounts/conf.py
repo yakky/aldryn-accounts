@@ -6,7 +6,7 @@ ADD_TO_INSTALLED_APPS = [
     'password_reset',
     'social_auth',
     'absolute',
-    'django_gravatar',
+    # 'django_gravatar',
     'djangocms_common',
     'standard_form',
 ]
