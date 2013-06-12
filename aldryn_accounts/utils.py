@@ -3,7 +3,7 @@ import hashlib
 import os
 import uuid
 
-from django.conf import settings
+from .conf import settings
 from django.contrib.auth.models import User
 from django.utils.crypto import random
 
@@ -33,8 +33,8 @@ def random_token(extra=None, hash_func=hashlib.sha256):
 
 def profile_image_upload_to(instance, filename):
     name, extension = os.path.splitext(filename)
-    profile_data_prefix = getattr(settings, 'ALDRYN_ACCOUNTS_PROFILE_IMAGE_UPLOAD_TO', 'profile-data')
-    return profile_data_prefix + '/%s.%s' % (uuid.uuid4(), extension)
+    profile_data_prefix = settings.ALDRYN_ACCOUNTS_PROFILE_IMAGE_UPLOAD_TO
+    return os.path.join(profile_data_prefix, '%s%s' % (uuid.uuid4(), extension) )
 
 
 # TODO: make cache method configurable

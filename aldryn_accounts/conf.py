@@ -53,6 +53,8 @@ class AccountsAppConf(AppConf):
 
     LOGIN_REDIRECT_URL = '/'
 
+    PROFILE_IMAGE_UPLOAD_TO = 'profile-data'
+
     def enable_authentication_backend(self, name):
         s = self._meta.holder
         if not name in s.AUTHENTICATION_BACKENDS:
