@@ -13,9 +13,11 @@
 	{% timezone 'UTC' %}
 		<strong>UTC</strong>: {% now "DATETIME_FORMAT" %}<br/>
 	{% endtimezone %}
-	{% timezone TIME_ZONE %}
-		<strong>{{ TIME_ZONE }}</strong>: {% now "DATETIME_FORMAT" %}  (your timezone)
-	{% endtimezone %}
+	{% if TIME_ZONE %}
+		{% timezone TIME_ZONE %}
+			<strong>{{ TIME_ZONE }}</strong>: {% now "DATETIME_FORMAT" %}  (your timezone)
+		{% endtimezone %}
+	{% endif %}
 	<br/>
     geoip data:
     <pre>{{ request.session.geoip|pprint }}</pre>
