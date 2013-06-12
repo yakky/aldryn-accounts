@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django import forms
-from .models import EmailAddress, UserSettings, EmailConfirmation
+
+from .models import EmailAddress, UserSettings
 from .utils import get_most_qualified_user_for_email
 import password_reset.forms
 
@@ -36,7 +37,7 @@ class PasswordResetForm(forms.Form):
     password = forms.CharField(
         label=_('New password'),
         widget=forms.PasswordInput,
-        )
+    )
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
@@ -46,7 +47,7 @@ class PasswordResetForm(forms.Form):
         self.user.set_password(self.cleaned_data['password'])
         User.objects.filter(pk=self.user.pk).update(
             password=self.user.password,
-            )
+        )
 
 
 class ChangePasswordForm(forms.Form):
@@ -100,10 +101,29 @@ class SignupForm(forms.Form):
 
 
 class UserSettingsForm(forms.ModelForm):
+    first_name = forms.CharField(label=_("First name"), required=True)
+    last_name = forms.CharField(label=_("Last name"), required=True)
+
     class Meta:
         model = UserSettings
-        fields = ('preferred_language', 'timezone', 'location_name', 'location_latitude', 'location_longitude')
+        fields = ('birth_date', 'preferred_language', 'timezone',
+                  'location_name', 'location_latitude', 'location_longitude', 'profile_image')
         widgets = {
             'location_latitude': forms.HiddenInput(),
             'location_longitude': forms.HiddenInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(UserSettingsForm, self).__init__(*args, **kwargs)
+        user = self.instance.user
+        self.fields['first_name'].initial = user.first_name
+        self.fields['last_name'].initial = user.last_name
+
+    def save(self):
+        first_name = self.cleaned_data['first_name']
+        last_name = self.cleaned_data['last_name']
+        user = self.instance.user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        return super(UserSettingsForm, self).save()

@@ -3,11 +3,11 @@
 {% load url from future %}
 {% load i18n standard_form %}
 
+{% block profile_title %}{% trans "Add email address" %}{% endblock %}
 {% block title_extra %}{% trans "Add an email address" %}{% endblock %}
 {% block profile_navigation %}{% include 'aldryn_accounts/profile/includes/nav.html' with active='email' %}{% endblock %}
 
 {% block content_primary %}
-	<h3>{% trans "add email address" %}</h3>
 	<form method="post" action="" class="frm" spellcheck="false">
 		{% csrf_token %}
 		<fieldset class="frm-horizontal">

@@ -16,7 +16,7 @@ setup(
         'django-appconf',
         'django-classy-tags',
         'django-class-based-auth-views',
-        'django-gravatar2',
+        # 'django-gravatar2',
         'django-password-reset',
         'django-sekizai',
         'django-social-auth>=0.7.23',

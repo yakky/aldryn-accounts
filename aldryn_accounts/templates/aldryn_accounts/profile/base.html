@@ -1,13 +1,17 @@
 {% extends "sidebar_left.html" %}
-{% load i18n gravatar %}
+{% load i18n thumbnail %}
 {% load url from future %}
 
-{% block title_prefix %}{% trans "My account" %}{% endblock %}
+{% block title_prefix %}{% trans "My account" %} - {% endblock %}
 
 {% block content_secondary %}
-	<div class="left" style="margin-right: 5px;">{% gravatar user.email 48 %}</div>
-
-	<div><a href="{% url 'accounts_profile' %}"><span>{{ username }}</span></a></div>
+	<div>
+		<a href="{% url 'accounts_profile' %}">
+			<img src="{% thumbnail user.settings.profile_image 200x200 crop upscale %}" /><br/>
+			<span class="username">{{ username }}</span>
+		</a>
+		<hr/>
+	</div>
 	<div class="clear"></div>
 	{% block profile_navigation %}
 		{% include "aldryn_accounts/profile/includes/nav.html" %}
@@ -15,5 +19,6 @@
 {% endblock %}
 
 {% block content_primary %}
+	<h3>{% block profile_title %}{% endblock %}</h3>
 	{{ block.super }}
 {% endblock content_primary %}

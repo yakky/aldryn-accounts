@@ -3,10 +3,9 @@
 {% load url from future %}
 {% load i18n tz %}
 
-{% block title_extra %}{% trans "Log in" %}{% endblock %}
+{% block profile_title %}{% trans "Edit settings" %}{% endblock %}
 
 {% block content_primary %}
-	<h3>insert fancy profile welcome screen here</h3>
 	username: {{ request.user.username }}<br/>
 	email: {{ request.user.email }}<br/>
 	name: {{ request.user.first_name }} {{ request.user.last_name }}<br/>
@@ -14,12 +13,12 @@
 	{% timezone 'UTC' %}
 		<strong>UTC</strong>: {% now "DATETIME_FORMAT" %}<br/>
 	{% endtimezone %}
-	{% timezone TIME_ZONE %}
-		<strong>{{ TIME_ZONE }}</strong>: {% now "DATETIME_FORMAT" %}  (your timezone)
-	{% endtimezone %}
+	{% if TIME_ZONE %}
+		{% timezone TIME_ZONE %}
+			<strong>{{ TIME_ZONE }}</strong>: {% now "DATETIME_FORMAT" %}  (your timezone)
+		{% endtimezone %}
+	{% endif %}
 	<br/>
     geoip data:
-    <pre>
-{{ request.session.geoip|pprint }}
-    </pre>
+    <pre>{{ request.session.geoip|pprint }}</pre>
 {% endblock %}

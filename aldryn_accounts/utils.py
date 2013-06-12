@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import hashlib
+import os
+import uuid
+
+from .conf import settings
 from django.contrib.auth.models import User
 from django.utils.crypto import random
-from django.conf import settings
+
 import pygeoip
-import os
 
 
 def user_display(user, fallback_to_username=False, fallback_to_pk=False):
@@ -26,6 +29,12 @@ def random_token(extra=None, hash_func=hashlib.sha256):
         extra = []
     bits = extra + [str(random.getrandbits(512))]
     return hash_func("".join(bits)).hexdigest()
+
+
+def profile_image_upload_to(instance, filename):
+    name, extension = os.path.splitext(filename)
+    profile_data_prefix = settings.ALDRYN_ACCOUNTS_PROFILE_IMAGE_UPLOAD_TO
+    return os.path.join(profile_data_prefix, '%s%s' % (uuid.uuid4(), extension) )
 
 
 # TODO: make cache method configurable

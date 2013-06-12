@@ -1,21 +1,23 @@
 # -*- coding: utf-8 -*-
 import datetime
+import operator
 import urllib
+
 from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
-from django.db import models, IntegrityError
+from django.db import models
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-import operator
-from .signals import signup_code_used, signup_code_sent, email_confirmed, email_confirmation_sent
-from .utils import random_token, user_display
-from .conf import *
 import timezone_field
+
+from .conf import settings
+from .signals import signup_code_used, signup_code_sent, email_confirmed, email_confirmation_sent
+from .utils import profile_image_upload_to, random_token, user_display
 
 
 class SignupCode(models.Model):
@@ -107,12 +109,12 @@ class SignupCode(models.Model):
             unicode(current_site.domain),
             reverse("account_signup"),
             urllib.urlencode({"code": self.code})
-            )
+        )
         ctx = {
             "signup_code": self,
             "current_site": current_site,
             "signup_url": signup_url,
-            }
+        }
         subject = render_to_string("account/email/invite_user_subject.txt", ctx)
         message = render_to_string("account/email/invite_user.txt", ctx)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
@@ -260,7 +262,7 @@ class EmailConfirmation(models.Model):
             protocol,
             unicode(site.domain),
             reverse("accounts_confirm_email", args=[self.key])
-            )
+        )
         ctx = {
             "email": self.email,
             "user": self.user,
@@ -270,9 +272,9 @@ class EmailConfirmation(models.Model):
             "site_name": site.name,
             "site_domain": site.domain,
             "key": self.key,
-            }
+        }
         subject = render_to_string("aldryn_accounts/email/email_confirmation.subject.txt", ctx)
-        subject = "".join(subject.splitlines()) # remove superfluous line breaks
+        subject = "".join(subject.splitlines())  # remove superfluous line breaks
         message = render_to_string("aldryn_accounts/email/email_confirmation.body.txt", ctx)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
         self.sent_at = timezone.now()
@@ -282,13 +284,16 @@ class EmailConfirmation(models.Model):
 
 class UserSettings(models.Model):
     user = models.OneToOneField(User, related_name='settings', unique=True, db_index=True)
-    timezone = timezone_field.TimeZoneField(blank=True, null=True, default=None)
+    birth_date = models.DateField(_('birth date'), blank=True, null=True)
+    timezone = timezone_field.TimeZoneField(blank=True, null=True, default=None, verbose_name=_('time zone'))
 
     location_name = models.CharField(_('location'), blank=True, default='', max_length=255)
     location_latitude = models.FloatField(null=True, blank=True, default=None)
     location_longitude = models.FloatField(null=True, blank=True, default=None)
 
-    preferred_language = models.CharField(_('language'), blank=True, default='', choices=settings.LANGUAGES, max_length=32, )
+    profile_image = models.ImageField(verbose_name=_('profile image'), blank=True, default='', max_length=255,
+                                      upload_to=profile_image_upload_to)
+    preferred_language = models.CharField(_('language'), blank=True, default='', choices=settings.LANGUAGES, max_length=32)
 
     class Meta:
         verbose_name = _('user settings')

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import pprint
 from django.conf import settings
 from appconf import AppConf
 
@@ -7,8 +6,7 @@ ADD_TO_INSTALLED_APPS = [
     'password_reset',
     'social_auth',
     'absolute',
-    'django_gravatar',
-    'my_account',
+    # 'django_gravatar',
     'djangocms_common',
     'standard_form',
 ]
@@ -47,13 +45,15 @@ class AccountsAppConf(AppConf):
 
     SOCIAL_BACKEND_ORDERING = []
 
-    ENABLE_SOCIAL_AUTH=False  # controls visibility of social auth related things in the UI
+    ENABLE_SOCIAL_AUTH = False  # controls visibility of social auth related things in the UI
     ENABLE_GITHUB_LOGIN = False
     ENABLE_FACEBOOK_LOGIN = False
     ENABLE_TWITTER_LOGIN = False
     ENABLE_GOOGLE_LOGIN = False
 
     LOGIN_REDIRECT_URL = '/'
+
+    PROFILE_IMAGE_UPLOAD_TO = 'profile-data'
 
     def enable_authentication_backend(self, name):
         s = self._meta.holder
@@ -112,4 +112,3 @@ class SocialAuthConf(AppConf):
 
     class Meta:
         prefix = ''
-
