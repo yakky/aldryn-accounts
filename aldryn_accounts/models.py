@@ -183,16 +183,30 @@ class EmailAddress(models.Model):
     def __unicode__(self):
         return u"%s (%s)" % (self.email, self.user)
 
-    def set_as_primary(self):
+    def set_as_primary(self, commit=True):
         old_primary = EmailAddress.objects.get_primary(self.user)
         if old_primary:
             old_primary.is_primary = False
-            old_primary.save()
+            if commit:
+                old_primary.save()
         self.is_primary = True
-        self.save()
+        if commit:
+            self.save()
         self.user.email = self.email
-        self.user.save()
+        if commit:
+            self.user.save()
         return True
+
+    def save(self, *args, **kwargs):
+        user_needs_save = False
+        if self.is_primary:
+            if not self.user.email == self.email:
+                self.set_as_primary(commit=False)
+                user_needs_save = True
+        result = super(EmailAddress, self).save(*args, **kwargs)
+        if user_needs_save:
+            self.user.save()
+        return result
 
 
 class EmailConfirmationManager(models.Manager):
