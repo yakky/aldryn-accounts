@@ -26,7 +26,7 @@ from social_auth.utils import setting as social_auth_setting
 import class_based_auth_views.views
 import password_reset.views
 
-from .conf import settings
+from .conf import AccountsAppConf, settings
 from .context_processors import empty_login_and_signup_forms
 from .forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm, PasswordResetForm
 from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
@@ -118,18 +118,19 @@ class SignupView(FormView):
         if email_is_trusted:
             email_address = EmailAddress.objects.add_email(self.created_user, self.created_user.email)
         else:
-            email_address_verification = EmailConfirmation.objects.request(self.created_user, email=email, send=True)
             # send a verification email
-            if self.messages.get("email_confirmation_sent"):
-                messages.add_message(
-                    self.request,
-                    self.messages["email_confirmation_sent"]["level"],
-                    self.messages["email_confirmation_sent"]["text"] % {
-                        "email": form.cleaned_data["email"]
-                    }
-                )
+            email_address_verification = EmailConfirmation.objects.request(self.created_user, email=email, send=True)
+            if not AccountsAppConf.ENABLE_NOTIFICATIONS:
+                if self.messages.get("email_confirmation_sent"):
+                    messages.add_message(
+                        self.request,
+                        self.messages["email_confirmation_sent"]["level"],
+                        self.messages["email_confirmation_sent"]["text"] % {
+                            "email": form.cleaned_data["email"]
+                        }
+                    )
         self.after_signup(form)
-        self.login_user()
+        self.login_user(show_message=False)
         return redirect(self.get_success_url())
 
     def get_success_url(self, fallback_url=None, **kwargs):

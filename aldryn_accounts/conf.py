@@ -50,6 +50,7 @@ class AccountsAppConf(AppConf):
     ENABLE_FACEBOOK_LOGIN = False
     ENABLE_TWITTER_LOGIN = False
     ENABLE_GOOGLE_LOGIN = False
+    ENABLE_NOTIFICATIONS = True  # by now this is only used to suppress redundant "Confirmation email" message
 
     LOGIN_REDIRECT_URL = '/'
 
