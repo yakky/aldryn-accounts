@@ -12,6 +12,7 @@ setup(
     packages=find_packages(),
     install_requires = (
 #        'Django>=1.3,<1.5',
+        'django-annoying',
         'django-absolute',
         'django-appconf',
         'django-classy-tags',

@@ -14,6 +14,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import timezone_field
+from annoying.fields import AutoOneToOneField
 
 from .conf import settings
 from .signals import signup_code_used, signup_code_sent, email_confirmed, email_confirmation_sent
@@ -297,7 +298,7 @@ class EmailConfirmation(models.Model):
 
 
 class UserSettings(models.Model):
-    user = models.OneToOneField(User, related_name='settings', unique=True, db_index=True)
+    user = AutoOneToOneField(User, related_name='settings', unique=True, db_index=True)
     birth_date = models.DateField(_('birth date'), blank=True, null=True)
     timezone = timezone_field.TimeZoneField(blank=True, null=True, default=None, verbose_name=_('time zone'))
 
@@ -312,3 +313,21 @@ class UserSettings(models.Model):
     class Meta:
         verbose_name = _('user settings')
         verbose_name_plural = _('user settings')
+
+
+# South rules
+rules = [
+    (
+        (AutoOneToOneField,),
+        [],
+        {
+            "to": ["rel.to", {}],
+            "to_field": ["rel.field_name", {"default_attr": "rel.to._meta.pk.name"}],
+            "related_name": ["rel.related_name", {"default": None}],
+            "db_index": ["db_index", {"default": True}],
+        },
+    )
+]
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules(rules, ["^annoying\.fields\.AutoOneToOneField"])
+
