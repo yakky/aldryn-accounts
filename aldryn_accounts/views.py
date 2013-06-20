@@ -28,7 +28,7 @@ from social_auth.utils import setting as social_auth_setting
 import class_based_auth_views.views
 import password_reset.views
 
-from .conf import AccountsAppConf, settings
+from .conf import settings
 from .context_processors import empty_login_and_signup_forms
 from .forms import (
     EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm,
@@ -125,7 +125,7 @@ class SignupView(FormView):
         else:
             # send a verification email
             email_address_verification = EmailConfirmation.objects.request(self.created_user, email=email, send=True)
-            if not AccountsAppConf.ENABLE_NOTIFICATIONS:
+            if not settings.ALDRYN_ACCOUNTS_ENABLE_NOTIFICATIONS:
                 if self.messages.get("email_confirmation_sent"):
                     messages.add_message(
                         self.request,
