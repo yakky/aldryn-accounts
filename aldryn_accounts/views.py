@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
 import datetime
+import urllib
 
 from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from class_based_auth_views.utils import default_redirect
@@ -14,6 +15,7 @@ from django.contrib.sites.models import get_current_site, RequestSite
 from django.core import urlresolvers, signing
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.template import loader
@@ -28,7 +30,10 @@ import password_reset.views
 
 from .conf import AccountsAppConf, settings
 from .context_processors import empty_login_and_signup_forms
-from .forms import EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm, PasswordRecoveryForm, SignupForm, UserSettingsForm, PasswordResetForm
+from .forms import (
+    EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm,
+    PasswordRecoveryForm, SignupForm, SignupEmailResendConfirmationForm,
+    UserSettingsForm, PasswordResetForm)
 from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
 from .signals import user_sign_up_attempt, user_signed_up, password_changed
 from .utils import user_display
@@ -240,6 +245,70 @@ class SignupEmailView(FormView):
         name = social_auth_setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
         backend = self.request.session[name]['backend']
         return urlresolvers.reverse('socialauth_complete', kwargs=dict(backend=backend))
+
+
+class SignupEmailResendConfirmationView(FormView):
+    template_name = 'aldryn_accounts/signup_email_resend_confirmation.html'
+    form_class = SignupEmailResendConfirmationForm
+
+    def get_form_kwargs(self):
+        kwargs = super(SignupEmailResendConfirmationView, self).get_form_kwargs()
+        return kwargs
+
+    def _get_email(self):
+        if not hasattr(self, '_email'):
+            email = self.request.GET.get('email', '')
+            self._email = urllib.unquote(email)
+        return self._email
+
+    def get_context_data(self, **kwargs):
+        context = super(SignupEmailResendConfirmationView, self).get_context_data(**kwargs)
+        email = self._get_email()
+        context['email'] = email
+        return context
+
+    def get_initial(self):
+        initial = super(SignupEmailResendConfirmationView, self).get_initial()
+        email = self._get_email()
+        initial["email"] = email
+        return initial
+
+    def get_success_url(self):
+        email = self._get_email()
+        url = reverse('accounts_signup_email_confirmation_sent')
+        url += '?' + urllib.urlencode({'email': email})
+        return url
+
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        try:
+            email_confirmation = EmailConfirmation.objects.get(email=email)
+        except EmailConfirmation.DoesNotExist:
+            messages.error(self.request, _('This email does not have any pending confirmations.'))
+            return self.form_invalid(form)
+        else:
+            email_confirmation.send()
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        # This shouldn't happen unless someone was tampering with the email parameter
+        # or somehow managed to have invalid email in the database
+        return HttpResponseRedirect(reverse('accounts_signup'))
+
+
+class SignupEmailConfirmationSentView(TemplateView):
+    template_name = 'aldryn_accounts/signup_email_confirmation_sent.html'
+
+    def get_the_email(self):
+        email = self.request.GET.get('email', None)
+        email = urllib.unquote(email)
+        return email
+
+    def get_context_data(self, **kwargs):
+        context = super(SignupEmailConfirmationSentView, self).get_context_data(**kwargs)
+        email = self.get_the_email()
+        context['email'] = email
+        return context
 
 
 class SignupEmailSentView(TemplateView):
