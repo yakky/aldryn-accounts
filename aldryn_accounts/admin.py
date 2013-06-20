@@ -8,7 +8,7 @@ from social_auth.db.django_models import UserSocialAuth
 
 class EmailInline(admin.TabularInline):
     model = EmailAddress
-    extra = 0
+    extra = 1
 
 
 class UserSocialAuthInline(admin.TabularInline):
@@ -18,7 +18,7 @@ class UserSocialAuthInline(admin.TabularInline):
 
 class UserSettingsInline(admin.StackedInline):
     model = UserSettings
-    extra = 0
+    extra = 1
     max_num = 1
 
 
