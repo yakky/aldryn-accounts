@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import patterns, include, url
-from .views import LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,\
-    ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView, ChangePasswordView, \
-    ProfileView, CreatePasswordView, ProfileEmailListView, ProfileEmailConfirmationCreateView, \
-    ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView, ConfirmEmailView, \
-    SignupView, SignupEmailView, SignupEmailSentView, UserSettingsView
+from .views import (
+    LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,
+    ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView,
+    ChangePasswordView, ProfileView, CreatePasswordView, ProfileEmailListView,
+    ProfileEmailConfirmationCreateView, ProfileEmailConfirmationCancelView,
+    ProfileEmailDeleteView, ProfileEmailMakePrimaryView, ConfirmEmailView, SignupView,
+    SignupEmailView, SignupEmailResendConfirmationView, SignupEmailConfirmationSentView,
+    SignupEmailSentView, UserSettingsView)
 import social_auth.views
 
 
@@ -12,6 +15,8 @@ import social_auth.views
 urlpatterns = patterns('',
     url(r"^signup/$", SignupView.as_view(), name="accounts_signup"),
     url(r"^signup/email/$", SignupEmailView.as_view(), name="accounts_signup_email"),
+    url(r"^signup/email/resend-confirmation/$", SignupEmailResendConfirmationView.as_view(), name="accounts_signup_email_resend_confirmation"),
+    url(r"^signup/email/confirmation-sent/$", SignupEmailConfirmationSentView.as_view(), name="accounts_signup_email_confirmation_sent"),
     url(r"^signup/email/sent/$", SignupEmailSentView.as_view(), name="accounts_signup_email_sent"),
 
     url(r"^login/$", LoginView.as_view(), name="login"), #

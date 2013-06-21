@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import urllib
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-from .models import EmailAddress, UserSettings
+from .models import EmailAddress, EmailConfirmation, UserSettings
 from .utils import get_most_qualified_user_for_email
 import password_reset.forms
 
@@ -94,10 +98,28 @@ class SignupForm(forms.Form):
 
     def clean_email(self):
         value = self.cleaned_data["email"]
-        qs = EmailAddress.objects.filter(email__iexact=value)
-        if not qs.exists():
-            return value
-        raise forms.ValidationError(_("A user is already registered with this email address."))
+        verified_qs = EmailAddress.objects.filter(email__iexact=value)
+        if verified_qs.exists():
+            raise forms.ValidationError(_("A user is already registered with this email address."))
+        unverified_qs = EmailConfirmation.objects.filter(email__iexact=value)
+        if unverified_qs.exists():
+            resend_url = reverse('accounts_signup_email_resend_confirmation')
+            resend_url += '?' + urllib.urlencode({'email': value})
+            body = render_to_string('aldryn_accounts/inc/email_already_in_the_verification_phase.html',
+                                    {'resend_url': resend_url})
+            raise forms.ValidationError(body)
+        return value
+
+
+class SignupEmailResendConfirmationForm(forms.Form):
+    email = forms.EmailField(required=True, widget=forms.HiddenInput())
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        verified_qs = EmailAddress.objects.filter(email__iexact=email)
+        if verified_qs.exists():
+            raise forms.ValidationError(_("A user is already registered with this email address."))
+        return email
 
 
 class UserSettingsForm(forms.ModelForm):

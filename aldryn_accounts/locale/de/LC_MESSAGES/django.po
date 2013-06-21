@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-25 17:48+0200\n"
+"POT-Creation-Date: 2013-06-21 09:52+0200\n"
 "PO-Revision-Date: 2013-05-25 17:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -17,101 +17,120 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: forms.py:12 forms.py:83
+#: forms.py:17 forms.py:88
 msgid "Email"
 msgstr ""
 
-#: forms.py:18
+#: forms.py:23
 msgid "email"
 msgstr ""
 
-#: forms.py:32
+#: forms.py:37
 msgid "Sorry, this user doesn't exist."
 msgstr "Dieser Benutzer existiert nicht."
 
-#: forms.py:37
+#: forms.py:42
 msgid "New password"
 msgstr "Neues Passwort"
 
-#: forms.py:54
+#: forms.py:59
 msgid "Current Password"
 msgstr "Aktuelles Passwort"
 
-#: forms.py:58
+#: forms.py:63
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: forms.py:68
+#: forms.py:73
 msgid "Please type your current password."
 msgstr "Geben Sie Ihr aktuelles Passwort ein."
 
-#: forms.py:99
+#: forms.py:103 forms.py:121
 msgid "A user is already registered with this email address."
 msgstr "Ein Benutzer mit dieser Email ist bereits bei uns registriert."
 
-#: models.py:175
+#: forms.py:126
+msgid "First name"
+msgstr ""
+
+#: forms.py:127
+msgid "Last name"
+msgstr ""
+
+#: models.py:178
 msgid "email address"
 msgstr "E-Mail"
 
-#: models.py:176 templates/aldryn_accounts/profile/email_list.html:6
-#: templates/aldryn_accounts/profile/email_list.html:10
-#: templates/aldryn_accounts/profile/includes/nav.html:19
+#: models.py:179 templates/aldryn_accounts/profile/includes/nav.html:19
 msgid "email addresses"
 msgstr "E-Mails"
 
-#: models.py:225
+#: models.py:242
 msgid "email confirmation"
 msgstr "E-Mail Bestätigung"
 
-#: models.py:226
+#: models.py:243
 msgid "email confirmations"
 msgstr "E-Mail Bestätigungen"
 
-#: models.py:285
+#: models.py:302
+msgid "birth date"
+msgstr ""
+
+#: models.py:303
 msgid "time zone"
 msgstr "Zeitzone"
 
-#: models.py:287
+#: models.py:305
 msgid "location"
 msgstr "Ort"
 
-#: models.py:291
+#: models.py:309
+#, fuzzy
+msgid "profile image"
+msgstr "Mein Profil"
+
+#: models.py:311
 msgid "language"
 msgstr "Sprache"
 
-#: models.py:294 models.py:295
+#: models.py:314 models.py:315
 msgid "user settings"
 msgstr "Benutzereinstellungen"
 
-#: views.py:45
+#: views.py:52
 #, python-format
 msgid "Confirmation email sent to %(email)s."
 msgstr "Bestätigungsmail gesendet an %(email)s."
 
-#: views.py:49
+#: views.py:56
 #, python-format
 msgid "Logged in as %(user)s."
 msgstr "Angemeldet als %(user)s."
 
-#: views.py:53
+#: views.py:60
 #, python-format
 msgid "The code %(code)s is invalid."
 msgstr "Der Code %(code)s ist ungültig."
 
-#: views.py:320
+#: views.py:287
+msgid "This email does not have any pending confirmations."
+msgstr ""
+
+#: views.py:393
 #, python-format
 msgid "You have confirmed %(email)s."
 msgstr "Sie haben %(email)s bestätigt."
 
-#: views.py:334
+#: views.py:407
 msgid "This email has already been verified with an other account."
 msgstr "Diese E-Mail wurde bereits von einem anderen Konto aktiviert."
 
-#: views.py:337
+#: views.py:410
 msgid "The activation key has expired."
 msgstr "Der Aktivierungsschlüssel ist obligatorisch."
 
-#: views.py:399
+#: views.py:472
 msgid "Password successfully changed."
 msgstr "Passwort wurde neu gesetzt."
 
@@ -136,7 +155,6 @@ msgstr "Bestätigen und anmelden"
 
 #: templates/aldryn_accounts/login_and_signup.html:5
 #: templates/aldryn_accounts/logout.html:6
-#: templates/aldryn_accounts/profile/index.html:6
 msgid "Log in"
 msgstr "Anmelden"
 
@@ -250,6 +268,24 @@ msgstr ""
 "Wir haben Ihnen zur Bestätigung eine Mail an <b>%(email)s</b> geschickt. "
 "Folgen Sie dem Link um die Anmeldung abzuschliessen."
 
+#: templates/aldryn_accounts/signup_email_resend_confirmation.html:6
+#, fuzzy
+msgid "Send again the confirmation email"
+msgstr "E-Mail Bestätigung"
+
+#: templates/aldryn_accounts/signup_email_resend_confirmation.html:9
+#, fuzzy, python-format
+msgid "Send me the confirmation email to %(email)s again"
+msgstr "Bestätigungsmail gesendet an %(email)s."
+
+#: templates/aldryn_accounts/signup_email_resend_confirmation.html:12
+msgid "Are You sure?"
+msgstr ""
+
+#: templates/aldryn_accounts/signup_email_resend_confirmation.html:18
+msgid "Yes, send me the confirmation email again"
+msgstr ""
+
 #: templates/aldryn_accounts/email/change_password.body.txt:1
 #: templates/aldryn_accounts/email/email_confirmation.body.txt:1
 #, python-format
@@ -330,6 +366,13 @@ msgstr ""
 msgid "Password recovery on %(domain)s"
 msgstr "Passwort zurück setzen auf %(domain)s"
 
+#: templates/aldryn_accounts/inc/email_already_in_the_verification_phase.html:4
+#, python-format
+msgid ""
+"A verification email was already send to this address. Click <a href="
+"\"%(resend_url)s\">here</a> to resend it."
+msgstr ""
+
 #: templates/aldryn_accounts/inc/login_form.html:9
 msgid "Login"
 msgstr "Anmelden"
@@ -363,24 +406,31 @@ msgid "signup"
 msgstr "Registrieren"
 
 #: templates/aldryn_accounts/profile/base.html:5
-#: templates/aldryn_accounts/profile/change_password.html:3
 msgid "My account"
 msgstr "Mein Konto"
 
-#: templates/aldryn_accounts/profile/change_password.html:7
+#: templates/aldryn_accounts/profile/change_password.html:3
+#: templates/aldryn_accounts/profile/change_password.html:4
+#, fuzzy
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: templates/aldryn_accounts/profile/change_password.html:8
 msgid "Here you can change your account password."
 msgstr "Hier können Sie Ihr Passwort ändern."
 
-#: templates/aldryn_accounts/profile/change_password.html:13
+#: templates/aldryn_accounts/profile/change_password.html:16
 msgid "set new password"
 msgstr "Neues Passwort setzen"
 
 #: templates/aldryn_accounts/profile/email_confirmation_cancel.html:6
-msgid "cancel an email confirmation"
+#, fuzzy
+msgid "Cancel email confirmation"
 msgstr "E-Mail Bestätigung abbrechen"
 
-#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:10
-msgid "cancel email confirmation"
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:7
+#, fuzzy
+msgid "Cancel an email confirmation"
 msgstr "E-Mail Bestätigung abbrechen"
 
 #: templates/aldryn_accounts/profile/email_confirmation_cancel.html:12
@@ -401,12 +451,12 @@ msgid "yes"
 msgstr "Ja"
 
 #: templates/aldryn_accounts/profile/email_confirmation_create.html:6
-#: templates/aldryn_accounts/profile/email_delete.html:6
-msgid "Add an email address"
+#, fuzzy
+msgid "Add email address"
 msgstr "E-Mail Adresse hinzufügen"
 
-#: templates/aldryn_accounts/profile/email_confirmation_create.html:10
-msgid "add email address"
+#: templates/aldryn_accounts/profile/email_confirmation_create.html:7
+msgid "Add an email address"
 msgstr "E-Mail Adresse hinzufügen"
 
 #: templates/aldryn_accounts/profile/email_confirmation_create.html:16
@@ -414,14 +464,26 @@ msgstr "E-Mail Adresse hinzufügen"
 msgid "add"
 msgstr "hinzufügen"
 
-#: templates/aldryn_accounts/profile/email_delete.html:10
-msgid "remove email"
+#: templates/aldryn_accounts/profile/email_delete.html:6
+#, fuzzy
+msgid "Remove email"
 msgstr "E-Mail Adresse entfernen"
+
+#: templates/aldryn_accounts/profile/email_delete.html:7
+#, fuzzy
+msgid "Remove an email address"
+msgstr "E-Mail Adresse hinzufügen"
 
 #: templates/aldryn_accounts/profile/email_delete.html:12
 #, python-format
 msgid "Do you really want to remove %(email)s from your account?"
 msgstr "Wollen Sie wirklich die E-Mail %(email)s von Ihrem Konto entfernen?"
+
+#: templates/aldryn_accounts/profile/email_list.html:6
+#: templates/aldryn_accounts/profile/email_list.html:7
+#, fuzzy
+msgid "Email addresses"
+msgstr "E-Mails"
 
 #: templates/aldryn_accounts/profile/email_list.html:16
 msgid "verified"
@@ -444,8 +506,9 @@ msgid "cancel"
 msgstr "Abbrechen"
 
 #: templates/aldryn_accounts/profile/email_make_primary.html:6
-#: templates/aldryn_accounts/profile/email_make_primary.html:9
-msgid "set as primary email"
+#: templates/aldryn_accounts/profile/email_make_primary.html:7
+#, fuzzy
+msgid "Set as primary email"
 msgstr "Als Primär-Adresse setzen"
 
 #: templates/aldryn_accounts/profile/email_make_primary.html:11
@@ -453,10 +516,15 @@ msgstr "Als Primär-Adresse setzen"
 msgid "Do you really want to make %(email)s your primary email?"
 msgstr "Wollen Sie wirklich %(email)s zu Ihrer primären E-Mail Adresse machen?"
 
+#: templates/aldryn_accounts/profile/index.html:6
+#, fuzzy
+msgid "Edit settings"
+msgstr "Einstellungen"
+
 #: templates/aldryn_accounts/profile/social_accounts.html:5
-#: templates/aldryn_accounts/profile/social_accounts.html:9
-#: templates/aldryn_accounts/profile/includes/nav.html:15
-msgid "connected accounts"
+#: templates/aldryn_accounts/profile/social_accounts.html:6
+#, fuzzy
+msgid "Connected accounts"
 msgstr "Verknüpfte Konten"
 
 #: templates/aldryn_accounts/profile/social_accounts.html:14
@@ -472,19 +540,24 @@ msgstr "Sie haben noch kein Passwort"
 msgid "set a password"
 msgstr "Passwort setzen"
 
-#: templates/aldryn_accounts/profile/social_accounts.html:27
+#: templates/aldryn_accounts/profile/social_accounts.html:28
 msgid "connected"
 msgstr "Verknüpft"
 
-#: templates/aldryn_accounts/profile/social_accounts.html:34
+#: templates/aldryn_accounts/profile/social_accounts.html:35
 msgid "connect"
 msgstr "Verknüpfen"
 
 #: templates/aldryn_accounts/profile/usersettings_form.html:6
+#, fuzzy
+msgid "Edit Settings"
+msgstr "Einstellungen"
+
+#: templates/aldryn_accounts/profile/usersettings_form.html:7
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: templates/aldryn_accounts/profile/usersettings_form.html:16
+#: templates/aldryn_accounts/profile/usersettings_form.html:17
 msgid "save"
 msgstr "sichern"
 
@@ -496,3 +569,7 @@ msgstr "Einstellungen"
 #: templates/aldryn_accounts/profile/includes/nav.html:10
 msgid "create a password"
 msgstr "Passwort erstellen"
+
+#: templates/aldryn_accounts/profile/includes/nav.html:15
+msgid "connected accounts"
+msgstr "Verknüpfte Konten"

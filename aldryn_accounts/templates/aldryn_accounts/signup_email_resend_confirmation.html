@@ -1,0 +1,22 @@
+{% extends "aldryn_accounts/base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{% block title_extra %}{% trans "Send again the confirmation email" %}{% endblock %}
+
+{% block content_primary %}
+	<h2>{% blocktrans %}Send me the confirmation email to {{ email }} again{% endblocktrans %}</h2>
+	<form id="signup_email_resend_confirmation" method="post" action="{# leave empty #}" class="form-horizontal">
+		<legend>
+			<strong>{% trans "Are You sure?" %}</strong>
+		</legend>
+		<fieldset>
+			{% csrf_token %}
+			{{ form }}
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">{% trans "Yes, send me the confirmation email again" %}</button>
+			</div>
+		</fieldset>
+	</form>
+{% endblock %}
