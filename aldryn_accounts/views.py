@@ -166,6 +166,7 @@ class SignupView(FormView):
         return uuid4().get_hex()[:30]
 
     def after_signup(self, form):
+        # TODO: SignupForm as sender might suck, because it might be replaced by something else.
         user_signed_up.send(sender=SignupForm, user=self.created_user, form=form)
 
     def login_user(self, show_message=True):
@@ -215,6 +216,9 @@ class SignupView(FormView):
 
 
 class SignupEmailView(FormView):
+    """
+    experimental: used when someone signs up with a social login and has to also add an email.
+    """
     template_name = 'aldryn_accounts/signup_email.html'
     form_class = EmailForm
 
