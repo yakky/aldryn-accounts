@@ -31,13 +31,6 @@ class AccountsUserAdmin(UserAdmin):
         return u", ".join([u"%s (%s)" % (i.provider, i.uid) for i in obj.social_auth.all()])
 
 
-class EmailAddressAdmin(admin.ModelAdmin):
-    list_display = ('email', 'user', 'is_primary', 'verification_method', 'verified_at',)
-    list_filter = ('is_primary', 'verification_method',)
-    date_hierarchy = 'verified_at'
-    search_fields = ('email', 'user__username', 'user__first_name', 'user__last_name', 'user__email',)
-
-
 class EmailConfirmationAdmin(admin.ModelAdmin):
     list_display = ('email', 'user')
     actions = ('manual_confirmation', )
@@ -54,4 +47,3 @@ class UserProxy(User):
 
 admin.site.register(UserProxy, AccountsUserAdmin)
 admin.site.register(EmailConfirmation, EmailConfirmationAdmin)
-admin.site.register(EmailAddress, EmailAddressAdmin)
