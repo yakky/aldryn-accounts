@@ -1,5 +1,5 @@
 {% load standard_form i18n %}{% load url from future %}
-<form method="post" action="{% url 'login' %}{# TODO: add the 'next' get parameter #}" class="frm" autocapitalize="off">
+<form method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}" class="frm" autocapitalize="off">
 	{% csrf_token %}
 	{% if redirect_field_value %}<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />{% endif %}
 	<fieldset class="frm-vertical">
