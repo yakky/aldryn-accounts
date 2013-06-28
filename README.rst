@@ -94,6 +94,12 @@ using django-cms apphooks. In order for this to work, create a cms page with the
 choose ``aldryn_accounts/profile/base.html`` as the template. To add an element to the navigation just create a
 subpage and assign your view logic as an AppHook.
 
+Overriding
+----------
+
+To override login/signup and the core profile view (and anything else really), a custom ``urls`` can be defined and
+included before the builtin ``aldryn_accounts.urls``. Overriding the builtin Views with customized subclasses.
+
 
 
 
