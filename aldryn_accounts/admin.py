@@ -86,10 +86,6 @@ class EmailConfirmationAdmin(admin.ModelAdmin):
 
 
 class UserProxy(User):
-    def save(self, *args, **kwargs):
-        if not self.username:
-            self.username = uuid.uuid4().get_hex()[:30]
-        return super(UserProxy, self).save(*args, **kwargs)
     class Meta:
         proxy = True
         verbose_name = _('User')
