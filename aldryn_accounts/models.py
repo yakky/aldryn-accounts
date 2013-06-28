@@ -20,6 +20,9 @@ from .conf import settings
 from .signals import signup_code_used, signup_code_sent, email_confirmed, email_confirmation_sent
 from .utils import profile_image_upload_to, random_token, user_display
 
+import monkeypatches
+monkeypatches.patch_user_unicode()
+
 
 class SignupCode(models.Model):
 
