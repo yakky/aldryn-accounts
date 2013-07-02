@@ -22,7 +22,7 @@ from django.template import loader
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View
+from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View, DetailView
 from django.views.generic.base import TemplateResponseMixin
 from social_auth.utils import setting as social_auth_setting
 import class_based_auth_views.views
@@ -610,20 +610,36 @@ class ProfileEmailListView(OnlyOwnedObjectsMixin, ListView):
         return context
 
 
-class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
-    template_name = 'aldryn_accounts/profile/email_delete.html'
-    model = EmailAddress
+class ProfileEmailConfirmationResendView(OnlyOwnedObjectsMixin, DetailView):
+    template_name = 'aldryn_accounts/profile/email_confirmation_resend.html'
+    model = EmailConfirmation
+    messages = {
+        "email_confirmation_resent": {
+            "level": messages.INFO,
+            "text": _("Confirmation email re-sent to %(email)s.")
+        },
+    }
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(ProfileEmailDeleteView, self).dispatch(*args, **kwargs)
+        return super(ProfileEmailConfirmationResendView, self).dispatch(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        email_confirmation = self.get_object()
+        email_confirmation.send()
+        message_type = 'email_confirmation_resent'
+        if message_type in self.messages:
+            messages.add_message(
+                self.request,
+                self.messages[message_type]["level"],
+                self.messages[message_type]["text"] % {
+                    "email": email_confirmation.email
+                }
+            )
+        return redirect(self.get_success_url())
 
     def get_success_url(self):
         return urlresolvers.reverse('accounts_email_list')
-
-    def get_queryset(self):
-        # don't allow deleting the primary email address
-        return super(ProfileEmailDeleteView, self).get_queryset().filter(is_primary=False)
 
 
 class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
@@ -659,6 +675,22 @@ class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
     def form_valid(self, form):
         self.object.set_as_primary()
         return redirect(self.get_success_url())
+
+
+class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
+    template_name = 'aldryn_accounts/profile/email_delete.html'
+    model = EmailAddress
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProfileEmailDeleteView, self).dispatch(*args, **kwargs)
+
+    def get_success_url(self):
+        return urlresolvers.reverse('accounts_email_list')
+
+    def get_queryset(self):
+        # don't allow deleting the primary email address
+        return super(ProfileEmailDeleteView, self).get_queryset().filter(is_primary=False)
 
 
 class UserSettingsView(UpdateView):
