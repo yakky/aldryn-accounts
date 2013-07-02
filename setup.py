@@ -1,17 +1,17 @@
 from setuptools import setup, find_packages
 
 setup(
-    name = "aldryn-accounts",
-    version = __import__('aldryn_accounts').__version__,
-    url = 'http://github.com/aldryn/aldryn-accounts',
-    license = 'BSD',
+    name='aldryn-accounts',
+    version=__import__('aldryn_accounts').__version__,
+    url='http://github.com/aldryn/aldryn-accounts',
+    license='BSD',
     platforms=['OS Independent'],
-    description = "A registration and authentication app for Aldryn and the django CMS Cloud.",
-    author = 'Divio AG',
-    author_email = 'developers@divio.ch',
+    description='A registration and authentication app for Aldryn and the django CMS Cloud.',
+    author='Divio AG',
+    author_email='developers@divio.ch',
     packages=find_packages(),
-    install_requires = (
-#        'Django>=1.3,<1.5',
+    install_requires=(
+        # 'Django>=1.3,<1.5',
         'django-annoying',
         'django-absolute',
         'django-appconf',
@@ -29,7 +29,7 @@ setup(
     ),
     include_package_data=True,
     zip_safe=False,
-    classifiers = [
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Intended Audience :: Developers',
