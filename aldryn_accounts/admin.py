@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-import uuid
 from aldryn_accounts.admin_forms import UserCreationForm
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import EmailConfirmation, EmailAddress, UserSettings
 from social_auth.db.django_models import UserSocialAuth
-from django.utils.translation import ugettext, ugettext_lazy as _
-
+from django.utils.translation import ugettext_lazy as _
 
 
 class EmailInline(admin.TabularInline):
@@ -33,6 +31,7 @@ class AccountsUserAdmin(UserAdmin):
     inlines = [UserSettingsInline, EmailInline, UserSocialAuthInline]
     readonly_fields = UserAdmin.readonly_fields + ('email', 'last_login', 'date_joined')
     add_readonly_fields = UserAdmin.readonly_fields + ('last_login', 'date_joined')
+    search_fields = ('username', 'first_name', 'last_name', 'email', 'emailaddress__email')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name',)}),
@@ -50,7 +49,6 @@ class AccountsUserAdmin(UserAdmin):
                                        'groups', 'user_permissions')}),
     )
     add_form = UserCreationForm
-
 
     def social_logins(self, obj):
         return u", ".join([u"%s (%s)" % (i.provider, i.uid) for i in obj.social_auth.all()])
