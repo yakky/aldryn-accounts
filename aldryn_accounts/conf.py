@@ -43,6 +43,9 @@ class AccountsAppConf(AppConf):
     SOCIAL_BACKENDS_WITH_TRUSTED_EMAIL = ['google']  # which backends can be trusted to provide validated email addresses
     SUPPORT_EMAIL = settings.DEFAULT_FROM_EMAIL
 
+    USER_DISPLAY_FALLBACK_TO_USERNAME = False
+    USER_DISPLAY_FALLBACK_TO_PK = False
+
     SOCIAL_BACKEND_ORDERING = []
 
     ENABLE_SOCIAL_AUTH = False  # controls visibility of social auth related things in the UI

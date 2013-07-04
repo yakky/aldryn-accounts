@@ -10,9 +10,9 @@ from django.utils.crypto import random
 import pygeoip
 
 
-def user_display(user, fallback_to_username=False, fallback_to_pk=False):
+def user_display(user, fallback_to_username=settings.ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_USERNAME, fallback_to_pk=settings.ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_PK):
     if user.is_anonymous():
-        return 'Anonymous user'
+        return u'Anonymous user'
     if user.email:
         return user.email
     elif user.first_name or user.last_name:
@@ -20,8 +20,8 @@ def user_display(user, fallback_to_username=False, fallback_to_pk=False):
     elif fallback_to_username and user.username:
         return user.username
     elif fallback_to_pk and user.pk:
-        return user.pk
-    return None
+        return unicode(user.pk)
+    return u''
 
 
 def random_token(extra=None, hash_func=hashlib.sha256):
