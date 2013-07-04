@@ -577,32 +577,39 @@ class ProfileAssociationsView(TemplateView):
         return super(ProfileAssociationsView, self).dispatch(*args, **kwargs)
 
 
-class ProfileEmailListView(ListView):
+class ProfileEmailListView(OnlyOwnedObjectsMixin, ListView):
     template_name = 'aldryn_accounts/profile/email_list.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(ProfileEmailListView, self).dispatch(*args, **kwargs)
 
+    def get(self, *args, **kwargs):
+        self.form = EmailForm()
+        return super(ProfileEmailListView, self).get(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        self.form = EmailForm(self.request.POST)
+        if self.form.is_valid():
+            return self.form_valid(self.form)
+        else:
+            return super(ProfileEmailListView, self).get(*args, **kwargs)
+
     def get_queryset(self):
-        return chain(EmailAddress.objects.all(), EmailConfirmation.objects.all()).filter(user=self.request.user)
-
-
-class ProfileEmailConfirmationCreateView(FormView):
-    template_name = 'aldryn_accounts/profile/email_confirmation_create.html'
-    form_class = EmailForm
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ProfileEmailConfirmationCreateView, self).dispatch(*args, **kwargs)
+        return chain(EmailAddress.objects.all(), EmailConfirmation.objects.all())
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
-        email_confirmation = EmailConfirmation.objects.request(user=self.request.user, email=email, send=True)
+        EmailConfirmation.objects.request(user=self.request.user, email=email, send=True)
         return redirect(self.get_success_url())
 
     def get_success_url(self):
         return urlresolvers.reverse('accounts_email_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileEmailListView, self).get_context_data(**kwargs)
+        context['add_email_form'] = self.form
+        return context
 
 
 class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
