@@ -4,10 +4,9 @@ from .views import (
     LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,
     ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView,
     ChangePasswordView, ProfileView, CreatePasswordView, ProfileEmailListView,
-    ProfileEmailConfirmationCreateView, ProfileEmailConfirmationCancelView,
-    ProfileEmailDeleteView, ProfileEmailMakePrimaryView, ConfirmEmailView, SignupView,
-    SignupEmailView, SignupEmailResendConfirmationView, SignupEmailConfirmationSentView,
-    SignupEmailSentView, UserSettingsView)
+    ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView,
+    ConfirmEmailView, SignupView, SignupEmailView, SignupEmailResendConfirmationView,
+    SignupEmailConfirmationSentView, SignupEmailSentView, UserSettingsView)
 import social_auth.views
 
 
