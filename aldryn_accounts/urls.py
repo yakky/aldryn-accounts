@@ -4,10 +4,9 @@ from .views import (
     LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,
     ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView,
     ChangePasswordView, ProfileView, CreatePasswordView, ProfileEmailListView,
-    ProfileEmailConfirmationCreateView, ProfileEmailConfirmationCancelView,
-    ProfileEmailDeleteView, ProfileEmailMakePrimaryView, ConfirmEmailView, SignupView,
-    SignupEmailView, SignupEmailResendConfirmationView, SignupEmailConfirmationSentView,
-    SignupEmailSentView, UserSettingsView)
+    ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView,
+    ConfirmEmailView, SignupView, SignupEmailView, SignupEmailResendConfirmationView,
+    SignupEmailConfirmationSentView, SignupEmailSentView, UserSettingsView)
 import social_auth.views
 
 
@@ -36,7 +35,6 @@ urlpatterns = patterns('',
     url(r"^profile/password/create/$", CreatePasswordView.as_view(), name="accounts_create_password"),
 
     url(r"^profile/emails/$", ProfileEmailListView.as_view(), name="accounts_email_list"),
-    url(r"^profile/email/add/$", ProfileEmailConfirmationCreateView.as_view(), name="accounts_email_create"),
     url(r"^profile/email/confirmation/(?P<pk>\d+)/cancel/$", ProfileEmailConfirmationCancelView.as_view(), name="accounts_email_confirmation_cancel"),
     url(r"^profile/email/(?P<pk>\d+)/delete/$", ProfileEmailDeleteView.as_view(), name="accounts_email_delete"),
     url(r"^profile/email/(?P<pk>\d+)/make_primary/$", ProfileEmailMakePrimaryView.as_view(), name="accounts_email_make_primary"),

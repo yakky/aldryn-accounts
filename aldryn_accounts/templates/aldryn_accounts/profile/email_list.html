@@ -1,7 +1,7 @@
 {% extends "aldryn_accounts/profile/base.html" %}
 
 {% load url from future %}
-{% load i18n %}
+{% load i18n standard_form %}
 
 {% block profile_title %}{% trans "Email addresses" %}{% endblock %}
 {% block title_extra %}{% trans "Email addresses" %}{% endblock %}
@@ -27,5 +27,13 @@
 			</li>
 		{% endfor %}
 	</ul>
-	<a class="btn" href="{% url 'accounts_email_create' %}">{% trans 'add'|capfirst %}</a>
+	<form method="post" action="" class="frm" spellcheck="false">
+		{% csrf_token %}
+		<fieldset class="frm-horizontal">
+			<ol>
+				{% standard_form add_email_form %}
+				<li><label></label><input type="submit" value="{% trans 'add' %}" class="btn" /></li>
+			</ol>
+		</fieldset>
+	</form>
 {% endblock %}
