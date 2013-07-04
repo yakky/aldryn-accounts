@@ -4,16 +4,14 @@ from .views import (
     LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,
     ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView,
     ChangePasswordView, ProfileView, CreatePasswordView, ProfileEmailListView,
-    ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView, 
-    ConfirmEmailView, SignupView, SignupEmailView, SignupEmailResendConfirmationView, 
-    SignupEmailConfirmationSentView, SignupEmailSentView, UserSettingsView, 
+    ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView,
+    ConfirmEmailView, SignupView, SignupEmailView, SignupEmailResendConfirmationView,
+    SignupEmailConfirmationSentView, SignupEmailSentView, UserSettingsView,
     ProfileEmailConfirmationResendView)
 import social_auth.views
 
 
-
-urlpatterns = patterns(
-    '',
+urlpatterns = patterns('',
     url(r"^signup/$", SignupView.as_view(), name="accounts_signup"),
     url(r"^signup/email/$", SignupEmailView.as_view(), name="accounts_signup_email"),
     url(r"^signup/email/resend-confirmation/$", SignupEmailResendConfirmationView.as_view(), name="accounts_signup_email_resend_confirmation"),
