@@ -577,7 +577,7 @@ class ProfileAssociationsView(TemplateView):
         return super(ProfileAssociationsView, self).dispatch(*args, **kwargs)
 
 
-class ProfileEmailListView(OnlyOwnedObjectsMixin, ListView):
+class ProfileEmailListView(ListView):
     template_name = 'aldryn_accounts/profile/email_list.html'
 
     @method_decorator(login_required)
@@ -596,7 +596,7 @@ class ProfileEmailListView(OnlyOwnedObjectsMixin, ListView):
             return super(ProfileEmailListView, self).get(*args, **kwargs)
 
     def get_queryset(self):
-        return chain(EmailAddress.objects.all(), EmailConfirmation.objects.all())
+        return chain(EmailAddress.objects.all(), EmailConfirmation.objects.all()).filter(user=self.request.user)
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
