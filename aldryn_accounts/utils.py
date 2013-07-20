@@ -45,7 +45,7 @@ def geoip(ip):
     # TODO: validate ip
     data = gi4.record_by_addr(ip)
     if not data:  # empty dict
-        return data
+        return dict()
     if data.get('city') and data.get('country'):
         data['pretty_name'] = u"%s, %s" % (data.get('city'), data.get('country_name'))
     elif data.get('country'):
