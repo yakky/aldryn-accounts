@@ -21,6 +21,7 @@
 					{% endif %}
 				{% else %}
 					<span class="label label-important">{% trans 'not verified yet' %}</span>
+					<a href="{% url 'accounts_email_confirmation_resend' pk=obj.pk %}">{% trans 're-send' %}</a>
 					<a href="{% url 'accounts_email_confirmation_cancel' pk=obj.pk %}">{% trans 'cancel' %}</a>
 				{% endif %}
 				</div>

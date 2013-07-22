@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls.defaults import patterns, url
 from .views import (
     LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,
     ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView,
     ChangePasswordView, ProfileView, CreatePasswordView, ProfileEmailListView,
     ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView,
     ConfirmEmailView, SignupView, SignupEmailView, SignupEmailResendConfirmationView,
-    SignupEmailConfirmationSentView, SignupEmailSentView, UserSettingsView)
+    SignupEmailConfirmationSentView, SignupEmailSentView, UserSettingsView,
+    ProfileEmailConfirmationResendView)
 import social_auth.views
-
 
 
 urlpatterns = patterns('',
@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r"^signup/email/confirmation-sent/$", SignupEmailConfirmationSentView.as_view(), name="accounts_signup_email_confirmation_sent"),
     url(r"^signup/email/sent/$", SignupEmailSentView.as_view(), name="accounts_signup_email_sent"),
 
-    url(r"^login/$", LoginView.as_view(), name="login"), #
+    url(r"^login/$", LoginView.as_view(), name="login"),
     url(r"^logout/$", LogoutView.as_view(), name="logout"),
 
     url(r'^password-reset/$', PasswordResetRecoverView.as_view(), name='accounts_password_reset_recover'),
@@ -35,6 +35,7 @@ urlpatterns = patterns('',
     url(r"^profile/password/create/$", CreatePasswordView.as_view(), name="accounts_create_password"),
 
     url(r"^profile/emails/$", ProfileEmailListView.as_view(), name="accounts_email_list"),
+    url(r"^profile/email/confirmation/(?P<pk>\d+)/re-send/$", ProfileEmailConfirmationResendView.as_view(), name="accounts_email_confirmation_resend"),
     url(r"^profile/email/confirmation/(?P<pk>\d+)/cancel/$", ProfileEmailConfirmationCancelView.as_view(), name="accounts_email_confirmation_cancel"),
     url(r"^profile/email/(?P<pk>\d+)/delete/$", ProfileEmailDeleteView.as_view(), name="accounts_email_delete"),
     url(r"^profile/email/(?P<pk>\d+)/make_primary/$", ProfileEmailMakePrimaryView.as_view(), name="accounts_email_make_primary"),
