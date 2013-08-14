@@ -56,16 +56,16 @@ def geoip(ip):
 def get_most_qualified_user_for_email_and_password(email, password):
     from aldryn_accounts.models import EmailAddress, EmailConfirmation
     # try verified email addresses
-    for email in EmailAddress.objects.filter(email=email):
+    for email in EmailAddress.objects.filter(email__iexact=email):
         # (EmailAddress.email is unique, but using the forloop vs a .get removes the need for a try/except.
         if email.user.check_password(password):
             return email.user
         # try the email field on the user
-    for user in User.objects.filter(email=email):
+    for user in User.objects.filter(email__iexact=email):
         if user.check_password(password):
             return user
         # try unconfirmed email addresses
-    for email_confirmation in EmailConfirmation.objects.filter(email=email):
+    for email_confirmation in EmailConfirmation.objects.filter(email__iexact=email):
         if email_confirmation.user.check_password(password):
             return email_confirmation.user
     return None
@@ -74,11 +74,11 @@ def get_most_qualified_user_for_email_and_password(email, password):
 def get_most_qualified_user_for_email(email):
     from aldryn_accounts.models import EmailAddress, EmailConfirmation
     # try verified email addresses
-    for email in EmailAddress.objects.filter(email=email):
+    for email in EmailAddress.objects.filter(email__iexact=email):
         # (EmailAddress.email is unique, but using the forloop vs a .get removes the need for a try/except.
         return email.user
-    for user in User.objects.filter(email=email):
+    for user in User.objects.filter(email__iexact=email):
         return user
-    for email_confirmation in EmailConfirmation.objects.filter(email=email):
+    for email_confirmation in EmailConfirmation.objects.filter(email__iexact=email):
         return email_confirmation.user
     return None
