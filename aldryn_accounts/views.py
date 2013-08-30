@@ -420,14 +420,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         user.backend = "django.contrib.auth.backends.ModelBackend"
         login(self.request, user)
         redirect_url = self.get_redirect_url()
-        if self.messages.get("email_confirmed"):
-            messages.add_message(
-                self.request,
-                self.messages["email_confirmed"]["level"],
-                self.messages["email_confirmed"]["text"] % {
-                    "email": confirmation.email
-                }
-            )
+        self.has_successfully_confirmed(confirmation=confirmation)
         return redirect(redirect_url)
 
     def get_object(self, queryset=None):
@@ -453,6 +446,22 @@ class ConfirmEmailView(TemplateResponseMixin, View):
             return urlresolvers.reverse('accounts_email_list')
         else:
             return urlresolvers.reverse('login')
+
+    def has_successfully_confirmed(self, confirmation):
+        """
+        Gets called when the user has successfully confirmed his/her email.
+        This method allows us to add custom handlers for this occasion.
+
+        By default this sends a message to the user.
+        """
+        if self.messages.get("email_confirmed"):
+            messages.add_message(
+                self.request,
+                self.messages["email_confirmed"]["level"],
+                self.messages["email_confirmed"]["text"] % {
+                    "email": confirmation.email
+                }
+            )
 
 
 class ProfileView(TemplateView):
