@@ -59,6 +59,8 @@ class AccountsAppConf(AppConf):
 
     PROFILE_IMAGE_UPLOAD_TO = 'profile-data'
 
+    USE_PROFILE_APPHOOKS = False
+
     def enable_authentication_backend(self, name):
         s = self._meta.holder
         if not name in s.AUTHENTICATION_BACKENDS:

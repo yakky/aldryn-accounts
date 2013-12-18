@@ -1,28 +1,34 @@
 # -*- coding: utf-8 -*-
+from aldryn_accounts.urls import email_settings_urlpatterns
 from cms.app_base import CMSApp
 from cms.apphook_pool import apphook_pool
-from cms.menu_bases import CMSAttachMenu
-from django.conf.urls import include, url, patterns
-from django.core import urlresolvers
 from django.utils.translation import ugettext_lazy as _
-from menus.base import NavigationNode
+from .conf import settings
+from . import urls
 
 
-#class AccountsProfileMenu(CMSAttachMenu):
-#    name = _('Account Profile Menu')
-#
-#    def get_nodes(self, request):
-#        nodes = [
-#            NavigationNode(_('login'), urlresolvers.reverse('accounts:login'), 'login_id'),
-#        ]
-#        return nodes
+class AldrynAccountsUserProfileIndexApphook(CMSApp):
+    name = _("user profile: index")
+    urls = [urls.profile_index_urlpatterns]
 
-# WARNING: don't use "AccountsApphook" as name, because it clashes with the shopplugnplay apphook.
-# There should be multiple hooks for different parts anyway
-# class AccountsStuffApphook(CMSApp):
-#     name = _("Accounts")
-# #    urls = [patterns('', url('^', include('aldryn_accounts.urls', namespace='accounts')))]
-#     urls = ['aldryn_accounts.urls']
-# #    menus = [AccountsProfileMenu]
 
-# apphook_pool.register(AccountsApphook)
+class AldrynAccountsUserProfileSettingsApphook(CMSApp):
+    name = _("user profile: settings")
+    urls = [urls.profile_settings_urlpatterns]
+
+
+class AldrynAccountsUserProfileChangePasswordApphook(CMSApp):
+    name = _("user profile: change password")
+    urls = [urls.change_password_urlpatterns]
+
+
+class AldrynAccountsUserProfileEmailSettingsApphook(CMSApp):
+    name = _("user profile: email settings")
+    urls = [urls.email_settings_urlpatterns]
+
+
+if settings.ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS:
+    apphook_pool.register(AldrynAccountsUserProfileIndexApphook)
+    apphook_pool.register(AldrynAccountsUserProfileSettingsApphook)
+    apphook_pool.register(AldrynAccountsUserProfileChangePasswordApphook)
+    apphook_pool.register(AldrynAccountsUserProfileEmailSettingsApphook)

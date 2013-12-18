@@ -489,6 +489,8 @@ class ChangePasswordView(FormView):
     def get(self, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return redirect("accounts_password_reset_recover")
+        if not self.request.user.has_usable_password:
+            return redirect("accounts_create_password")
         return super(ChangePasswordView, self).get(*args, **kwargs)
 
     def post(self, *args, **kwargs):
