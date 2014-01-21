@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.urlresolvers import NoReverseMatch
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
@@ -23,8 +24,13 @@ def check_notifications(user):
 
 def check_password(user):
     if not user.has_usable_password():
-        body = render_to_string('aldryn_accounts/notifications/no_password.html', {'user': user})
-        return Notification(body)
+        try:
+            body = render_to_string('aldryn_accounts/notifications/no_password.html', {'user': user})
+            return Notification(body)
+        except NoReverseMatch:
+            # the aldryn accounts profile urls are not setup correctly yet
+            # (e.g the apphook was not added yet)
+            pass
     return None
 
 
