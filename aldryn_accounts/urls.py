@@ -75,7 +75,7 @@ if not settings.ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS:
     print "adding them!"
     urlpatterns = urlpatterns + patterns('',
         url(r"^profile/settings/", include(profile_settings_urlpatterns)),
-        url(r"^profile/associations/", include(profile_settings_urlpatterns)),
+        url(r"^profile/associations/", include(associations_urlpatterns)),
         url(r"^profile/password/", include(change_password_urlpatterns)),
         url(r"^profile/email/", include(email_settings_urlpatterns)),
         url(r"^profile/", include(profile_index_urlpatterns)),
