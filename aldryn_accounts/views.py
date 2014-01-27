@@ -33,7 +33,7 @@ from .context_processors import empty_login_and_signup_forms
 from .forms import (
     EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm,
     PasswordRecoveryForm, SignupForm, SignupEmailResendConfirmationForm,
-    UserSettingsForm, PasswordResetForm)
+    UserSettingsForm, PasswordResetForm, ProfileEmailForm)
 from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
 from .signals import user_sign_up_attempt, user_signed_up, password_changed
 from .utils import user_display
@@ -591,17 +591,18 @@ class ProfileAssociationsView(TemplateView):
 class ProfileEmailListView(OnlyOwnedObjectsMixin, ListView):
     template_name = 'aldryn_accounts/profile/email_list.html'
     queryset = chain(EmailAddress.objects.all(), EmailConfirmation.objects.all())
+    profile_form_class = ProfileEmailForm
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(ProfileEmailListView, self).dispatch(*args, **kwargs)
 
     def get(self, *args, **kwargs):
-        self.form = EmailForm()
+        self.form = self.profile_form_class()
         return super(ProfileEmailListView, self).get(*args, **kwargs)
 
     def post(self, *args, **kwargs):
-        self.form = EmailForm(self.request.POST)
+        self.form = self.profile_form_class(self.request.POST)
         if self.form.is_valid():
             return self.form_valid(self.form)
         else:

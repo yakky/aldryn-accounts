@@ -88,6 +88,17 @@ class EmailForm(forms.Form):
     email = forms.EmailField(label=_("Email"), required=True)
 
 
+class ProfileEmailForm(EmailForm):
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        verified_qs = EmailAddress.objects.filter(email__iexact=email)
+        confirmation_qs = EmailConfirmation.objects.filter(email__iexact=email)
+        if verified_qs.exists() or confirmation_qs.exists():
+            raise forms.ValidationError(_("This email address is already in use."))
+        return email
+
+
 class SignupForm(forms.Form):
     email = forms.EmailField(widget=forms.TextInput(), required=True)
     code = forms.CharField(
