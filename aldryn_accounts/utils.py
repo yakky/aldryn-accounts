@@ -43,7 +43,11 @@ gi4 = pygeoip.GeoIP(os.path.join(settings.GEOIP_PATH, getattr(settings, 'GEOIP_C
 
 def geoip(ip):
     # TODO: validate ip
-    data = gi4.record_by_addr(ip)
+    try:
+        data = gi4.record_by_addr(ip)
+    except IndexError:
+        # TODO: log this
+        data = None
     if not data:  # empty dict
         return dict()
     if data.get('city') and data.get('country'):
