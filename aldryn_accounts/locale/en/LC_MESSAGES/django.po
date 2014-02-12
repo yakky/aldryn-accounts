@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-03 21:35+0200\n"
+"POT-Creation-Date: 2014-02-11 22:12-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:38 admin.py:48
+#: admin.py:37 admin.py:47
 msgid "Personal info"
 msgstr ""
 
-#: admin.py:39 admin.py:49
+#: admin.py:38 admin.py:48
 msgid "Permissions"
 msgstr ""
 
-#: admin.py:41
+#: admin.py:40
 msgid "Important dates"
 msgstr ""
 
-#: admin.py:91
+#: admin.py:89
 msgid "User"
 msgstr ""
 
-#: admin.py:92
+#: admin.py:90
 msgid "Users"
 msgstr ""
 
@@ -43,6 +43,22 @@ msgstr ""
 
 #: admin_forms.py:19
 msgid "Password"
+msgstr ""
+
+#: cms_app.py:11
+msgid "user profile: index"
+msgstr ""
+
+#: cms_app.py:16
+msgid "user profile: settings"
+msgstr ""
+
+#: cms_app.py:21
+msgid "user profile: change password"
+msgstr ""
+
+#: cms_app.py:26
+msgid "user profile: email settings"
 msgstr ""
 
 #: forms.py:17 forms.py:88
@@ -153,8 +169,13 @@ msgstr ""
 msgid "The activation key has expired."
 msgstr ""
 
-#: views.py:476
+#: views.py:485
 msgid "Password successfully changed."
+msgstr ""
+
+#: views.py:630
+#, python-format
+msgid "Confirmation email re-sent to %(email)s."
 msgstr ""
 
 #: templates/aldryn_accounts/email_confirm.html:6
@@ -259,6 +280,14 @@ msgstr ""
 msgid ""
 "An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
 "it to set a new password."
+msgstr ""
+
+#: templates/aldryn_accounts/signup_closed.html:5
+msgid "Signup Closed"
+msgstr ""
+
+#: templates/aldryn_accounts/signup_closed.html:8
+msgid "Signup is currently closed"
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email.html:6
@@ -439,28 +468,30 @@ msgid "Do you really want to cancel the confirmation request for %(email)s?"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_confirmation_cancel.html:13
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:13
 #: templates/aldryn_accounts/profile/email_delete.html:13
 #: templates/aldryn_accounts/profile/email_make_primary.html:12
 msgid "back"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_confirmation_cancel.html:14
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:14
 #: templates/aldryn_accounts/profile/email_delete.html:14
 #: templates/aldryn_accounts/profile/email_make_primary.html:13
 msgid "yes"
 msgstr ""
 
-#: templates/aldryn_accounts/profile/email_confirmation_create.html:6
-msgid "Add email address"
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:6
+msgid "Re-send email confirmation"
 msgstr ""
 
-#: templates/aldryn_accounts/profile/email_confirmation_create.html:7
-msgid "Add an email address"
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:7
+msgid "Re-send an email confirmation"
 msgstr ""
 
-#: templates/aldryn_accounts/profile/email_confirmation_create.html:16
-#: templates/aldryn_accounts/profile/email_list.html:30
-msgid "add"
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:12
+#, python-format
+msgid "Do you want to re-send the confirmation request for %(email)s?"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_delete.html:6
@@ -498,7 +529,15 @@ msgid "not verified yet"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_list.html:24
+msgid "re-send"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_list.html:25
 msgid "cancel"
+msgstr ""
+
+#: templates/aldryn_accounts/profile/email_list.html:36
+msgid "add"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_make_primary.html:6
