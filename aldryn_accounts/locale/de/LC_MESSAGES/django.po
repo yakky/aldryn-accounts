@@ -559,7 +559,7 @@ msgstr "Noch nicht bestätigt"
 
 #: templates/aldryn_accounts/profile/email_list.html:24
 msgid "re-send"
-msgstr ""
+msgstr "nochmal senden"
 
 #: templates/aldryn_accounts/profile/email_list.html:25
 msgid "cancel"
