@@ -285,13 +285,15 @@ class SignupEmailResendConfirmationView(FormView):
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
-        try:
-            email_confirmation = EmailConfirmation.objects.get(email=email)
-        except EmailConfirmation.DoesNotExist:
+
+        email_confirmations = EmailConfirmation.objects.filter(email=email)
+        if not email_confirmations.exists():
             messages.error(self.request, _('This email does not have any pending confirmations.'))
             return self.form_invalid(form)
-        else:
+
+        for email_confirmation in email_confirmations:
             email_confirmation.send()
+
         return redirect(self.get_success_url())
 
     def form_invalid(self, form):
