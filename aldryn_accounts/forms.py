@@ -93,8 +93,7 @@ class ProfileEmailForm(EmailForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         verified_qs = EmailAddress.objects.filter(email__iexact=email)
-        confirmation_qs = EmailConfirmation.objects.filter(email__iexact=email)
-        if verified_qs.exists() or confirmation_qs.exists():
+        if verified_qs.exists():
             raise forms.ValidationError(_("This email address is already in use."))
         return email
 
