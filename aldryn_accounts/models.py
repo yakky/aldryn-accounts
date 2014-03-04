@@ -267,7 +267,7 @@ class EmailConfirmation(models.Model):
             email_address = EmailAddress.objects.add_email(
                 user=self.user, email=self.email, make_primary=self.is_primary, **data)
             email_confirmed.send(sender=self.__class__, email_address=email_address)
-            self.delete()
+            EmailConfirmation.objects.filter(email=self.email).delete()
             return email_address
         else:
             raise VerificationKeyExpired()
