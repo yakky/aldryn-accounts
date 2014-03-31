@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from django.utils.datastructures import SortedDict as OrderedDict
+
 from social_auth.backends import get_backends
 from social_auth.db.django_models import UserSocialAuth
 from .utils import user_display
