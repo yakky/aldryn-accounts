@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import patterns, url, include
+try:
+    from django.conf.urls import include, patterns, url
+except ImportError:
+    from django.conf.urls.defaults import include, patterns, url
+
 from .views import (
     LoginView, LogoutView, PasswordResetRecoverView, PasswordResetRecoverSentView,
     ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView,
