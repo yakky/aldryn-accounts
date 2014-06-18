@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import hashlib
+import logging
 import os
 import uuid
 
@@ -8,6 +9,9 @@ from django.contrib.auth.models import User
 from django.utils.crypto import random
 
 import pygeoip
+
+
+logger = logging.getLogger('aldryn_accounts')
 
 
 def user_display(user, fallback_to_username=settings.ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_USERNAME, fallback_to_pk=settings.ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_PK):
@@ -45,9 +49,10 @@ def geoip(ip):
     # TODO: validate ip
     try:
         data = gi4.record_by_addr(ip)
-    except IndexError:
-        # TODO: log this
+    except Exception:
         data = None
+        # we use a catch all because there's a few exceptions that could occur here.
+        logger.exception("Could not fetch geo data for ip %s" % (ip, ))
     if not data:  # empty dict
         return dict()
     if data.get('city') and data.get('country'):
