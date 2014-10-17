@@ -12,7 +12,7 @@ from django.db import models
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.translation import override as force_language, gettext_lazy as _
+from django.utils.translation import get_language, override as force_language, gettext_lazy as _
 import timezone_field
 from annoying.fields import AutoOneToOneField
 
@@ -291,7 +291,8 @@ class EmailConfirmation(models.Model):
             "site_domain": site.domain,
             "key": self.key,
         }
-        with force_language(self.user.settings.preferred_language):
+        language = self.user.settings.preferred_language or get_language()
+        with force_language(language):
             subject = render_to_string("aldryn_accounts/email/email_confirmation.subject.txt", ctx)
             message = render_to_string("aldryn_accounts/email/email_confirmation.body.txt", ctx)
         subject = "".join(subject.splitlines())  # remove superfluous line breaks
