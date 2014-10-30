@@ -276,25 +276,27 @@ class EmailConfirmation(models.Model):
         # TODO: send as HTML email
         site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
-        activate_url = u"%s://%s%s" % (
-            protocol,
-            unicode(site.domain),
-            reverse("accounts_confirm_email", args=[self.key])
-        )
-        ctx = {
-            "email": self.email,
-            "user": self.user,
-            "name": user_display(self.user),
-            "activate_url": activate_url,
-            "site": site,
-            "site_name": site.name,
-            "site_domain": site.domain,
-            "key": self.key,
-        }
         language = self.user.settings.preferred_language or get_language()
         with force_language(language):
-            subject = render_to_string("aldryn_accounts/email/email_confirmation.subject.txt", ctx)
-            message = render_to_string("aldryn_accounts/email/email_confirmation.body.txt", ctx)
+            activate_url = u"%s://%s%s" % (
+                protocol,
+                unicode(site.domain),
+                reverse("accounts_confirm_email", args=[self.key])
+            )
+            ctx = {
+                "email": self.email,
+                "user": self.user,
+                "name": user_display(self.user),
+                "activate_url": activate_url,
+                "site": site,
+                "site_name": site.name,
+                "site_domain": site.domain,
+                "key": self.key,
+            }
+            subject = render_to_string(
+                "aldryn_accounts/email/email_confirmation.subject.txt", ctx)
+            message = render_to_string(
+                "aldryn_accounts/email/email_confirmation.body.txt", ctx)
         subject = "".join(subject.splitlines())  # remove superfluous line breaks
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
         self.sent_at = timezone.now()
