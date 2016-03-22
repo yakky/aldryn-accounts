@@ -78,9 +78,6 @@ HELPER_SETTINGS = {
         'cms.middleware.page.CurrentPageMiddleware',
         'cms.middleware.toolbar.ToolbarMiddleware'
     ],
-    'SOUTH_MIGRATION_MODULES': {
-        'aldryn_accounts': 'aldryn_accounts.migrations',
-    }
 }
 
 # If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
