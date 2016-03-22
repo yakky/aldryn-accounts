@@ -77,7 +77,7 @@ class SignupCode(models.Model):
         return cls(**params)
 
     @classmethod
-    def check(cls, code):
+    def is_valid(cls, code):
         try:
             signup_code = cls._default_manager.get(code=code)
         except cls.DoesNotExist:
@@ -335,6 +335,9 @@ rules = [
         },
     )
 ]
-from south.modelsinspector import add_introspection_rules
-add_introspection_rules(rules, ["^annoying\.fields\.AutoOneToOneField"])
-
+try:
+    from south.modelsinspector import add_introspection_rules
+    add_introspection_rules(rules, ["^annoying\.fields\.AutoOneToOneField"])
+except ImportError:
+    # no south, Django version >1.6
+    pass

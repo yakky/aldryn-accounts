@@ -188,7 +188,7 @@ class SignupView(FormView):
         code = self.request.REQUEST.get("code")
         if code:
             try:
-                self.signup_code = SignupCode.check(code)
+                self.signup_code = SignupCode.is_valid(code)
             except SignupCode.InvalidCode:
                 if not settings.ALDRYN_ACCOUNTS_OPEN_SIGNUP:
                     return False
