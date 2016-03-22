@@ -18,7 +18,6 @@ gettext = noop_gettext
 HELPER_SETTINGS = {
     'TIME_ZONE': 'UTC',
     'INSTALLED_APPS': [
-        'aldryn_apphook_reload',  # for tests
         'aldryn_common',
         'reversion',
         'djangocms_text_ckeditor',
@@ -87,6 +86,7 @@ HELPER_SETTINGS = {
 # If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
 # use aldryn_apphook_reload's.
 if cms_version < LooseVersion('3.2.0'):
+    HELPER_SETTINGS['INSTALLED_APPS'].insert(0, 'aldryn_apphook_reload')
     HELPER_SETTINGS['MIDDLEWARE_CLASSES'].remove(
         'cms.middleware.utils.ApphookReloadMiddleware')
     HELPER_SETTINGS['MIDDLEWARE_CLASSES'].insert(
