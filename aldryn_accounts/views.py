@@ -186,26 +186,18 @@ class SignupView(FormView):
 
     def is_open(self):
         code = self.request.REQUEST.get("code")
-        if code:
-            try:
-                self.signup_code = SignupCode.is_valid(code)
-            except SignupCode.InvalidCode:
-                if not settings.ALDRYN_ACCOUNTS_OPEN_SIGNUP:
-                    return False
-                else:
-                    if self.messages.get("invalid_signup_code"):
-                        messages.add_message(
-                            self.request,
-                            self.messages["invalid_signup_code"]["level"],
-                            self.messages["invalid_signup_code"]["text"] % {
-                                "code": code
-                            }
-                        )
-                    return True
-            else:
-                return True
-        else:
+        if not code:
             return settings.ALDRYN_ACCOUNTS_OPEN_SIGNUP
+        signup_code = None
+        code_is_valid = False
+        try:
+            signup_code = SignupCode.objects.get(code=code)
+        except SignupCode.DoesNotExist:
+            return settings.ALDRYN_ACCOUNTS_OPEN_SIGNUP
+        if signup_code:
+            self.signup_code = signup_code
+            code_is_valid = signup_code.is_valid()
+        return code_is_valid
 
     def closed(self):
         response_kwargs = {

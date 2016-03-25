@@ -54,17 +54,18 @@ class SignupCode(models.Model):
         if code:
             checks.append(Q(code=code))
         if email:
-            checks.append(Q(email=code))
+            checks.append(Q(email=email))
         return cls._default_manager.filter(reduce(operator.or_, checks)).exists()
 
     @classmethod
     def create(cls, **kwargs):
         email, code = kwargs.get("email"), kwargs.get("code")
-        if kwargs.get("check_exists", True) and cls.exists(code=code, email=email):
-            raise cls.AlreadyExists()
         expires_at = timezone.now() + datetime.timedelta(hours=kwargs.get("expires_at", 24))
         if not code:
             code = random_token([email]) if email else random_token()
+
+        if kwargs.get("check_exists", True) and cls.exists(code=code, email=email):
+            raise cls.AlreadyExists()
         params = {
             "code": code,
             "max_uses": kwargs.get("max_uses", 0),
@@ -76,20 +77,15 @@ class SignupCode(models.Model):
             params["email"] = email
         return cls(**params)
 
-    @classmethod
-    def is_valid(cls, code):
-        try:
-            signup_code = cls._default_manager.get(code=code)
-        except cls.DoesNotExist:
-            raise cls.InvalidCode()
-        else:
-            if signup_code.max_uses and signup_code.max_uses <= signup_code.use_count:
-                raise cls.InvalidCode()
-            else:
-                if signup_code.expiry and timezone.now() > signup_code.expiry:
-                    raise cls.InvalidCode()
-                else:
-                    return signup_code
+    def is_valid(self):
+        """
+        Check if code is valid. Returns True or False.
+        """
+        if self.max_uses and self.max_uses <= self.use_count:
+            return False
+        if self.expires_at and timezone.now() > self.expires_at:
+            return False
+        return True
 
     def calculate_use_count(self):
         self.use_count = self.signupcoderesult_set.count()
@@ -111,7 +107,7 @@ class SignupCode(models.Model):
         signup_url = u"%s://%s%s?%s" % (
             protocol,
             unicode(current_site.domain),
-            reverse("account_signup"),
+            reverse("accounts_signup"),
             urllib.urlencode({"code": self.code})
         )
         ctx = {
