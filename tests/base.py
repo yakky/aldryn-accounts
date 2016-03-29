@@ -190,4 +190,3 @@ class AllAccountsApphooksTestCase(CleanUpMixin,
         cms_app.AldrynAccountsUserProfileChangePasswordApphook,
         cms_app.AldrynAccountsUserProfileEmailSettingsApphook,
     ]
-    pass
