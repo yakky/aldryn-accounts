@@ -115,8 +115,11 @@ class SignupCode(models.Model):
             "current_site": current_site,
             "signup_url": signup_url,
         }
-        subject = render_to_string("account/email/invite_user_subject.txt", ctx)
-        message = render_to_string("account/email/invite_user.txt", ctx)
+        subject = render_to_string(
+            "aldryn_accounts/email/invite_user.subject.txt", ctx)
+        subject = "".join(subject.splitlines())
+        message = render_to_string(
+            "aldryn_accounts/email/invite_user.body.txt", ctx)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
         self.sent_at = timezone.now()
         self.save()
@@ -211,7 +214,7 @@ class EmailAddress(models.Model):
 
 class EmailConfirmationManager(models.Manager):
     def delete_expired_confirmations(self):
-        for confirmation in self.all():
+        for confirmation in self.all().exclude(sent_at__isnull=True):
             if confirmation.key_expired():
                 confirmation.delete()
 
@@ -248,7 +251,9 @@ class EmailConfirmation(models.Model):
         self.email = self.email.strip().lower()
 
     def key_expired(self):
-        expiration_date = self.sent_at + datetime.timedelta(days=settings.ALDRYN_ACCOUNTS_EMAIL_CONFIRMATION_EXPIRE_DAYS)
+        expire_days = getattr(
+            settings, 'ALDRYN_ACCOUNTS_EMAIL_CONFIRMATION_EXPIRE_DAYS', 5)
+        expiration_date = self.sent_at + datetime.timedelta(days=expire_days)
         return expiration_date <= timezone.now()
     key_expired.boolean = True
 

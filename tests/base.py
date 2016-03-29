@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+import random
+import string
 import sys
 
 from django.conf import settings
@@ -179,6 +182,10 @@ class AcountsSetupMixin(object):
             apphook=app_hook_name,
         )
         return page
+
+    @classmethod
+    def rand_str(cls, prefix='', length=23, chars=string.ascii_letters):
+        return prefix + ''.join(random.choice(chars) for _ in range(length))
 
 
 class AllAccountsApphooksTestCase(CleanUpMixin,

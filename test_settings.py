@@ -16,6 +16,8 @@ gettext = noop_gettext
 
 
 HELPER_SETTINGS = {
+    # plug urls directly, test_urls includes urls from djangocms-helper
+    'ROOT_URLCONF': 'aldryn_accounts.test_urls',
     'TIME_ZONE': 'UTC',
     'INSTALLED_APPS': [
         'aldryn_common',
