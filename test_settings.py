@@ -78,6 +78,8 @@ HELPER_SETTINGS = {
         'cms.middleware.page.CurrentPageMiddleware',
         'cms.middleware.toolbar.ToolbarMiddleware'
     ],
+    # aldryn-accounts related
+    'ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS': True,
 }
 
 # If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
