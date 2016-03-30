@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import datetime
 import operator
 import urllib
@@ -44,7 +46,7 @@ class SignupCode(models.Model):
 
     def __unicode__(self):
         if self.email:
-            return u"%s [%s]" % (self.email, self.code)
+            return "%s [%s]" % (self.email, self.code)
         else:
             return self.code
 
@@ -104,7 +106,7 @@ class SignupCode(models.Model):
     def send(self, **kwargs):
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
         current_site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
-        signup_url = u"%s://%s%s?%s" % (
+        signup_url = "%s://%s%s?%s" % (
             protocol,
             unicode(current_site.domain),
             reverse("accounts_signup"),
@@ -184,7 +186,7 @@ class EmailAddress(models.Model):
         self.email = self.email.strip().lower()
 
     def __unicode__(self):
-        return u"%s (%s)" % (self.email, self.user)
+        return "%s (%s)" % (self.email, self.user)
 
     def set_as_primary(self, commit=True):
         old_primary = EmailAddress.objects.get_primary(self.user)
@@ -245,7 +247,7 @@ class EmailConfirmation(models.Model):
         verbose_name_plural = _("email confirmations")
 
     def __unicode__(self):
-        return u"confirmation for %s (%s)" % (self.email, self.user)
+        return "confirmation for %s (%s)" % (self.email, self.user)
 
     def clean(self):
         self.email = self.email.strip().lower()
@@ -260,7 +262,7 @@ class EmailConfirmation(models.Model):
     def confirm(self, verification_method='unknown', delete=True):
         if self.sent_at and not self.key_expired():
             if EmailAddress.objects.filter(email=self.email).exists():
-                raise EmailAlreadyVerified(u"%s already exists" % self.email)
+                raise EmailAlreadyVerified("%s already exists" % self.email)
             data = dict(
                 verified_at=timezone.now(),
                 verification_method=verification_method,
@@ -279,7 +281,7 @@ class EmailConfirmation(models.Model):
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
         language = self.user.settings.preferred_language or get_language()
         with force_language(language):
-            activate_url = u"%s://%s%s" % (
+            activate_url = "%s://%s%s" % (
                 protocol,
                 unicode(site.domain),
                 reverse("accounts_confirm_email", args=[self.key])
