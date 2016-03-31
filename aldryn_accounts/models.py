@@ -14,7 +14,7 @@ from django.db import models
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.translation import get_language, override as force_language, gettext_lazy as _
+from django.utils.translation import get_language, override as force_language, ugettext_lazy as _
 import timezone_field
 from annoying.fields import AutoOneToOneField
 

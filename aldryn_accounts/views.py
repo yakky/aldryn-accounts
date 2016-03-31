@@ -298,7 +298,7 @@ class SignupEmailConfirmationSentView(TemplateView):
     template_name = 'aldryn_accounts/signup_email_confirmation_sent.html'
 
     def get_the_email(self):
-        email = self.request.GET.get('email', None)
+        email = self.request.GET.get('email', '')
         email = urllib.unquote(email)
         return email
 

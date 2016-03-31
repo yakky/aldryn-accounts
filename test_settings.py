@@ -65,6 +65,9 @@ HELPER_SETTINGS = {
             'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         }
     },
+    # until session engine is hardcoded in djangocms-helper use
+    # @override_settings in your test cases.
+    'SESSION_ENGINE': 'django.contrib.sessions.backends.cached_db',
     'MIDDLEWARE_CLASSES': [
         # NOTE: This will actually be removed below in CMS<3.2 installs.
         'cms.middleware.utils.ApphookReloadMiddleware',
