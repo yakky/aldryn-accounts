@@ -230,7 +230,7 @@ class EmailAddressTestCase(TestDataAttrsMixin,
     def test_get_primary(self):
         user = self.get_standard_user()
         self.assertEqual(EmailAddress.objects.count(), 0)
-        # test if on emails present
+        # test if no emails present
         self.assertIsNone(EmailAddress.objects.get_primary(
             user=user
         ))
