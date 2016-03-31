@@ -74,9 +74,9 @@ email_settings_urlpatterns = patterns('',
     url(r"^(?P<pk>\d+)/make_primary/$", ProfileEmailMakePrimaryView.as_view(), name="accounts_email_make_primary"),
 )
 
-
-if not settings.ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS:
-    print "adding them!"
+ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS = getattr(
+    settings, 'ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS', False)
+if not ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS:
     urlpatterns = urlpatterns + patterns('',
         url(r"^profile/settings/", include(profile_settings_urlpatterns)),
         url(r"^profile/associations/", include(associations_urlpatterns)),
