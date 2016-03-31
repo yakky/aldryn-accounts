@@ -111,10 +111,12 @@ class SignupEmailResendConfirmationViewTestCase(AllAccountsApphooksTestCase):
         data = {
             'email': 'wrong@example.com',
         }
+        mail.outbox = []
         with override('en'):
             view_url = reverse(self.veiw_name)
         response = self.client.post(view_url, data=data)
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_post_with_valid_email(self):
         user = self.get_standard_user()
@@ -174,15 +176,10 @@ class LoginViewTestCase(AllAccountsApphooksTestCase):
         response = self.client.get(login_url)
         self.assertEqual(response.status_code, 200)
 
-
-    # @override_settings(
-    #     SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
     def test_login_view_logins(self):
         self.get_standard_user()
         self.login()
 
-    # @override_settings(
-    #     SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
     def test_logout(self):
         self.get_standard_user()
         self.login()
