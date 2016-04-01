@@ -599,6 +599,7 @@ class ProfileEmailListViewTestCase(GetViewUrlMixin,
         self.assertContains(response, 'This email address is already in use')
 
 
+@override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
 class ProfileEmailConfirmationResendViewTestCase(GetViewUrlMixin,
                                                  AllAccountsApphooksTestCase):
     view_name = 'accounts_email_confirmation_resend'
