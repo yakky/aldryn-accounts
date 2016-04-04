@@ -1,4 +1,4 @@
-{% load i18n %}{% load url from future %}{% blocktrans %}Hi, {{ name }}{% endblocktrans %}
+{% load i18n %}{% blocktrans %}Hi, {{ name }}{% endblocktrans %}
 
 {% blocktrans %}You recently added an email address associated with your {{ site_name }} account.
 To confirm {{ email }} as your email, click this link:

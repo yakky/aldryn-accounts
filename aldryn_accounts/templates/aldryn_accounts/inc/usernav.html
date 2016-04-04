@@ -1,4 +1,4 @@
-{% load i18n %}{% load url from future %}
+{% load i18n %}
 {% if request.user.is_authenticated %}
 	<li><a href="{% url 'accounts_profile' %}" title="{{ username }}">{% trans 'my profile' %}</a></li>
 	{% if request.user.is_staff %}

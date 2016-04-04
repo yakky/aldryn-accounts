@@ -1,2 +1,1 @@
-{% load url from future %}
 <a class="btn-auth btn-{{ backend }}" href="{% url 'socialauth_begin' backend %}?{{ redirect_querystring }}">{{ backend }}</a>
