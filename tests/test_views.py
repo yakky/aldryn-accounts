@@ -497,7 +497,7 @@ class ProfileViewTestCase(GetViewUrlMixin,
         self.assertContains(response, 'Edit settings')
 
 
-@unittest.skip("Since social aut is not working - don't run this test cases.")
+@unittest.skip("Since social auth is not working - don't run this test cases.")
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
 class ProfileAssociationsViewTestCase(GetViewUrlMixin,
                                       ProfileViewsCommonMixin,
@@ -541,7 +541,7 @@ class ProfileEmailListViewTestCase(GetViewUrlMixin,
         # staff user email addresses and confirmations
         staff_user = self.get_staff_user_with_std_permissions()
         staff_email_address = EmailAddress(
-            user=self.user,
+            user=staff_user,
             email=self.user_email1,
             is_primary=True,
         )
@@ -599,59 +599,283 @@ class ProfileEmailListViewTestCase(GetViewUrlMixin,
         self.assertContains(response, 'This email address is already in use')
 
 
+class ProfileEmailConfirmationCommonMixin(object):
+    confirmation_email_addr = 'test_confirm@example.com'
+
+    def setUp(self):
+        self.user = self.get_standard_user()
+        self.staff_user = self.get_staff_user_with_std_permissions()
+        super(ProfileEmailConfirmationCommonMixin, self).setUp()
+        self.client.login(username=self.user.username, password='standard')
+
+    def _get_not_logged_in(self, **kwargs):
+        self.client.logout()
+        view_url = self.get_view_url(**kwargs)
+        response = self.client.get(view_url)
+        return response
+
+    def _get_logged_in(self, **kwargs):
+        view_url = self.get_view_url(**kwargs)
+        response = self.client.get(view_url)
+        return response
+
+    def _get_logged_in_confirmation_for_another_user(self):
+        staff_user_confirmation = EmailConfirmation.objects.request(
+            user=self.staff_user, email='staff_confirm@example.com', send=True)
+        mail.outbox = []
+        view_url = self.get_view_url(pk=staff_user_confirmation.pk)
+        response = self.client.get(view_url)
+        return response
+
+    def _post_with_valid_pk(self, **kwargs):
+        view_url = self.get_view_url(**kwargs)
+        self.assertEqual(len(mail.outbox), 0)
+        response = self.client.post(view_url)
+        return response
+
+    def _post_with_not_valid_pk(self, pk=42):
+        view_url = self.get_view_url(pk=pk)
+        self.assertEqual(len(mail.outbox), 0)
+        response = self.client.post(view_url)
+        return response
+
+    def _post_for_another_user(self, **kwargs):
+        view_url = self.get_view_url(**kwargs)
+        response = self.client.post(view_url)
+        return response
+
+
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
-class ProfileEmailConfirmationResendViewTestCase(GetViewUrlMixin,
-                                                 AllAccountsApphooksTestCase):
+class ProfileEmailConfirmationResendViewTestCase(
+        GetViewUrlMixin,
+        ProfileEmailConfirmationCommonMixin,
+        AllAccountsApphooksTestCase):
+
     view_name = 'accounts_email_confirmation_resend'
 
     def setUp(self):
-        super(ProfileViewsCommonMixin, self).setUp()
-        self.user = self.get_standard_user()
+        super(ProfileEmailConfirmationResendViewTestCase, self).setUp()
         self.confirmation = EmailConfirmation.objects.request(
-            user=self.user, email='test_confirm@example.com', send=True)
+            user=self.user, email=self.confirmation_email_addr, send=True)
+        self.staff_user_confirmation = EmailConfirmation.objects.request(
+            user=self.staff_user, email='staff_confirm@example.com', send=True)
         mail.outbox = []
-        self.client.login(username=self.user.username, password='standard')
 
     def test_get_not_logged_in(self):
-        self.client.logout()
-        view_url = self.get_view_url()
-        response = self.client.get(view_url)
+        response = self._get_not_logged_in(pk=self.confirmation.pk)
         self.assertEqual(response.status_code, 302)
 
     def test_get_logged_in(self):
-        view_url = self.get_view_url(pk=self.confirmation.pk)
-        response = self.client.get(view_url)
+        response = self._get_logged_in(pk=self.confirmation.pk)
         self.assertContains(
             response, 'Do you want to re-send the confirmation request')
 
     def test_get_logged_in_confirmation_for_another_user(self):
-        staff_user = self.get_staff_user_with_std_permissions()
-        staff_user_confirmation = EmailConfirmation.objects.request(
-            user=staff_user, email='staff_confirm@example.com', send=True)
-        mail.outbox = []
-        view_url = self.get_view_url(pk=staff_user_confirmation.pk)
-        response = self.client.get(view_url)
+        response = self._get_logged_in_confirmation_for_another_user()
         self.assertEqual(response.status_code, 404)
 
     def test_post_with_valid_pk(self):
-        view_url = self.get_view_url(pk=self.confirmation.pk)
-        self.assertEqual(len(mail.outbox), 0)
-        response = self.client.post(view_url)
+        response = self._post_with_valid_pk(pk=self.confirmation.pk)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len(mail.outbox), 1)
 
     def test_post_with_not_valid_pk(self):
-        view_url = self.get_view_url(pk=42)
-        self.assertEqual(len(mail.outbox), 0)
-        response = self.client.post(view_url)
+        response = self._post_with_not_valid_pk()
         self.assertEqual(response.status_code, 404)
         self.assertEqual(len(mail.outbox), 0)
 
     def test_post_confirmation_for_another_user(self):
-        staff_user = self.get_staff_user_with_std_permissions()
-        staff_user_confirmation = EmailConfirmation.objects.request(
-            user=staff_user, email='staff_confirm@example.com', send=True)
-        mail.outbox = []
-        view_url = self.get_view_url(pk=staff_user_confirmation.pk)
-        response = self.client.post(view_url)
+        response = self._post_for_another_user(pk=self.staff_user_confirmation.pk)
         self.assertEqual(response.status_code, 404)
+
+
+@override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
+class ProfileEmailConfirmationCancelViewTestCase(
+        GetViewUrlMixin,
+        ProfileEmailConfirmationCommonMixin,
+        AllAccountsApphooksTestCase):
+
+    view_name = 'accounts_email_confirmation_cancel'
+
+    def setUp(self):
+        super(ProfileEmailConfirmationCancelViewTestCase, self).setUp()
+        self.confirmation = EmailConfirmation.objects.request(
+            user=self.user, email=self.confirmation_email_addr, send=True)
+        self.staff_user_confirmation = EmailConfirmation.objects.request(
+            user=self.staff_user, email='staff_confirm@example.com', send=True)
+        mail.outbox = []
+
+    def test_get_not_logged_in(self):
+        response = self._get_not_logged_in(pk=self.confirmation.pk)
+        self.assertEqual(response.status_code, 302)
+
+    def test_get_logged_in(self):
+        response = self._get_logged_in(pk=self.confirmation.pk)
+        self.assertContains(
+            response,
+            'cancel the confirmation request for {0}'.format(
+                self.confirmation_email_addr))
+
+    def test_post_with_valid_pk(self):
+        confirmation_pk = self.confirmation.pk
+        response = self._post_with_valid_pk(pk=self.confirmation.pk)
+        self.assertFalse(
+            EmailConfirmation.objects.filter(pk=confirmation_pk).exists())
+        self.assertEqual(response.status_code, 302)
+
+    def test_post_with_not_valid_pk(self):
+        confirmation_pk = self.confirmation.pk
+        response = self._post_with_not_valid_pk()
+        self.assertTrue(
+            EmailConfirmation.objects.filter(pk=confirmation_pk).exists())
+        self.assertEqual(response.status_code, 404)
+
+    def test_post_confirmation_for_another_user(self):
+        staf_user_confirmation_pk = self.staff_user_confirmation.pk
+        response = self._post_for_another_user(pk=self.staff_user_confirmation.pk)
+        self.assertTrue(EmailConfirmation.objects.filter(
+            pk=staf_user_confirmation_pk).exists())
+        self.assertEqual(response.status_code, 404)
+
+
+class ProfileEmailObjectsSetupMixin(object):
+
+    def setUp(self):
+        super(ProfileEmailObjectsSetupMixin, self).setUp()
+        # regular user
+        self.user_email_1 = EmailAddress.objects.add_email(
+            user=self.user,
+            email='user_first@example.com',
+            make_primary=True)
+        self.user_email_2 = EmailAddress.objects.add_email(
+            user=self.user,
+            email='user_second@example.com',
+            make_primary=False)
+        # staff user
+        self.staff_email_1 = EmailAddress.objects.add_email(
+            user=self.staff_user,
+            email='staff_first@example.com',
+            make_primary=True)
+        self.staff_email_2 = EmailAddress.objects.add_email(
+            user=self.staff_user,
+            email='staff_second@example.com',
+            make_primary=False)
+
+
+@override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
+class ProfileEmailMakePrimaryViewTestCase(
+        GetViewUrlMixin,
+        ProfileEmailConfirmationCommonMixin,
+        ProfileEmailObjectsSetupMixin,
+        AllAccountsApphooksTestCase):
+
+    view_name = 'accounts_email_make_primary'
+
+    def test_get_not_logged_in(self):
+        email_pk = self.user_email_1.pk
+        response = self._get_not_logged_in(pk=email_pk)
+        self.assertEqual(response.status_code, 302)
+
+    def test_get_logged_in(self):
+        email_pk = self.user_email_2.pk
+        response = self._get_logged_in(pk=email_pk)
+        self.assertContains(
+            response,
+            'to make {0} your primary email'.format(
+                self.user_email_2.email))
+
+    def test_post_with_valid_pk(self):
+        email_1_pk = self.user_email_1.pk
+        email_2_pk = self.user_email_2.pk
+        response = self._post_with_valid_pk(pk=email_2_pk)
+        user_email_1 = EmailAddress.objects.get(pk=email_1_pk)
+        user_email_2 = EmailAddress.objects.get(pk=email_2_pk)
+        self.assertFalse(user_email_1.is_primary)
+        self.assertTrue(user_email_2.is_primary)
+        self.assertEqual(response.status_code, 302)
+
+    def test_post_with_not_valid_pk(self):
+        response = self._post_with_not_valid_pk()
+        user_email_1 = EmailAddress.objects.get(pk=self.user_email_1.pk)
+        self.assertTrue(user_email_1.is_primary)
+        self.assertEqual(response.status_code, 404)
+
+    def test_post_for_another_user(self):
+        staf_user_email_pk = self.staff_email_2.pk
+        response = self._post_for_another_user(
+            pk=staf_user_email_pk)
+        self.assertTrue(EmailAddress.objects.filter(
+            pk=staf_user_email_pk).exists())
+        self.assertEqual(response.status_code, 404)
+
+
+@override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
+class ProfileEmailDeleteViewTestCase(
+        GetViewUrlMixin,
+        ProfileEmailConfirmationCommonMixin,
+        ProfileEmailObjectsSetupMixin,
+        AllAccountsApphooksTestCase):
+
+    view_name = 'accounts_email_delete'
+
+    def test_get_not_logged_in(self):
+        email_pk = self.user_email_1.pk
+        response = self._get_not_logged_in(pk=email_pk)
+        self.assertEqual(response.status_code, 302)
+
+    def test_get_logged_in(self):
+        email_pk = self.user_email_1.pk
+        response = self._get_logged_in(pk=email_pk)
+        self.assertContains(
+            response,
+            'to remove {0} from your account'.format(
+                self.user_email_2.email))
+
+    def test_post_with_valid_pk(self):
+        email_1_pk = self.user_email_1.pk
+        email_2_pk = self.user_email_2.pk
+        response = self._post_with_valid_pk(pk=email_2_pk)
+        # first email exists
+        self.assertTrue(
+            EmailAddress.objects.filter(pk=email_1_pk).exists())
+        # second email does not exists
+        self.assertFalse(
+            EmailAddress.objects.filter(pk=email_2_pk).exists())
+        self.assertEqual(response.status_code, 302)
+
+    def test_post_with_not_valid_pk(self):
+        response = self._post_with_not_valid_pk()
+        user_email_1 = EmailAddress.objects.filter(pk=self.user_email_1.pk)
+        self.assertTrue(user_email_1.is_primary)
+        self.assertEqual(response.status_code, 404)
+
+    def test_post_with_primary_email_address(self):
+        primary_email_pk = self.user_email_1.pk
+        response = self._post_with_valid_pk(pk=primary_email_pk)
+        user_email_1 = EmailAddress.objects.filter(pk=primary_email_pk)
+        self.assertTrue(user_email_1.exists())
+        self.assertEqual(response.status_code, 404)
+
+    def test_post_for_another_user(self):
+        staf_user_email_pk = self.staff_email_2.pk
+        response = self._post_for_another_user(
+            pk=staf_user_email_pk)
+        self.assertTrue(EmailAddress.objects.filter(
+            pk=staf_user_email_pk).exists())
+        self.assertEqual(response.status_code, 404)
+
+
+@override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
+class UserSettingsViewTestCase(GetViewUrlMixin,
+                               ProfileEmailConfirmationCommonMixin,
+                               AllAccountsApphooksTestCase):
+    view_name = 'accounts_settings'
+
+    def test_get_not_logged_in(self):
+        response = self._get_not_logged_in(pk=self.confirmation.pk)
+        self.assertEqual(response.status_code, 302)
+
+    def test_get_logged_in(self):
+        response = self._get_logged_in(pk=self.confirmation.pk)
+        self.assertContains(
+            response, 'Edit settings')
