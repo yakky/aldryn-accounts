@@ -1,4 +1,4 @@
-{% load standard_form i18n %}{% load url from future %}
+{% load standard_form i18n %}
 <form method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}" class="frm" autocapitalize="off">
 	{% csrf_token %}
 	{% if redirect_field_value %}<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />{% endif %}
