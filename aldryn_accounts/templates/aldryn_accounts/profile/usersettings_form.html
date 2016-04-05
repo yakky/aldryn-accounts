@@ -6,7 +6,7 @@
 {% block title_extra %}{% trans "Settings" %}{% endblock %}
 {% block profile_navigation %}{% include 'aldryn_accounts/profile/includes/nav.html' with active='profile_settings' %}{% endblock %}
 
-{% block content_primary %}
+{% block content %}
 	<form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
 		<fieldset>
 			{% standard_form form %}

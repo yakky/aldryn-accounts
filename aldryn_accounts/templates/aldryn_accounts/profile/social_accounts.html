@@ -5,7 +5,7 @@
 {% block title_extra %}{% trans "Connected accounts" %}{% endblock %}
 {% block profile_navigation %}{% include 'aldryn_accounts/profile/includes/nav.html' with active='profile_associations' %}{% endblock %}
 
-{% block content_primary %}
+{% block content %}
 	<ul class="reset-list tablish-list">
 		<li>
 			<img src="{% static 'favicon.png' %}" style="width: 24px;" /> {{ site_settings.site.name }}

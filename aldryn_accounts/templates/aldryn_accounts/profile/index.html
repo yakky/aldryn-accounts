@@ -4,7 +4,7 @@
 
 {% block profile_title %}{% trans "Edit settings" %}{% endblock %}
 
-{% block content_primary %}
+{% block content %}
 	username: {{ request.user.username }}<br/>
 	email: {{ request.user.email }}<br/>
 	name: {{ request.user.first_name }} {{ request.user.last_name }}<br/>

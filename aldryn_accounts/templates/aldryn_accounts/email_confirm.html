@@ -3,7 +3,7 @@
 
 {% block title_extra %}{% trans "Confirm Email" %}{% endblock %}
 
-{% block content_primary %}
+{% block content %}
 	<form method="post" action="{% url 'accounts_confirm_email' key=confirmation.key %}">
 		<legend>{% trans "Email Validation" %}</legend>
 		<fieldset>
