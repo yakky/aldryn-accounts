@@ -5,7 +5,7 @@
 {% block profile_title %}{% trans "Set as primary email" %}{% endblock %}
 {% block title_extra %}{% trans "Set as primary email" %}{% endblock %}
 
-{% block content_primary %}
+{% block content %}
 	<form method="post" action="" spellcheck="false">{% csrf_token %}
 		<p>{% blocktrans with email=object.email %}Do you really want to make {{ email }} your primary email?{% endblocktrans %}</p>
 		<a href="{% url 'accounts_email_list' %}">{% trans 'back' %}</a>

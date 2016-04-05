@@ -5,7 +5,7 @@
 {% block title_extra %}{% trans "Email addresses" %}{% endblock %}
 {% block profile_navigation %}{% include 'aldryn_accounts/profile/includes/nav.html' with active='email' %}{% endblock %}
 
-{% block content_primary %}
+{% block content %}
 	<ul class="reset-list tablish-list">
 		{% for obj in object_list %}
 			<li>{{ obj.email }}

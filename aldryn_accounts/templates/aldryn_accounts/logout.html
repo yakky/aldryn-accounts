@@ -3,7 +3,7 @@
 
 {% block title_extra %}{% trans "Log in" %}{% endblock %}
 
-{% block content_primary %}
+{% block content %}
 	<form method="POST" action="{% url 'logout' %}" autocapitalize="off">
 		<legend>{% trans "Are you sure you want to logout?" %}</legend>
 		{% csrf_token %}

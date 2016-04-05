@@ -1,23 +1,21 @@
-{% extends "sidebar_left.html" %}
+{% extends "aldryn_accounts/base.html" %}
 {% load i18n thumbnail %}
 
 {% block title_prefix %}{% trans "My account" %} - {% endblock %}
 
-{% block content_secondary %}
-	<div>
-		<a href="{% url 'accounts_profile' %}">
-			<img src="{% thumbnail user.settings.profile_image 200x200 crop upscale %}" /><br/>
-			<span class="username">{{ username }}</span>
-		</a>
-		<hr/>
-	</div>
-	<div class="clear"></div>
-	{% block profile_navigation %}
-		{% include "aldryn_accounts/profile/includes/nav.html" %}
-	{% endblock profile_navigation %}
-{% endblock %}
+{% block content %}
+    <h3>{% block profile_title %}{% endblock %}</h3>
+    <div class="accounts-profile-image">
+        <a href="{% url 'accounts_profile' %}">
+            <img src="{% thumbnail user.settings.profile_image 200x200 crop upscale %}" /><br/>
+            <span class="username">{{ username }}</span>
+        </a>
+        <hr/>
+    </div>
+    <div class="clear"></div>
+    {% block profile_navigation %}
+        {% include "aldryn_accounts/profile/includes/nav.html" %}
+    {% endblock profile_navigation %}
 
-{% block content_primary %}
-	<h3>{% block profile_title %}{% endblock %}</h3>
-	{{ block.super }}
-{% endblock content_primary %}
+    {{ block.super }}
+{% endblock content %}
