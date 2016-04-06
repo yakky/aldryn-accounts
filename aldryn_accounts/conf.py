@@ -17,9 +17,13 @@ ADD_TO_MIDDLEWARE_CLASSES = [
     'aldryn_accounts.middleware.SocialAuthExceptionMiddleware',
 ]
 
-ADD_TO_TEMPLATE_CONTEXT_PROCESSORS = [
+# should be used if social login is configured
+SOCIAL_CONTEXT_PROCESSORS = [
     'social_auth.context_processors.social_auth_login_redirect',
     'aldryn_accounts.context_processors.social_auth_info',
+]
+
+ADD_TO_TEMPLATE_CONTEXT_PROCESSORS = [
     'aldryn_accounts.context_processors.account_info',
     'aldryn_accounts.context_processors.django_settings',
     'aldryn_accounts.context_processors.notifications',
@@ -47,6 +51,8 @@ class AccountsAppConf(AppConf):
     USER_DISPLAY_FALLBACK_TO_PK = False
 
     SOCIAL_BACKEND_ORDERING = []
+    # if set to True - will add SOCIAL_CONTEXT_PROCESSORS to context processors
+    USE_SOCIAL_CONTEXT_PROCESSORS = False
 
     ENABLE_SOCIAL_AUTH = False  # controls visibility of social auth related things in the UI
     ENABLE_GITHUB_LOGIN = False
@@ -97,6 +103,9 @@ class AccountsAppConf(AppConf):
             if not middleware in s.MIDDLEWARE_CLASSES:
                 s.MIDDLEWARE_CLASSES.insert(pos, middleware)
                 pos = pos + 1
+        # add social context processors if needed.
+        if self.configured_data['USE_SOCIAL_CONTEXT_PROCESSORS']:
+            s.TEMPLATE_CONTEXT_PROCESSORS.extend(SOCIAL_CONTEXT_PROCESSORS)
         # insert our template context processors
         s.TEMPLATE_CONTEXT_PROCESSORS.extend(ADD_TO_TEMPLATE_CONTEXT_PROCESSORS)
         if not getattr(s, 'GITHUB_EXTENDED_PERMISSIONS', None):

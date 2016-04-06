@@ -5,6 +5,7 @@ django-treebeard>=2.0
 djangocms-admin-style
 djangocms-helper>=0.9.4
 djangocms_text_ckeditor
+easy-thumbnails
 flake8
 html5lib
 pyflakes
