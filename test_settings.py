@@ -21,10 +21,12 @@ HELPER_SETTINGS = {
     'TIME_ZONE': 'UTC',
     'INSTALLED_APPS': [
         'aldryn_common',
+        'easy_thumbnails',
         'reversion',
         'djangocms_text_ckeditor',
         'standard_form',
         'aldryn_accounts',
+        'absolute',
     ],
     'CMS_PERMISSION': True,
     'LANGUAGES': (
@@ -83,6 +85,16 @@ HELPER_SETTINGS = {
         'cms.middleware.page.CurrentPageMiddleware',
         'cms.middleware.toolbar.ToolbarMiddleware'
     ],
+    'THUMBNAIL_PROCESSORS': (
+        'easy_thumbnails.processors.colorspace',
+        'easy_thumbnails.processors.autocrop',
+        # since we don't have filer in dependencies - but we use upscale
+        # we need at least one processor which processes upscale
+        # if filer is in the dependencies - please use
+        # 'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+        'easy_thumbnails.processors.scale_and_crop',
+        'easy_thumbnails.processors.filters',
+    ),
     # aldryn-accounts related
     'ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS': True,
 }

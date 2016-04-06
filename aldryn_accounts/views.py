@@ -11,7 +11,8 @@ from django.contrib import messages, auth
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.sites.models import get_current_site, RequestSite
+from django.contrib.sites.models import get_current_site
+from django.contrib.sites.requests import RequestSite
 from django.core import urlresolvers, signing
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail

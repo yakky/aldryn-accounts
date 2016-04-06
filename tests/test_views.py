@@ -421,8 +421,8 @@ class CreateChangePasswordCommonTestCasesMixin(object):
 
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
 class ChangePasswordViewTestCase(GetViewUrlMixin,
-                                 AllAccountsApphooksTestCase,
-                                 CreateChangePasswordCommonTestCasesMixin):
+                                 CreateChangePasswordCommonTestCasesMixin,
+                                 AllAccountsApphooksTestCase):
     view_name = 'accounts_change_password'
     new_password = 'new_password'
     valid_data = {
@@ -531,7 +531,7 @@ class ProfileEmailListViewTestCase(GetViewUrlMixin,
         # standard user email addresses and confirmation objects
         user_email_address = EmailAddress(
             user=self.user,
-            email=self.user_email1,
+            email='user_email@example.com',
             is_primary=True,
         )
         user_email_address.save()
@@ -542,7 +542,7 @@ class ProfileEmailListViewTestCase(GetViewUrlMixin,
         staff_user = self.get_staff_user_with_std_permissions()
         staff_email_address = EmailAddress(
             user=staff_user,
-            email=self.user_email1,
+            email='staff_email@example.com',
             is_primary=True,
         )
         user_email_address.save()
@@ -846,7 +846,7 @@ class ProfileEmailDeleteViewTestCase(
     def test_post_with_not_valid_pk(self):
         response = self._post_with_not_valid_pk()
         user_email_1 = EmailAddress.objects.filter(pk=self.user_email_1.pk)
-        self.assertTrue(user_email_1.is_primary)
+        self.assertTrue(user_email_1.exists())
         self.assertEqual(response.status_code, 404)
 
     def test_post_with_primary_email_address(self):
@@ -867,15 +867,22 @@ class ProfileEmailDeleteViewTestCase(
 
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
 class UserSettingsViewTestCase(GetViewUrlMixin,
-                               ProfileEmailConfirmationCommonMixin,
                                AllAccountsApphooksTestCase):
     view_name = 'accounts_settings'
 
+    def setUp(self):
+        self.user = self.get_standard_user()
+        self.staff_user = self.get_staff_user_with_std_permissions()
+        super(UserSettingsViewTestCase, self).setUp()
+
     def test_get_not_logged_in(self):
-        response = self._get_not_logged_in(pk=self.confirmation.pk)
+        view_url = self.get_view_url()
+        response = self.client.get(view_url)
         self.assertEqual(response.status_code, 302)
 
     def test_get_logged_in(self):
-        response = self._get_logged_in(pk=self.confirmation.pk)
+        self.client.login(username=self.user.username, password='standard')
+        view_url = self.get_view_url()
+        response = self.client.get(view_url)
         self.assertContains(
             response, 'Edit settings')
