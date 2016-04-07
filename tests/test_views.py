@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 
 import datetime
-from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.auth import  SESSION_KEY
+from django.contrib.auth import SESSION_KEY
+from django.contrib.messages import get_messages
 
 from django.core import mail
 from django.test import  override_settings
@@ -13,6 +13,9 @@ from django.utils import unittest
 from django.utils.translation import override
 
 from aldryn_accounts.models import SignupCode, EmailConfirmation, EmailAddress
+# use aldryn account patched settings
+from aldryn_accounts.conf import settings
+
 from .base import AllAccountsApphooksTestCase
 
 
@@ -27,6 +30,16 @@ class GetViewUrlMixin(object):
         return view_url
 
 
+class ViewsAssertionsMixin(object):
+
+    def assertMessagesContains(self, response, text):
+        """
+        Test if provided text is in response messages.
+        """
+        storage = get_messages(response.wsgi_request)
+        messages = [msg.message for msg in storage]
+        self.assertIn(text, messages)
+
 # session engine is hardcoded in djangocms-helper (atm v0.9.4), so override
 # per test case
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
@@ -38,7 +51,7 @@ class SignupViewTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         view_url = self.get_view_url()
         response = self.client.get(view_url)
         self.assertContains(response, 'New? Register now')
-
+        self.assertRedirects()
     @override_settings(ALDRYN_ACCOUNTS_OPEN_SIGNUP=False)
     def test_get_not_logged_in_no_code(self):
         view_url = self.get_view_url()
@@ -98,19 +111,34 @@ class SignupViewTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         view_url = self.get_view_url()
         self.client.login(username='standard', password='standard')
         response = self.client.get(view_url, follow=True)
-        self.assertEqual(response.status_code, 302)
+        # ensure we had a redirect, redirect_chain will look like
+        # [('http://testserver/', 302), ('http://testserver/en/', 302)]
+        root_url = self.root_page.get_absolute_url()
+        self.assertRedirects(response, root_url)
 
 
 class SignupEmailResendConfirmationViewTestCase(GetViewUrlMixin,
                                                 AllAccountsApphooksTestCase):
     view_name = "accounts_signup_email_resend_confirmation"
 
-    def test_get(self):
+    def test_get_with_not_existing_email_in_get_params(self):
+        """
+        Tests get content with email present in get params, but email doesn't
+        exists
+        """
+        # TODO: Check the desired behavior, adjust accordingly
+        # should we redirect or 404 if email does not exists or display the
+        # form anyway and validate only on post requests?
         view_url = self.get_view_url()
-        response = self.client.get(view_url)
-        # test that there is the text from template
-        self.assertContains(response, 'Send again the confirmation email')
-        # and submit button
+        data = {
+            'email': 'not_existing_confirmation@example.com'
+        }
+        response = self.client.get(view_url, data=data)
+        # check the text from template
+        expected_string = 'confirmation email to {email} again'.format(**data)
+        self.assertContains(
+            response, expected_string)
+        # and button
         self.assertContains(
             response, 'Yes, send me the confirmation email again')
 
@@ -146,6 +174,8 @@ class SignupEmailConfirmationSentViewTestCase(GetViewUrlMixin,
     view_name = 'accounts_signup_email_confirmation_sent'
 
     def test_get_no_email(self):
+        # TODO: Check the desired behavior, adjust accordingly
+        # should we redirect or 404 if the email is not present?
         view_url = self.get_view_url()
         response = self.client.get(view_url)
         self.assertContains(response, 'We have sent you an email to')
@@ -232,9 +262,10 @@ class PasswordResetViewsTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         # check that no email were sent
         self.assertEqual(len(mail.outbox), 0)
         # check that there is a validation error message
-        self.assertContains(response, "Sorry, this user doesn't exist.")
+        # original message "Sorry, this user doesn't exist.", but ' is escaped
+        self.assertContains(response, "Sorry, this user doesn&#39;t exist.")
 
-    def test_post_with_valid_username(self):
+    def test_post_with_valid_username_no_primary_email(self):
         user = self.get_standard_user()
         view_url = self.get_view_url()
         data = {
@@ -245,10 +276,12 @@ class PasswordResetViewsTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         # check that email was sent
         self.assertEqual(len(mail.outbox), 1)
         # ensure there was a redirect
-        self.assertEqual(response.status_code, 302)
-        # TODO: add check for content of redirected PasswordResetRecoverSentView
+        self.assertGreater(len(response.redirect_chain), 0)
+        expected_message = 'An email was sent to <strong>{0}</strong>'.format(
+            user.email)
+        self.assertContains(response, expected_message)
 
-    def test_post_with_valid_email(self):
+    def test_post_with_valid_email_no_primary_email(self):
         user = self.get_standard_user()
         view_url = self.get_view_url()
         data = {
@@ -259,12 +292,16 @@ class PasswordResetViewsTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         # check that email was sent
         self.assertEqual(len(mail.outbox), 1)
         # ensure there was a redirect
-        self.assertEqual(response.status_code, 302)
-        # TODO: add check for content of redirected PasswordResetRecoverSentView
+        self.assertGreater(len(response.redirect_chain), 0)
+        expected_message = 'An email was sent to <strong>{0}</strong>'.format(
+            user.email)
+        self.assertContains(response, expected_message)
 
 
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
-class ConfirmEmailViewTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
+class ConfirmEmailViewTestCase(GetViewUrlMixin,
+                               ViewsAssertionsMixin,
+                               AllAccountsApphooksTestCase):
     view_name = 'accounts_confirm_email'
 
     def setUp(self):
@@ -302,29 +339,39 @@ class ConfirmEmailViewTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         # ensure user was not logged in
         self.assertNotIn(SESSION_KEY, self.client.session)
         response = self.client.post(view_url, follow=True)
-        # TODO: test messages
-        self.assertEqual(response.status_code, 302)
+        # test that success messages is present in response
+        self.assertMessagesContains(response,
+                                    'You have confirmed test@example.com.')
+        self.assertGreater(len(response.redirect_chain), 0)
+        expected_url = self.page_profile_email_settings.get_absolute_url('en')
+        self.assertRedirects(response, expected_url)
         # ensure user has been logged in after success
         self.assertIn(SESSION_KEY, self.client.session)
         # refresh user from db
         self.user = User.objects.get(pk=self.user.pk)
         self.assertTrue(self.user.is_active)
 
-    def test_post_with_verified_email(self):
+    def test_post_with_verified_email_no_delete(self):
         view_url = self.get_view_url(key=self.confirmation_object.key)
         # ensure user was not logged in
         self.assertNotIn(SESSION_KEY, self.client.session)
-        # confirm email
-        self.confirmation_object.confirm()
+        # confirm email, but leave the item
+        self.confirmation_object.confirm(delete=False)
         mail.outbox = []
         response = self.client.post(view_url, follow=True)
-        # TODO: test messages
-        self.assertContains(
-            response, 'This email has already been verified')
+        self.assertMessagesContains(
+            response,
+            'This email has already been verified with an other account.')
         # ensure user was not logged in and not affected
         self.assertNotIn(SESSION_KEY, self.client.session)
         self.user = User.objects.get(pk=self.user.pk)
         self.assertFalse(self.user.is_active)
+
+    def test_post_with_verified_email_returns404(self):
+        view_url = self.get_view_url(key=self.confirmation_object.key)
+        self.confirmation_object.confirm()
+        response = self.client.post(view_url)
+        self.assertEqual(response.status_code, 404)
 
     def test_post_with_expired_key(self):
         view_url = self.get_view_url(key=self.confirmation_object.key)
@@ -339,9 +386,7 @@ class ConfirmEmailViewTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         self.confirmation_object.save()
         mail.outbox = []
         response = self.client.post(view_url, follow=True)
-        # TODO: test messages
-        self.assertContains(
-            response, 'The activation key has expired')
+        self.assertMessagesContains(response, 'The activation key has expired.')
         # ensure user was not logged in and not affected
         self.assertNotIn(SESSION_KEY, self.client.session)
         self.user = User.objects.get(pk=self.user.pk)
@@ -370,48 +415,63 @@ class CreateChangePasswordCommonTestCasesMixin(object):
         self.client.login(username=self.user.username, password='standard')
         self.user.set_unusable_password()
         self.user.save()
-        # todo: test with follow=true
-        response = self.client.get(view_url)
+        response = self.client.get(view_url, follow=True)
         return response
 
     def test_post_with_not_authenticated_user(self):
         view_url = self.get_view_url()
         response = self.client.post(view_url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
 
-    def _test_post_with_valid_data(self):
+    def _test_post_with_valid_data(self, set_unusable_password=False):
         view_url = self.get_view_url()
         self.client.login(username=self.user.username, password='standard')
-        # todo: test with follow=true and check messages
-        response = self.client.post(view_url, data=self.valid_data)
-        self.assertEqual(response.status_code, 302)
+        if set_unusable_password:
+            self.user.set_unusable_password()
+            self.user.save()
+        response = self.client.post(view_url, data=self.valid_data, follow=True)
         self.client.logout()
         # check that we can login with new password
         login_result = self.client.login(
             username=self.user.username, password=self.new_password)
         self.assertTrue(login_result)
+        return response
 
-    def test_post_with_valid_data_no_extra_settings(self):
-        self._test_post_with_valid_data()
+    def test_post_with_valid_data_no_extra_settings(
+            self, set_unusable_password=False):
+        self._test_post_with_valid_data(
+            set_unusable_password=set_unusable_password)
 
     @override_settings(ALDRYN_ACCOUNTS_NOTIFY_PASSWORD_CHANGE=False)
-    def test_post_with_valid_data_dont_send_email(self):
+    def test_post_with_valid_data_dont_send_email(self,
+                                                  set_unusable_password=False):
         mail.outbox = []
-        self._test_post_with_valid_data()
+        response = self._test_post_with_valid_data(
+            set_unusable_password=set_unusable_password)
+        expected_url = self.page_profile_index.get_absolute_url('en')
+        self.assertRedirects(response, expected_url)
+        self.assertMessagesContains(response, 'Password successfully changed.')
         self.assertEqual(len(mail.outbox), 0)
 
     @override_settings(ALDRYN_ACCOUNTS_NOTIFY_PASSWORD_CHANGE=True)
-    def test_post_with_valid_data_and_send_email(self):
+    def test_post_with_valid_data_and_send_email(self,
+                                                 set_unusable_password=False):
         mail.outbox = []
-        self._test_post_with_valid_data()
+        response = self._test_post_with_valid_data(
+            set_unusable_password=set_unusable_password)
+        expected_url = self.page_profile_index.get_absolute_url('en')
+        self.assertRedirects(response, expected_url)
+        self.assertMessagesContains(response, 'Password successfully changed.')
         self.assertEqual(len(mail.outbox), 1)
 
-    def test_post_with_not_valid_data(self):
+    def test_post_with_not_valid_data(self, set_unusable_password=False):
         view_url = self.get_view_url()
         self.client.login(username=self.user.username, password='standard')
-        # todo: test with follow=true and check messages
-        response = self.client.post(view_url, data=self.invalid_data)
-        self.assertEqual(response.status_code, 200)
+        if set_unusable_password:
+            self.user.set_unusable_password()
+            self.user.save()
+        response = self.client.post(view_url, data=self.invalid_data,
+                                    follow=True)
         self.client.logout()
         # check that we can't login with new password
         login_result = self.client.login(
@@ -421,6 +481,7 @@ class CreateChangePasswordCommonTestCasesMixin(object):
 
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
 class ChangePasswordViewTestCase(GetViewUrlMixin,
+                                 ViewsAssertionsMixin,
                                  CreateChangePasswordCommonTestCasesMixin,
                                  AllAccountsApphooksTestCase):
     view_name = 'accounts_change_password'
@@ -440,11 +501,13 @@ class ChangePasswordViewTestCase(GetViewUrlMixin,
 
     def test_get_with_not_usable_user_password(self):
         response = self._view_get_with_not_usable_user_password()
-        self.assertEqual(response.status_code, 302)
+        expected_url = self.get_view_url(view_name='accounts_create_password')
+        self.assertRedirects(response, expected_url)
 
 
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
 class CreatePasswordViewTestCase(GetViewUrlMixin,
+                                 ViewsAssertionsMixin,
                                  CreateChangePasswordCommonTestCasesMixin,
                                  AllAccountsApphooksTestCase):
     view_name = 'accounts_create_password'
@@ -464,6 +527,28 @@ class CreatePasswordViewTestCase(GetViewUrlMixin,
         response = self._view_get_with_not_usable_user_password()
         self.assertContains(response, 'set new password')
 
+    def test_post_with_valid_data_no_extra_settings(self,
+                                                    set_unusable_password=True):
+        super(CreatePasswordViewTestCase,
+              self).test_post_with_valid_data_no_extra_settings(
+            set_unusable_password=set_unusable_password)
+
+    def test_post_with_valid_data_dont_send_email(self,
+                                                  set_unusable_password=True):
+        super(CreatePasswordViewTestCase,
+              self).test_post_with_valid_data_dont_send_email(
+            set_unusable_password=set_unusable_password)
+
+    def test_post_with_not_valid_data(self, set_unusable_password=True):
+        super(CreatePasswordViewTestCase, self).test_post_with_not_valid_data(
+            set_unusable_password=set_unusable_password)
+
+    def test_post_with_valid_data_and_send_email(self,
+                                                 set_unusable_password=True):
+        super(CreatePasswordViewTestCase,
+              self).test_post_with_valid_data_and_send_email(
+            set_unusable_password=set_unusable_password)
+
 
 class ProfileViewsCommonMixin(object):
 
@@ -476,6 +561,7 @@ class ProfileViewsCommonMixin(object):
         self.client.login(username=self.user.username, password='standard')
         response = self.client.get(view_url)
         return response
+
     def _view_get_not_logged_in(self):
         view_url = self.get_view_url()
         response = self.client.get(view_url)
@@ -494,7 +580,10 @@ class ProfileViewTestCase(GetViewUrlMixin,
 
     def test_get_logged_in(self):
         response = self._view_get_logged_in()
-        self.assertContains(response, 'Edit settings')
+        expected_username = 'username: {0}'.format(self.user.username)
+        expected_user_email = 'email: {0}'.format(self.user.email)
+        self.assertContains(response, expected_username)
+        self.assertContains(response, expected_user_email)
 
 
 @unittest.skip("Since social auth is not working - don't run this test cases.")
@@ -547,7 +636,7 @@ class ProfileEmailListViewTestCase(GetViewUrlMixin,
         )
         user_email_address.save()
         staff_email_confirmtaion = EmailConfirmation.objects.request(
-            user=self.user, email='test@example.com', send=True)
+            user=staff_user, email='staff_test@example.com', send=True)
         # get response for standard user
         response = self._view_get_logged_in()
         self.assertContains(response, user_email_address.email)
@@ -574,16 +663,18 @@ class ProfileEmailListViewTestCase(GetViewUrlMixin,
             'email': 'new@example.com'
         }
         self.assertEqual(EmailConfirmation.objects.count(), 0)
-        response = self.client.post(view_url, data=data)
-        self.assertEqual(response.status_code, 302)
+        response = self.client.post(view_url, data=data, follow=True)
+        self.assertRedirects(response, view_url)
         self.assertEqual(EmailConfirmation.objects.count(), 1)
         # test second time
-        response = self.client.post(view_url, data=data)
-        self.assertEqual(response.status_code, 200)
-        # ensure that another email confirmation object was not created.
-        self.assertEqual(EmailConfirmation.objects.count(), 1)
+        response = self.client.post(view_url, data=data, follow=True)
+        self.assertRedirects(response, view_url)
+        # ensure that another email confirmation object was created.
+        # the actual owner of email can only confirm the email
+        # redundant emails can be deleted on cleanup or other way.
+        self.assertEqual(EmailConfirmation.objects.count(), 2)
 
-    def test_post_if_email_object_exists(self):
+    def test_post_if_email_objeselfct_exists(self):
         view_url = self.get_view_url()
         self.client.login(username=self.user.username, password='standard')
         new_email = EmailAddress(
@@ -639,7 +730,7 @@ class ProfileEmailConfirmationCommonMixin(object):
         response = self.client.post(view_url)
         return response
 
-    def _post_for_another_user(self, **kwargs):
+    def _post(self, **kwargs):
         view_url = self.get_view_url(**kwargs)
         response = self.client.post(view_url)
         return response
@@ -685,7 +776,7 @@ class ProfileEmailConfirmationResendViewTestCase(
         self.assertEqual(len(mail.outbox), 0)
 
     def test_post_confirmation_for_another_user(self):
-        response = self._post_for_another_user(pk=self.staff_user_confirmation.pk)
+        response = self._post(pk=self.staff_user_confirmation.pk)
         self.assertEqual(response.status_code, 404)
 
 
@@ -732,7 +823,7 @@ class ProfileEmailConfirmationCancelViewTestCase(
 
     def test_post_confirmation_for_another_user(self):
         staf_user_confirmation_pk = self.staff_user_confirmation.pk
-        response = self._post_for_another_user(pk=self.staff_user_confirmation.pk)
+        response = self._post(pk=self.staff_user_confirmation.pk)
         self.assertTrue(EmailConfirmation.objects.filter(
             pk=staf_user_confirmation_pk).exists())
         self.assertEqual(response.status_code, 404)
@@ -802,8 +893,7 @@ class ProfileEmailMakePrimaryViewTestCase(
 
     def test_post_for_another_user(self):
         staf_user_email_pk = self.staff_email_2.pk
-        response = self._post_for_another_user(
-            pk=staf_user_email_pk)
+        response = self._post(pk=staf_user_email_pk)
         self.assertTrue(EmailAddress.objects.filter(
             pk=staf_user_email_pk).exists())
         self.assertEqual(response.status_code, 404)
@@ -819,17 +909,26 @@ class ProfileEmailDeleteViewTestCase(
     view_name = 'accounts_email_delete'
 
     def test_get_not_logged_in(self):
-        email_pk = self.user_email_1.pk
+        # we are using second email, because user shouldn't be able to delete
+        # the primary email
+        email_pk = self.user_email_2.pk
         response = self._get_not_logged_in(pk=email_pk)
         self.assertEqual(response.status_code, 302)
 
     def test_get_logged_in(self):
-        email_pk = self.user_email_1.pk
+        # we are using second email, because user shouldn't be able to delete
+        # the primary email
+        email_pk = self.user_email_2.pk
         response = self._get_logged_in(pk=email_pk)
         self.assertContains(
             response,
             'to remove {0} from your account'.format(
                 self.user_email_2.email))
+
+    def test_get_logged_in_for_another_user(self):
+        staf_user_email_pk = self.staff_email_2.pk
+        response = self._get_logged_in(pk=staf_user_email_pk)
+        self.assertEqual(response.status_code, 404)
 
     def test_post_with_valid_pk(self):
         email_1_pk = self.user_email_1.pk
@@ -858,8 +957,7 @@ class ProfileEmailDeleteViewTestCase(
 
     def test_post_for_another_user(self):
         staf_user_email_pk = self.staff_email_2.pk
-        response = self._post_for_another_user(
-            pk=staf_user_email_pk)
+        response = self._post(pk=staf_user_email_pk)
         self.assertTrue(EmailAddress.objects.filter(
             pk=staf_user_email_pk).exists())
         self.assertEqual(response.status_code, 404)
@@ -884,5 +982,5 @@ class UserSettingsViewTestCase(GetViewUrlMixin,
         self.client.login(username=self.user.username, password='standard')
         view_url = self.get_view_url()
         response = self.client.get(view_url)
-        self.assertContains(
-            response, 'Edit settings')
+        self.assertContains(response, 'Settings')
+        self.assertContains(response, 'save')

@@ -42,11 +42,17 @@ def profile_image_upload_to(instance, filename):
 
 
 # TODO: make cache method configurable
-gi4 = pygeoip.GeoIP(os.path.join(settings.GEOIP_PATH, getattr(settings, 'GEOIP_CITY', 'GeoLiteCity.dat')))
+if settings.ALDRYN_ACCOUNTS_USE_GEOIP:
+    GEOIP_PATH = getattr(settings, 'GEOIP_PATH', '')
+    GEOIP_CITY = getattr(settings, 'GEOIP_CITY', 'GeoLiteCity.dat')
+    gi4 = pygeoip.GeoIP(os.path.join(GEOIP_PATH, GEOIP_CITY))
 
 
 def geoip(ip):
     # TODO: validate ip
+    # do nothing if geo ip is not enabled.
+    if not settings.ALDRYN_ACCOUNTS_USE_GEOIP:
+        return dict()
     try:
         data = gi4.record_by_addr(ip)
     except Exception:

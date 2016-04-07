@@ -60,7 +60,9 @@ class AccountsAppConf(AppConf):
     ENABLE_TWITTER_LOGIN = False
     ENABLE_GOOGLE_LOGIN = False
     ENABLE_NOTIFICATIONS = True  # by now this is only used to suppress redundant "Confirmation email" message
-
+    # if enabled GEOIP_PATH and GEOIP_CITY (this one defaults to
+    # GeoLiteCity.dat) should be configured
+    USE_GEOIP = False
     LOGIN_REDIRECT_URL = '/'
 
     PROFILE_IMAGE_UPLOAD_TO = 'profile-data'
