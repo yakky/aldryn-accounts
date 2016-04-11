@@ -9,4 +9,3 @@ easy-thumbnails
 flake8
 html5lib
 pyflakes
-

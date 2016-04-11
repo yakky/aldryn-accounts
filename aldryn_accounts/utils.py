@@ -32,7 +32,7 @@ def random_token(extra=None, hash_func=hashlib.sha256):
     if extra is None:
         extra = []
     bits = extra + [str(random.getrandbits(512))]
-    return hash_func("".join(bits)).hexdigest()
+    return hash_func("".join(bits).encode('utf-8')).hexdigest()
 
 
 def profile_image_upload_to(instance, filename):

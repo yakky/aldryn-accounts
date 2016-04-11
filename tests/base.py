@@ -8,14 +8,13 @@ import sys
 from django.conf import settings
 from django.core.urlresolvers import clear_url_caches
 from django.core.cache import cache
-from django.test import TestCase
 
 from cms import api
 from cms.apphook_pool import apphook_pool
 from cms.appresolver import clear_app_resolvers
 from cms.exceptions import AppAlreadyRegistered
 from cms.utils import get_cms_setting
-from cms.test_utils.testcases import CMSTestCase, TransactionCMSTestCase
+from cms.test_utils.testcases import CMSTestCase
 
 from aldryn_accounts import cms_app
 
@@ -128,6 +127,15 @@ class CleanUpMixin(object):
         for module in url_modules:
             if module in sys.modules:
                 del sys.modules[module]
+
+
+# for cms 3.0 add get_standard_user method onto the class
+def get_standard_user(self):
+    """Creates standard user"""
+    standard = self._create_user("standard", is_staff=False, is_superuser=False)
+    return standard
+if not hasattr(CMSTestCase, 'get_standard_user'):
+    CMSTestCase.get_standard_user = get_standard_user
 
 
 class AcountsSetupMixin(object):

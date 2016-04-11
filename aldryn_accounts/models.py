@@ -3,8 +3,14 @@ from __future__ import unicode_literals
 
 import datetime
 import operator
-import urllib
+try:
+    from urllib import urlencode
+except ImportError:
+    # Python 3
+    from urllib.parse import urlencode
+import timezone_field
 
+from six.moves import reduce
 from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -15,17 +21,19 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import get_language, override as force_language, ugettext_lazy as _
-import timezone_field
+from django.utils.encoding import python_2_unicode_compatible, force_text
+
 from annoying.fields import AutoOneToOneField
 
 from .conf import settings
 from .signals import signup_code_used, signup_code_sent, email_confirmed, email_confirmation_sent
 from .utils import profile_image_upload_to, random_token, user_display
 
-import monkeypatches
-monkeypatches.patch_user_unicode()
+from .monkeypatches import patch_user_unicode
+patch_user_unicode()
 
 
+@python_2_unicode_compatible
 class SignupCode(models.Model):
 
     class AlreadyExists(Exception):
@@ -44,7 +52,7 @@ class SignupCode(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     use_count = models.PositiveIntegerField(editable=False, default=0)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.email:
             return "%s [%s]" % (self.email, self.code)
         else:
@@ -108,9 +116,9 @@ class SignupCode(models.Model):
         current_site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
         signup_url = "%s://%s%s?%s" % (
             protocol,
-            unicode(current_site.domain),
+            force_text(current_site.domain),
             reverse("accounts_signup"),
-            urllib.urlencode({"code": self.code})
+            urlencode({"code": self.code})
         )
         ctx = {
             "signup_code": self,
@@ -171,6 +179,7 @@ class EmailAddressManager(models.Manager):
         return self.filter(user=user).exists()
 
 
+@python_2_unicode_compatible
 class EmailAddress(models.Model):
     """
     All verified email addresses. If it's not verified it should not be here.
@@ -191,7 +200,7 @@ class EmailAddress(models.Model):
     def clean(self):
         self.email = self.email.strip().lower()
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s (%s)" % (self.email, self.user)
 
     def set_as_primary(self, commit=True):
@@ -237,6 +246,7 @@ class EmailConfirmationManager(models.Manager):
         return email_confirmation
 
 
+@python_2_unicode_compatible
 class EmailConfirmation(models.Model):
     user = models.ForeignKey(User, related_name="email_verifications")
     email = models.EmailField()
@@ -252,7 +262,7 @@ class EmailConfirmation(models.Model):
         verbose_name = _("email confirmation")
         verbose_name_plural = _("email confirmations")
 
-    def __unicode__(self):
+    def __str__(self):
         return "confirmation for %s (%s)" % (self.email, self.user)
 
     def clean(self):
@@ -290,7 +300,7 @@ class EmailConfirmation(models.Model):
         with force_language(language):
             activate_url = "%s://%s%s" % (
                 protocol,
-                unicode(site.domain),
+                force_text(site.domain),
                 reverse("accounts_confirm_email", args=[self.key])
             )
             ctx = {
@@ -314,6 +324,7 @@ class EmailConfirmation(models.Model):
         email_confirmation_sent.send(sender=self.__class__, confirmation=self)
 
 
+@python_2_unicode_compatible
 class UserSettings(models.Model):
     user = AutoOneToOneField(User, related_name='settings', unique=True, db_index=True)
     birth_date = models.DateField(_('birth date'), blank=True, null=True)
@@ -331,6 +342,8 @@ class UserSettings(models.Model):
         verbose_name = _('user settings')
         verbose_name_plural = _('user settings')
 
+    def __str__(self):
+        return '{0} ({1})'.format(self.user.username, self.user.pk)
 
 # South rules
 rules = [

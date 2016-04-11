@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
 import datetime
-import urllib
+try:
+    from urllib import urlencode, unquote
+except ImportError:
+    # Python 3
+    from urllib.parse import urlencode, unquote
 
 from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from class_based_auth_views.utils import default_redirect
@@ -11,8 +15,13 @@ from django.contrib import messages, auth
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.sites.models import get_current_site
-from django.contrib.sites.requests import RequestSite
+try:
+    from django.contrib.sites.shortcuts import get_current_site
+    from django.contrib.sites.requests import RequestSite
+except ImportError:
+    # Django 1.6
+    from django.contrib.sites.models import get_current_site
+    from django.contrib.sites.models import RequestSite
 from django.core import urlresolvers, signing
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -25,7 +34,6 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View, DetailView
 from django.views.generic.base import TemplateResponseMixin
-from social_auth.utils import setting as social_auth_setting
 import class_based_auth_views.views
 import password_reset.views
 
@@ -94,9 +102,11 @@ class SignupView(FormView):
         # the shared login/signup view works even if the context processor
         # was not added globally
         ctx.update(empty_login_and_signup_forms(self.request))  # TODO: make configurable?
+        redirect_field_value = self.request.POST.get(
+            redirect_field_name, self.request.GET.get(redirect_field_name, ''))
         ctx.update({
             "redirect_field_name": redirect_field_name,
-            "redirect_field_value": self.request.REQUEST.get(redirect_field_name),
+            "redirect_field_value": redirect_field_value,
         })
         return ctx
 
@@ -164,7 +174,11 @@ class SignupView(FormView):
         return user
 
     def generate_username(self, form):
-        return uuid4().get_hex()[:30]
+        uuid = uuid4()
+        if hasattr(uuid, 'get_hex'):
+            # Python 2
+            return uuid.get_hex()[:30]
+        return uuid.hex[:30]
 
     def after_signup(self, form):
         # TODO: SignupForm as sender might suck, because it might be replaced by something else.
@@ -186,7 +200,7 @@ class SignupView(FormView):
             )
 
     def is_open(self):
-        code = self.request.REQUEST.get("code")
+        code = self.request.POST.get("code", self.request.GET.get("code", ""))
         if not code:
             return settings.ALDRYN_ACCOUNTS_OPEN_SIGNUP
         signup_code = None
@@ -208,42 +222,6 @@ class SignupView(FormView):
         return self.response_class(**response_kwargs)
 
 
-class SignupEmailView(FormView):
-    """
-    experimental: used when someone signs up with a social login and has to also add an email.
-    """
-    template_name = 'aldryn_accounts/signup_email.html'
-    form_class = EmailForm
-
-    def get_initial(self):
-        email = self.request.session.get('social_auth_email')
-        if email:
-            return {'email': email}
-        else:
-            return {}
-
-    def form_valid(self, form):
-        verified_email = self.request.session.get('social_auth_verified_email')
-        email = form.cleaned_data['email']
-        social_auth_data_varname = social_auth_setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
-        social_auth_data = self.request.session[social_auth_data_varname]
-        user = User.objects.get(pk=social_auth_data['kwargs']['user']['pk'])
-        if email and verified_email and email == verified_email:
-            # we know all is ok with that email. Activate it right away
-            EmailAddress.objects.add_email(user=user, email=verified_email)
-        else:
-            EmailConfirmation.objects.request(user=user, email=email, send=True)
-        return redirect(self.get_success_url())
-
-    def get_success_url(self):
-        return self.social_auth_continue_url()
-
-    def social_auth_continue_url(self):
-        name = social_auth_setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
-        backend = self.request.session[name]['backend']
-        return urlresolvers.reverse('socialauth_complete', kwargs=dict(backend=backend))
-
-
 class SignupEmailResendConfirmationView(FormView):
     template_name = 'aldryn_accounts/signup_email_resend_confirmation.html'
     form_class = SignupEmailResendConfirmationForm
@@ -255,7 +233,7 @@ class SignupEmailResendConfirmationView(FormView):
     def _get_email(self):
         if not hasattr(self, '_email'):
             email = self.request.GET.get('email', '')
-            self._email = urllib.unquote(email)
+            self._email = unquote(email)
         return self._email
 
     def get_context_data(self, **kwargs):
@@ -273,7 +251,7 @@ class SignupEmailResendConfirmationView(FormView):
     def get_success_url(self):
         email = self._get_email()
         url = reverse('accounts_signup_email_confirmation_sent')
-        url += '?' + urllib.urlencode({'email': email})
+        url += '?' + urlencode({'email': email})
         return url
 
     def form_valid(self, form):
@@ -300,7 +278,7 @@ class SignupEmailConfirmationSentView(TemplateView):
 
     def get_the_email(self):
         email = self.request.GET.get('email', '')
-        email = urllib.unquote(email)
+        email = unquote(email)
         return email
 
     def get_context_data(self, **kwargs):
@@ -521,9 +499,11 @@ class ChangePasswordBaseView(FormView):
     def get_context_data(self, **kwargs):
         ctx = kwargs
         redirect_field_name = self.get_redirect_field_name()
+        redirect_value = self.request.POST.get(
+            redirect_field_name, self.request.GET.get(redirect_field_name, ''))
         ctx.update({
             "redirect_field_name": redirect_field_name,
-            "redirect_field_value": self.request.REQUEST.get(redirect_field_name),
+            "redirect_field_value": redirect_value,
         })
         return ctx
 
@@ -743,10 +723,3 @@ class UserSettingsView(UpdateView):
 
     def get_success_url(self):
         return urlresolvers.reverse('accounts_profile')
-
-
-class MyExceptionTestView(View):
-    def dispatch(self, request, *args, **kwargs):
-        from social_auth.exceptions import SocialAuthBaseException
-        raise SocialAuthBaseException("This is an exception test")
-my_exception_test_view = MyExceptionTestView.as_view()

@@ -4,7 +4,6 @@ from appconf import AppConf
 
 ADD_TO_INSTALLED_APPS = [
     'password_reset',
-    'social_auth',
     'absolute',
     # 'django_gravatar',
     'aldryn_common',
@@ -14,13 +13,6 @@ ADD_TO_INSTALLED_APPS = [
 ADD_TO_MIDDLEWARE_CLASSES = [
     'aldryn_accounts.middleware.GeoIPMiddleware',
     'aldryn_accounts.middleware.TimezoneMiddleware',  # TimezoneMiddleware relies on GeoIP location.
-    'aldryn_accounts.middleware.SocialAuthExceptionMiddleware',
-]
-
-# should be used if social login is configured
-SOCIAL_CONTEXT_PROCESSORS = [
-    'social_auth.context_processors.social_auth_login_redirect',
-    'aldryn_accounts.context_processors.social_auth_info',
 ]
 
 ADD_TO_TEMPLATE_CONTEXT_PROCESSORS = [
@@ -51,15 +43,6 @@ class AccountsAppConf(AppConf):
     USER_DISPLAY_FALLBACK_TO_USERNAME = False
     USER_DISPLAY_FALLBACK_TO_PK = False
 
-    SOCIAL_BACKEND_ORDERING = []
-    # if set to True - will add SOCIAL_CONTEXT_PROCESSORS to context processors
-    USE_SOCIAL_CONTEXT_PROCESSORS = False
-
-    ENABLE_SOCIAL_AUTH = False  # controls visibility of social auth related things in the UI
-    ENABLE_GITHUB_LOGIN = False
-    ENABLE_FACEBOOK_LOGIN = False
-    ENABLE_TWITTER_LOGIN = False
-    ENABLE_GOOGLE_LOGIN = False
     ENABLE_NOTIFICATIONS = True  # by now this is only used to suppress redundant "Confirmation email" message
     # if enabled GEOIP_PATH and GEOIP_CITY (this one defaults to
     # GeoLiteCity.dat) should be configured
@@ -74,22 +57,6 @@ class AccountsAppConf(AppConf):
         s = self._meta.holder
         if not name in s.AUTHENTICATION_BACKENDS:
             s.AUTHENTICATION_BACKENDS.append(name)
-
-    def configure_enable_github_login(self, value):
-        if value:
-            self.enable_authentication_backend('social_auth.backends.contrib.github.GithubBackend')
-
-    def configure_enable_facebook_login(self, value):
-        if value:
-            self.enable_authentication_backend('social_auth.backends.facebook.FacebookBackend')
-
-    def configure_enable_twitter_login(self, value):
-        if value:
-            self.enable_authentication_backend('social_auth.backends.twitter.TwitterBackend')
-
-    def configure_enable_google_login(self, value):
-        if value:
-            self.enable_authentication_backend('social_auth.backends.google.GoogleBackend')
 
     def configure(self):
         if not self.configured_data['AUTOCONFIGURE']:
@@ -106,11 +73,11 @@ class AccountsAppConf(AppConf):
             if not middleware in s.MIDDLEWARE_CLASSES:
                 s.MIDDLEWARE_CLASSES.insert(pos, middleware)
                 pos = pos + 1
-        # add social context processors if needed.
-        if self.configured_data['USE_SOCIAL_CONTEXT_PROCESSORS']:
-            s.TEMPLATE_CONTEXT_PROCESSORS.extend(SOCIAL_CONTEXT_PROCESSORS)
+        template_context_processors_list = list(s.TEMPLATE_CONTEXT_PROCESSORS)
         # insert our template context processors
-        s.TEMPLATE_CONTEXT_PROCESSORS.extend(ADD_TO_TEMPLATE_CONTEXT_PROCESSORS)
+        template_context_processors_list.extend(
+            ADD_TO_TEMPLATE_CONTEXT_PROCESSORS)
+        s.TEMPLATE_CONTEXT_PROCESSORS = template_context_processors_list
         if not getattr(s, 'GITHUB_EXTENDED_PERMISSIONS', None):
             s.GITHUB_EXTENDED_PERMISSIONS = ['user:email']
         if not getattr(s, 'FACEBOOK_EXTENDED_PERMISSIONS', None):

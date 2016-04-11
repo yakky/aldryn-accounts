@@ -7,9 +7,9 @@ from django.contrib.auth import SESSION_KEY
 from django.contrib.messages import get_messages
 
 from django.core import mail
-from django.test import  override_settings
+from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
-from django.utils import unittest
+from unittest import skip
 from django.utils.translation import override
 
 from aldryn_accounts.models import SignupCode, EmailConfirmation, EmailAddress
@@ -36,7 +36,11 @@ class ViewsAssertionsMixin(object):
         """
         Test if provided text is in response messages.
         """
-        storage = get_messages(response.wsgi_request)
+        try:
+            storage = get_messages(response.wsgi_request)
+        except AttributeError:
+            # Django 1.6
+            storage = get_messages(response._request)
         messages = [msg.message for msg in storage]
         self.assertIn(text, messages)
 
@@ -663,7 +667,7 @@ class ProfileViewTestCase(GetViewUrlMixin,
         self.assertContains(response, expected_user_email)
 
 
-@unittest.skip("Since social auth is not working - don't run this test cases.")
+@skip("Since social auth is not working - don't run this test cases.")
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
 class ProfileAssociationsViewTestCase(GetViewUrlMixin,
                                       ProfileViewsCommonMixin,
