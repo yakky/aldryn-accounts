@@ -9,7 +9,7 @@ from aldryn_accounts.models import EmailAddress
 class Command(BaseCommand):
     help = ("Creates confirmed email addresses for existing users.\n"
             "Uses user.email as a source.\n"
-            "Doesn't requires confirmation of the email address.")
+            "Doesn't require confirmation of the email address.")
 
     def handle(self, *args, **options):
         self.stdout.write("Starting to process existing users...")
@@ -36,6 +36,6 @@ class Command(BaseCommand):
         no_email_txt = '\n'.join(formatted_users)
         if no_email_txt:
             self.stdout.write(
-                'Following users had no email setted up:\n{0}'.format(
+                'Following users had no email set up:\n{0}'.format(
                     no_email_txt))
         self.stdout.write("Done.")
