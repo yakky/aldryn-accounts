@@ -277,7 +277,7 @@ class PasswordResetViewsTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         response = self.client.post(view_url, data=data, follow=True)
         # check that email was not sent
         self.assertEqual(len(mail.outbox), 0)
-        expected_msg = "Sorry, this user doesn&#39;t has any verified email."
+        expected_msg = "Sorry, this user doesn&#39;t have any verified email."
         self.assertContains(response, expected_msg)
 
     @override_settings(
@@ -314,7 +314,7 @@ class PasswordResetViewsTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         response = self.client.post(view_url, data=data, follow=True)
         # check that email was not sent
         self.assertEqual(len(mail.outbox), 0)
-        expected_msg = "Sorry, this user doesn&#39;t has any verified email."
+        expected_msg = "Sorry, this user doesn&#39;t have any verified email."
         self.assertContains(response, expected_msg)
 
     @override_settings(

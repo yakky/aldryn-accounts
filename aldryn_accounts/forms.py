@@ -29,7 +29,7 @@ def get_user_email(user, form_email):
     # check if entered email is confirmed
     matching_email = confirmed_emails.filter(email=form_email)
     if matching_email:
-        email_instance = matching_email[0]
+        email_instance = matching_email.get()
     # if entered email is not among the confirmed - user first
     # confirmed email
     return email_instance.email
@@ -74,7 +74,7 @@ class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
             settings.ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR)
         if validation_error:
             raise forms.ValidationError(
-                    _("Sorry, this user doesn't has any verified email."))
+                    _("Sorry, this user doesn't have any verified email."))
         cleaned_data['email'] = email
         return cleaned_data
 
