@@ -158,6 +158,12 @@ class EmailAddressManager(models.Manager):
         except self.model.DoesNotExist:
             return None
 
+    def get_for_user(self, user):
+        """
+        Returns a queryset of EmailAddress objects for a given user.
+        """
+        return self.filter(user=user)
+
     def get_user_for(self, email):
         return self.get(email=email)
 
@@ -270,7 +276,8 @@ class EmailConfirmation(models.Model):
             email_address = EmailAddress.objects.add_email(
                 user=self.user, email=self.email, make_primary=self.is_primary, **data)
             email_confirmed.send(sender=self.__class__, email_address=email_address)
-            EmailConfirmation.objects.filter(email=self.email).delete()
+            if delete:
+                EmailConfirmation.objects.filter(email=self.email).delete()
             return email_address
         else:
             raise VerificationKeyExpired()

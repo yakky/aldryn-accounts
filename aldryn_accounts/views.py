@@ -358,13 +358,15 @@ class PasswordResetRecoverView(password_reset.views.Recover):
 
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
-        self.email = form.cleaned_data['username_or_email']
-        self.send_notification()
+        self.email = form.cleaned_data['email']
+        if self.email:
+            self.send_notification()
         self.mail_signature = signing.dumps(self.email, salt=self.url_salt)
         return super(password_reset.views.Recover, self).form_valid(form)
 
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_password_reset_recover_sent', args=[self.mail_signature])
+        return urlresolvers.reverse('accounts_password_reset_recover_sent',
+                                    args=[self.mail_signature])
 
 
 class PasswordResetRecoverSentView(password_reset.views.RecoverDone):
@@ -467,7 +469,7 @@ class ProfileView(TemplateView):
         return super(ProfileView, self).dispatch(*args, **kwargs)
 
 
-class ChangePasswordView(FormView):
+class ChangePasswordBaseView(FormView):
     template_name = "aldryn_accounts/profile/change_password.html"
     email_template_name = "aldryn_accounts/email/change_password.body.txt"
     email_html_template_name = "aldryn_accounts/email/change_password.body.html"
@@ -481,17 +483,11 @@ class ChangePasswordView(FormView):
         }
     }
 
-    def get(self, *args, **kwargs):
-        if not self.request.user.is_authenticated():
-            return redirect("accounts_password_reset_recover")
-        if not self.request.user.has_usable_password():
-            return redirect("accounts_create_password")
-        return super(ChangePasswordView, self).get(*args, **kwargs)
 
     def post(self, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return HttpResponseForbidden()
-        return super(ChangePasswordView, self).post(*args, **kwargs)
+        return super(ChangePasswordBaseView, self).post(*args, **kwargs)
 
     def change_password(self, form):
         user = self.request.user
@@ -563,7 +559,22 @@ class ChangePasswordView(FormView):
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
 
-class CreatePasswordView(ChangePasswordView):
+class ChangePasswordView(ChangePasswordBaseView):
+
+    @method_decorator(login_required())
+    def dispatch(self, request, *args, **kwargs):
+        return super(ChangePasswordView, self).dispatch(
+            request, *args, **kwargs)
+
+    def get(self, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return redirect("accounts_password_reset_recover")
+        if not self.request.user.has_usable_password():
+            return redirect("accounts_create_password")
+        return super(ChangePasswordView, self).get(*args, **kwargs)
+
+
+class CreatePasswordView(ChangePasswordBaseView):
     form_class = CreatePasswordForm
 
     @method_decorator(login_required())
@@ -704,6 +715,10 @@ class UserSettingsView(UpdateView):
     model = UserSettings
     form_class = UserSettingsForm
     template_name = "aldryn_accounts/profile/usersettings_form.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserSettingsView, self).dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         if self.request.user.is_anonymous():
