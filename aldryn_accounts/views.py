@@ -358,37 +358,15 @@ class PasswordResetRecoverView(password_reset.views.Recover):
 
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
-        form_email = form.cleaned_data['username_or_email']
-        self.email = self._get_user_email(form_email)
-        self.send_notification()
+        self.email = form.cleaned_data['email']
+        if self.email:
+            self.send_notification()
         self.mail_signature = signing.dumps(self.email, salt=self.url_salt)
         return super(password_reset.views.Recover, self).form_valid(form)
 
-    def _get_user_email(self, form_email):
-        """
-        Search for confirmed emails with respect to form_email, or fall back to
-        user.email
-        """
-        # try to get primary email
-        email = EmailAddress.objects.get_primary(self.user)
-        if email:
-            return email
-        # check if there is confirmed emails for this user
-        confirmed_emails = EmailAddress.objects.get_for_user(self.user)
-        if not confirmed_emails:
-            # if there is no confirmed emails - use user.email.
-            return self.user.email
-
-        # check if entered email is confirmed
-        matching_email = confirmed_emails.filter(email=form_email)
-        if matching_email:
-            return matching_email[0]
-        # if entered email is not among the confirmed - user first
-        # confirmed email
-        return confirmed_emails[0]
-
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_password_reset_recover_sent', args=[self.mail_signature])
+        return urlresolvers.reverse('accounts_password_reset_recover_sent',
+                                    args=[self.mail_signature])
 
 
 class PasswordResetRecoverSentView(password_reset.views.RecoverDone):

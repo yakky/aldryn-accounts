@@ -46,7 +46,8 @@ class AccountsAppConf(AppConf):
     EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # how long a confirmation email code is valid
     SOCIAL_BACKENDS_WITH_TRUSTED_EMAIL = ['google']  # which backends can be trusted to provide validated email addresses
     SUPPORT_EMAIL = settings.DEFAULT_FROM_EMAIL
-
+    # raise validation error on password restore if user has no confirmed email
+    RESTORE_PASSWORD_RAISE_VALIDATION_ERROR = True
     USER_DISPLAY_FALLBACK_TO_USERNAME = False
     USER_DISPLAY_FALLBACK_TO_PK = False
 

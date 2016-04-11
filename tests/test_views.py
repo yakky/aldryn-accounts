@@ -266,6 +266,8 @@ class PasswordResetViewsTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         self.assertContains(response, "Sorry, this user doesn&#39;t exist.")
 
     def test_post_with_valid_username_no_primary_email(self):
+        # Since we cant blindly trust not confirmed emails, we need to ensure
+        # that emails with recovery are not sent to not confirmed emails.
         user = self.get_standard_user()
         view_url = self.get_view_url()
         data = {
@@ -273,15 +275,16 @@ class PasswordResetViewsTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         }
         mail.outbox = []
         response = self.client.post(view_url, data=data, follow=True)
-        # check that email was sent
-        self.assertEqual(len(mail.outbox), 1)
-        # ensure there was a redirect
-        self.assertGreater(len(response.redirect_chain), 0)
-        expected_message = 'An email was sent to <strong>{0}</strong>'.format(
-            user.email)
-        self.assertContains(response, expected_message)
+        # check that email was not sent
+        self.assertEqual(len(mail.outbox), 0)
+        expected_msg = "Sorry, this user doesn&#39;t has any verified email."
+        self.assertContains(response, expected_msg)
 
+    @override_settings(
+        ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR=False)
     def test_post_with_valid_email_no_primary_email(self):
+        # Since we cant blindly trust not confirmed emails, we need to ensure
+        # that emails with recovery are not sent to not confirmed emails.
         user = self.get_standard_user()
         view_url = self.get_view_url()
         data = {
@@ -289,12 +292,86 @@ class PasswordResetViewsTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
         }
         mail.outbox = []
         response = self.client.post(view_url, data=data, follow=True)
-        # check that email was sent
+        # check that email was not sent
+        self.assertEqual(len(mail.outbox), 0)
+        # ensure there was a redirect
+        self.assertGreater(len(response.redirect_chain), 0)
+        expected_message = 'An email was sent'.format(
+            user.email)
+        self.assertContains(response, expected_message)
+
+    @override_settings(
+        ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR=True)
+    def test_post_with_valid_email_no_primary_email_check_validation(self):
+        # Since we cant blindly trust not confirmed emails, we need to ensure
+        # that emails with recovery are not sent to not confirmed emails.
+        user = self.get_standard_user()
+        view_url = self.get_view_url()
+        data = {
+            'username_or_email': user.email,
+        }
+        mail.outbox = []
+        response = self.client.post(view_url, data=data, follow=True)
+        # check that email was not sent
+        self.assertEqual(len(mail.outbox), 0)
+        expected_msg = "Sorry, this user doesn&#39;t has any verified email."
+        self.assertContains(response, expected_msg)
+
+    @override_settings(
+        ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR=True)
+    def test_post_with_old_user_email_and_existing_primary(self):
+        # Since we cant blindly trust not confirmed emails, we need to ensure
+        # that emails with recovery are to confirmed emails.
+        user = self.get_standard_user()
+        primary_email = 'user_primary@example.com'
+        old_email = user.email
+        EmailAddress.objects.add_email(
+            user=user,
+            email=primary_email,
+            make_primary=True
+        )
+        view_url = self.get_view_url()
+        data = {
+            'username_or_email': old_email,
+        }
+        mail.outbox = []
+        response = self.client.post(view_url, data=data, follow=True)
+
+        # check that email was not sent
+        self.assertEqual(len(mail.outbox), 0)
+        # ensure there were no redirect
+        self.assertEqual(len(response.redirect_chain), 0)
+        expected_message = "Sorry, this user doesn&#39;t exist."
+        self.assertContains(response, expected_message)
+
+    @override_settings(
+        ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR=True)
+    def test_post_with_valid_email_and_primary_email_for_primary_email(self):
+        # Since we cant blindly trust not confirmed emails, we need to ensure
+        # that emails with recovery are to confirmed emails.
+        user = self.get_standard_user()
+        primary_email = 'user_primary@example.com'
+        email = EmailAddress.objects.add_email(
+            user=user,
+            email=primary_email,
+            make_primary=True
+        )
+        view_url = self.get_view_url()
+        data = {
+            'username_or_email': primary_email,
+        }
+        mail.outbox = []
+        response = self.client.post(view_url, data=data, follow=True)
+        # check that email was not sent
         self.assertEqual(len(mail.outbox), 1)
         # ensure there was a redirect
         self.assertGreater(len(response.redirect_chain), 0)
-        expected_message = 'An email was sent to <strong>{0}</strong>'.format(
-            user.email)
+        # expect that email was sent to primary address
+        self.assertContains(response, primary_email)
+        msg = mail.outbox[0]
+        self.assertEqual(msg.to, [primary_email])
+        # ensure template text
+        expected_message = "An email was sent"
         self.assertContains(response, expected_message)
 
 
