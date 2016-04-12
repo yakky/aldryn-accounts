@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
 from .utils import geoip
 from pytz import UnknownTimeZoneError
-import social_auth.middleware
 from django.utils import timezone
 from .conf import settings
-
-
-class SocialAuthExceptionMiddleware(social_auth.middleware.SocialAuthExceptionMiddleware):
-    def raise_exception(self, request, exception):
-        return False
 
 
 class TimezoneMiddleware(object):

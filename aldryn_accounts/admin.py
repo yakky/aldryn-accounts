@@ -4,19 +4,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import EmailConfirmation, EmailAddress, UserSettings
-from social_auth.db.django_models import UserSocialAuth
 from django.utils.translation import ugettext_lazy as _
 
 
 class EmailInline(admin.TabularInline):
     model = EmailAddress
     extra = 1
-
-
-class UserSocialAuthInline(admin.TabularInline):
-    model = UserSocialAuth
-    extra = 0
-    max_num = 0
 
 
 class UserSettingsInline(admin.StackedInline):
@@ -26,9 +19,9 @@ class UserSettingsInline(admin.StackedInline):
 
 
 class AccountsUserAdmin(UserAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'social_logins',)
+    list_display = ('email', 'first_name', 'last_name', 'is_staff',)
     list_filter = ('is_staff', 'is_superuser', 'is_active')
-    inlines = [UserSettingsInline, EmailInline, UserSocialAuthInline]
+    inlines = [UserSettingsInline, EmailInline]
     readonly_fields = UserAdmin.readonly_fields + ('email', 'last_login', 'date_joined')
     add_readonly_fields = UserAdmin.readonly_fields + ('last_login', 'date_joined')
     search_fields = ('username', 'first_name', 'last_name', 'email', 'emailaddress__email')
@@ -49,9 +42,6 @@ class AccountsUserAdmin(UserAdmin):
                                        'groups', 'user_permissions')}),
     )
     add_form = UserCreationForm
-
-    def social_logins(self, obj):
-        return u", ".join([u"%s (%s)" % (i.provider, i.uid) for i in obj.social_auth.all()])
 
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.pk:

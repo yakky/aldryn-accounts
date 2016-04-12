@@ -9,16 +9,14 @@ from .views import (
     ProfileAssociationsView, PasswordResetChangeView, PasswordResetChangeDoneView,
     ChangePasswordView, ProfileView, CreatePasswordView, ProfileEmailListView,
     ProfileEmailConfirmationCancelView, ProfileEmailDeleteView, ProfileEmailMakePrimaryView,
-    ConfirmEmailView, SignupView, SignupEmailView, SignupEmailResendConfirmationView,
+    ConfirmEmailView, SignupView, SignupEmailResendConfirmationView,
     SignupEmailConfirmationSentView, SignupEmailSentView, UserSettingsView,
     ProfileEmailConfirmationResendView)
-import social_auth.views
 from .conf import settings
 
 
 urlpatterns = patterns('',
     url(r"^signup/$", SignupView.as_view(), name="accounts_signup"),
-    url(r"^signup/email/$", SignupEmailView.as_view(), name="accounts_signup_email"),
     url(r"^signup/email/resend-confirmation/$", SignupEmailResendConfirmationView.as_view(), name="accounts_signup_email_resend_confirmation"),
     url(r"^signup/email/confirmation-sent/$", SignupEmailConfirmationSentView.as_view(), name="accounts_signup_email_confirmation_sent"),
     url(r"^signup/email/sent/$", SignupEmailSentView.as_view(), name="accounts_signup_email_sent"),
@@ -32,17 +30,7 @@ urlpatterns = patterns('',
     url(r'^password-reset/done/$', PasswordResetChangeDoneView.as_view(), name='accounts_password_reset_change_done'),
 
     url(r"^email/confirm/(?P<key>\w+)/$", ConfirmEmailView.as_view(), name="accounts_confirm_email"),
-
-    # Social Auth
-    url(r'^login/(?P<backend>[^/]+)/$', social_auth.views.auth, name='socialauth_begin'),
-    url(r'^complete/(?P<backend>[^/]+)/$', social_auth.views.complete, name='socialauth_complete'),
-    url(r'^disconnect/(?P<backend>[^/]+)/$', social_auth.views.disconnect, name='socialauth_disconnect'),
-    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$', social_auth.views.disconnect, name='socialauth_disconnect_individual'),
-
-    # test
-    url(r'^my-exception-test/$', 'aldryn_accounts.views.my_exception_test_view'),
 )
-
 
 
 profile_index_urlpatterns = patterns('',

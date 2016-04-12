@@ -19,23 +19,6 @@
 			{% endif %}
 			<div class="clearfix"></div>
 		</li>
-		{% for backend_name, backend_obj in social_auth.items %}
-			<li>
-				{% if backend_obj %}
-					<span class="btn-auth btn-{{ backend_obj.provider }}">{{ backend_obj.provider }}</span>
-					<div class="right">
-						{% trans "connected"|capfirst %}
-						<a href="{% url 'socialauth_disconnect' backend_obj.provider %}">
-							<span class="icon icon-close"></span>
-						</a>
-					</div>
-				{% else %}
-					<a class="btn-auth btn-{{ backend_name }}" href="{% url 'socialauth_begin' backend_name %}?{{ redirect_querystring }}">{{ backend_name }}</a>
-					<a class="btn right" href="{% url 'socialauth_begin' backend_name %}?{{ redirect_querystring }}"><span>{% trans 'connect' %}</span></a>
-				{% endif %}
-			</li>
-		{% endfor %}
 	</ul>
 
-	{% include 'aldryn_accounts/inc/social_auth_styles.html' %}
 {% endblock %}
