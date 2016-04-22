@@ -52,15 +52,19 @@ from source for local development (*whilst in the project virtualenv*)::
 Configuration
 =============
 
-aldryn-accounts has a lot of dependencies and these dependencies all need settings. So aldryn comes with an
-auto-configure mode which is active by default. All that needs to be done is add ``aldryn_accounts`` to
-``INSTALLED_APPS``. This will add a bunch of middlewares, template context processors and other installed apps.
+
+In your project’s settings.py make sure you have all of:
 
 ``INSTALLED_APPS``::
 
     'aldryn_accounts',
+    'easy_thumbnails',
+    'absolute',
+    'password_reset',
+    'standard_form',
+    'aldryn_common',
 
-
+listed in INSTALLED_APPS, after 'cms'.
 Then either add ``AccountsApphook`` to a page or include ``aldryn_accounts.urls``. Preferrably at ``/accounts/``.
 
 WARN:: currently the app must be connected at ``/accounts/`` to work properly.
