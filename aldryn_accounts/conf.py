@@ -2,14 +2,6 @@
 from django.conf import settings
 from appconf import AppConf
 
-ADD_TO_INSTALLED_APPS = [
-    'password_reset',
-    'absolute',
-    # 'django_gravatar',
-    'aldryn_common',
-    'standard_form',
-]
-
 ADD_TO_MIDDLEWARE_CLASSES = [
     'aldryn_accounts.middleware.GeoIPMiddleware',
     'aldryn_accounts.middleware.TimezoneMiddleware',  # TimezoneMiddleware relies on GeoIP location.
@@ -63,10 +55,6 @@ class AccountsAppConf(AppConf):
             return self.configured_data
         # do auto configuration
         s = self._meta.holder
-        # add our apps to INSTALLED_APPS
-        for app in ADD_TO_INSTALLED_APPS:
-            if not app in s.INSTALLED_APPS:
-                s.INSTALLED_APPS.append(app)
         # insert our middlewares after the session middleware
         pos = s.MIDDLEWARE_CLASSES.index('django.contrib.sessions.middleware.SessionMiddleware') + 1
         for middleware in ADD_TO_MIDDLEWARE_CLASSES:
