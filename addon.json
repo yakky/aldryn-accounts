@@ -1,0 +1,11 @@
+{
+    "package-name": "aldryn-accounts",
+    "installed-apps": [
+        "aldryn_accounts",
+        "easy_thumbnails",
+        "absolute",
+        "password_reset",
+        "standard_form",
+        "aldryn_common"
+    ]
+}
