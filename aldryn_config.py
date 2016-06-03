@@ -10,12 +10,14 @@ class Form(forms.BaseForm):
         help_text=("Plug aldryn profile views as an app hook."
                    "If not checked - you need to add aldryn-accounts urls"
                    "to your project core urls manually."),
+        required=False,
         initial=True,
     )
     open_signup = forms.CheckboxField(
         "Signup is open",
         help_text=("whether any user may signup. If set to False only "
                    "users with an invite code may sign up."),
+        required=False,
         initial=True,
     )
 
@@ -23,12 +25,14 @@ class Form(forms.BaseForm):
         "Notify ",
         help_text=("whether a confirmation email should be sent out "
                    "whenever the password is changed"),
+        required=False,
         initial=True,
     )
     email_confirmation_email = forms.CheckboxField(
         "send confirmation email",
         help_text=(
             "Whether to send out a confirmation email when a user signs up"),
+        required=False,
         initial=True,
     )
     email_confirmation_expire_days = forms.NumberField(
@@ -42,18 +46,21 @@ class Form(forms.BaseForm):
         "Restore password raise validation error",
         help_text=(
             "Whether to raise validation error when user resotres password."),
+        required=False,
         initial=True,
     )
     user_display_fallback_to_username = forms.CheckboxField(
         "User display name fallback to username",
         help_text=(
             "Whether to fallback to username when displaying a user."),
+        required=False,
         initial=False,
     )
     user_display_fallback_to_pk = forms.CheckboxField(
         "User display fallback to pk",
         help_text=(
             "Whether to fallback to user id when displaying a user."),
+        required=False,
         initial=False,
     )
 
@@ -66,4 +73,10 @@ class Form(forms.BaseForm):
         settings['ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR'] = data['restore_password_raise_validation_error']
         settings['ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_USERNAME'] = data['user_display_fallback_to_username']
         settings['ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_PK'] = data['user_display_fallback_to_pk']
+
+        # setup accounts login features and other urls
+        # we have to specify those urls because addon urls
+        settings['LOGIN_URL'] = '/login/'
+        settings['LOGOUT_URL'] = '/logout/'
+        settings['ADDON_URLS'].append('aldryn_accounts.urls')
         return settings
