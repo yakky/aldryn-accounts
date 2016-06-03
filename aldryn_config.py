@@ -63,6 +63,24 @@ class Form(forms.BaseForm):
         required=False,
         initial=False,
     )
+    login_redirect_url = forms.CharField(
+        "Login redirect url",
+        help_text=(
+            "Where to redirect users after a successful login. "
+            "Warning! Should be a valid url, otherwise you will get "
+            "404 errors."),
+        required=True,
+        initial='/',
+    )
+    signup_redirect_url = forms.CharField(
+        "Signup redirect url",
+        help_text=(
+            "Where to redirect users after a sign up, Use view name from urls. "
+            "please make sure that this view can be reversed, "
+            "include namespace if needed."),
+        required=True,
+        initial='accounts_profile',
+    )
 
     def to_settings(self, data, settings):
         settings['ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS'] = data['use_profile_apphooks']
@@ -73,9 +91,11 @@ class Form(forms.BaseForm):
         settings['ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR'] = data['restore_password_raise_validation_error']
         settings['ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_USERNAME'] = data['user_display_fallback_to_username']
         settings['ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_PK'] = data['user_display_fallback_to_pk']
+        settings['ALDRYN_ACCOUNTS_LOGIN_REDIRECT_URL'] = data['login_redirect_url']
+        settings['ALDRYN_ACCOUNTS_SIGNUP_REDIRECT_URL'] = data['signup_redirect_url']
 
         # setup accounts login features and other urls
-        # we have to specify those urls because addon urls
+        # we have to specify those urls because add-on urls
         settings['LOGIN_URL'] = '/login/'
         settings['LOGOUT_URL'] = '/logout/'
         settings['ADDON_URLS'].append('aldryn_accounts.urls')
