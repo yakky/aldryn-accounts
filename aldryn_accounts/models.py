@@ -290,6 +290,10 @@ class EmailConfirmation(models.Model):
                 EmailConfirmation.objects.filter(email=self.email).delete()
             return email_address
         else:
+            msg = _(
+                "Verification key {key} for {email} has been expired".format(
+                    key=self.key, email=self.email)
+            )
             raise VerificationKeyExpired()
 
     def send(self, **kwargs):
