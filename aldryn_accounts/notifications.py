@@ -24,7 +24,6 @@ def check_notifications(user):
     if DISPLAY_EMAIL_NOTIFICATION:
         email_notification = check_email_verification(user)
         if email_notification:
-            # if we don't have a verified email yet, not having a password set yet is secondary
             notifications.append(email_notification)
     if DISPLAY_PASSWORD_NOTIFICATION:
         password_notification = check_password(user)
