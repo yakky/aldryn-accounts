@@ -141,7 +141,7 @@ class ProfileEmailForm(EmailForm):
 
 
 class SignupForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput(), required=True)
+    email = forms.EmailField(label=_("E-mail"), widget=forms.TextInput(), required=True)
     code = forms.CharField(
         max_length=64,
         required=False,
