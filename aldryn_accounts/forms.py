@@ -36,13 +36,13 @@ def get_user_email(user, form_email):
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(label=_("Email"), max_length=255)
+    username = forms.CharField(label=_("E-mail"), max_length=255)
 
 
 class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
     def __init__(self, *args, **kwargs):
         super(PasswordRecoveryForm, self).__init__(*args, **kwargs)
-        self.fields['username_or_email'].label = _('email')
+        self.fields['username_or_email'].label = _('E-mail')
 
     def get_user_by_both(self, username):
         """
@@ -127,7 +127,7 @@ class CreatePasswordForm(ChangePasswordForm):
 
 
 class EmailForm(forms.Form):
-    email = forms.EmailField(label=_("Email"), required=True)
+    email = forms.EmailField(label=_("E-mail"), required=True)
 
 
 class ProfileEmailForm(EmailForm):
