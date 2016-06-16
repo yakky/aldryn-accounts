@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-16 16:33+0300\n"
+"POT-Creation-Date: 2016-06-16 17:10+0300\n"
 "PO-Revision-Date: 2013-05-25 17:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -72,8 +72,7 @@ msgstr "Passwort ändern"
 msgid "user profile: email settings"
 msgstr "Benutzereinstellungen"
 
-#: forms.py:39 forms.py:45 forms.py:130
-#| msgid "Email"
+#: forms.py:39 forms.py:45 forms.py:130 forms.py:167
 msgid "E-mail"
 msgstr "E-mail"
 
