@@ -164,7 +164,7 @@ class SignupForm(forms.Form):
 
 
 class SignupEmailResendConfirmationForm(forms.Form):
-    email = forms.EmailField(lable=_("E-mail"), required=True, widget=forms.HiddenInput())
+    email = forms.EmailField(label=_("E-mail"), required=True, widget=forms.HiddenInput())
 
     def clean_email(self):
         email = self.cleaned_data["email"]
