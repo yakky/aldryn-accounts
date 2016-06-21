@@ -36,13 +36,13 @@ def get_user_email(user, form_email):
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(label=_("E-mail"), max_length=255)
+    username = forms.CharField(label=_("E-Mail"), max_length=255)
 
 
 class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
     def __init__(self, *args, **kwargs):
         super(PasswordRecoveryForm, self).__init__(*args, **kwargs)
-        self.fields['username_or_email'].label = _('E-mail')
+        self.fields['username_or_email'].label = _('E-Mail')
 
     def get_user_by_both(self, username):
         """
@@ -127,7 +127,7 @@ class CreatePasswordForm(ChangePasswordForm):
 
 
 class EmailForm(forms.Form):
-    email = forms.EmailField(label=_("E-mail"), required=True)
+    email = forms.EmailField(label=_("E-Mail"), required=True)
 
 
 class ProfileEmailForm(EmailForm):
@@ -141,7 +141,7 @@ class ProfileEmailForm(EmailForm):
 
 
 class SignupForm(forms.Form):
-    email = forms.EmailField(label=_("E-mail"), widget=forms.TextInput(), required=True)
+    email = forms.EmailField(label=_("E-Mail"), widget=forms.TextInput(), required=True)
     code = forms.CharField(
         max_length=64,
         required=False,
@@ -164,7 +164,7 @@ class SignupForm(forms.Form):
 
 
 class SignupEmailResendConfirmationForm(forms.Form):
-    email = forms.EmailField(label=_("E-mail"), required=True, widget=forms.HiddenInput())
+    email = forms.EmailField(label=_("E-Mail"), required=True, widget=forms.HiddenInput())
 
     def clean_email(self):
         email = self.cleaned_data["email"]
