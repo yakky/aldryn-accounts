@@ -209,7 +209,7 @@ msgstr "Hallo"
 #: templates/aldryn_accounts/email/invite_user.body.txt:3
 #, python-format
 msgid "You have been invited to %(domain)s."
-msgstr "Sie haben %(email)s bestätigt."
+msgstr "Sie haben %(domain)s bestätigt."
 
 #: templates/aldryn_accounts/email/invite_user.body.txt:5
 msgid "You can accept invitation by following this link:"
@@ -424,7 +424,7 @@ msgstr "Passwort-Link gesendet"
 msgid ""
 "An E-Mail was sent %(ago)s ago.Use the link in it to set a new password."
 msgstr ""
-"Vor %(ago)s wurde eine E-Mail an <strong>%(email)s</strong> gesendet. "
+"Vor %(ago)s wurde eine E-Mail gesendet. "
 "Benützen Sie den darin enthaltenen Link um Ihr Passwort neu zu setzen."
 
 #: templates/aldryn_accounts/profile/base.html:4
