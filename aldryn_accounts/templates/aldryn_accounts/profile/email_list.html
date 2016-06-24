@@ -1,11 +1,11 @@
 {% extends "aldryn_accounts/profile/base.html" %}
 {% load i18n standard_form %}
 
-{% block profile_title %}{% trans "Email addresses" %}{% endblock %}
+{% block profile_title %}{% trans "E-Mail addresses" %}{% endblock %}
 {% block profile_navigation %}{% include 'aldryn_accounts/profile/includes/nav.html' with active='email' %}{% endblock %}
 
 {% block content %}
-    <p>{% trans "Email addresses" %}</p>
+    <p>{% trans "E-Mail addresses" %}</p>
 	<ul class="reset-list tablish-list">
 		{% for obj in object_list %}
 			<li>{{ obj.email }}

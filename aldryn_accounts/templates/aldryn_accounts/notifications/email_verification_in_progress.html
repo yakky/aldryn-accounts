@@ -2,8 +2,8 @@
 {% for unverified_email in unverified_emails %}
     {% url 'accounts_email_list' as email_list_link %}
     {% blocktrans with email_list_link=email_list_link email=unverified_email.email %}
-        <strong>We've sent you a verification email to {{ email }}. Please click on the link in the email to verify the address.</strong><br/>
-        If you're having trouble, see <a href="{{ email }}">email settings</a> on your profile.
+        <strong>We've sent you a verification E-Mail to {{ email }}. Please click on the link in the E-Mail to verify the address.</strong><br/>
+        If you're having trouble, see <a href="{{ email }}">E-Mail settings</a> on your profile.
     {% endblocktrans %}
     <br/>
 {% endfor %}

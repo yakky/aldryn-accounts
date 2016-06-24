@@ -2,10 +2,10 @@
 
 {% load i18n %}
 
-{% block title_extra %}{% trans "Send again the confirmation email" %}{% endblock %}
+{% block title_extra %}{% trans "Send again the confirmation E-Mail" %}{% endblock %}
 
 {% block content %}
-	<h2>{% blocktrans %}Send me the confirmation email to {{ email }} again{% endblocktrans %}</h2>
+	<h2>{% blocktrans %}Send me the confirmation E-Mail to {{ email }} again{% endblocktrans %}</h2>
 	<form id="signup_email_resend_confirmation" method="post" action="{# leave empty #}" class="form-horizontal">
 		<legend>
 			<strong>{% trans "Are You sure?" %}</strong>
@@ -14,7 +14,7 @@
 			{% csrf_token %}
 			{{ form }}
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">{% trans "Yes, send me the confirmation email again" %}</button>
+				<button type="submit" class="btn btn-primary">{% trans "Yes, send me the confirmation E-Mail again" %}</button>
 			</div>
 		</fieldset>
 	</form>

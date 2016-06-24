@@ -13,7 +13,7 @@ class UserCreationForm(forms.ModelForm):
     password.
     """
     error_messages = {
-        'duplicate_email': _("A user is already registered with this email address."),
+        'duplicate_email': _("A user is already registered with this E-Mail address."),
     }
     email = forms.EmailField()
     password = forms.CharField(label=_("Password"),
