@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-21 18:20+0300\n"
+"POT-Creation-Date: 2016-06-24 11:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgstr ""
 #: admin.py:84
 #, python-brace-format
 msgid ""
-"Sent {success} confirmation(s) sucessfuly; {failure} confirmation(s) have "
+"Sent {success} confirmation(s) sucessfully; {failure} confirmation(s) have "
 "expired verification keys"
 msgstr ""
 
@@ -45,7 +45,7 @@ msgid "Users"
 msgstr ""
 
 #: admin_forms.py:16 forms.py:155 forms.py:173
-msgid "A user is already registered with this email address."
+msgid "A user is already registered with this E-Mail address."
 msgstr ""
 
 #: admin_forms.py:19
@@ -65,7 +65,7 @@ msgid "user profile: change password"
 msgstr ""
 
 #: cms_app.py:26
-msgid "user profile: email settings"
+msgid "user profile: E-Mail settings"
 msgstr ""
 
 #: forms.py:39 forms.py:45 forms.py:130 forms.py:144 forms.py:167
@@ -77,7 +77,7 @@ msgid "Sorry, this user doesn't exist."
 msgstr ""
 
 #: forms.py:77
-msgid "Sorry, this user doesn't have any verified email."
+msgid "Sorry, this user doesn't have any verified E-Mail."
 msgstr ""
 
 #: forms.py:84
@@ -97,7 +97,7 @@ msgid "Please type your current password."
 msgstr ""
 
 #: forms.py:139
-msgid "This email address is already in use."
+msgid "This E-Mail address is already in use."
 msgstr ""
 
 #: forms.py:178
@@ -109,47 +109,49 @@ msgid "Last name"
 msgstr ""
 
 #: models.py:197
-msgid "email address"
+msgid "E-Mail address"
 msgstr ""
 
-#: models.py:198 templates/aldryn_accounts/profile/includes/nav.html:14
-msgid "email addresses"
+#: models.py:198 templates/aldryn_accounts/profile/email_list.html:4
+#: templates/aldryn_accounts/profile/email_list.html:8
+#: templates/aldryn_accounts/profile/includes/nav.html:14
+msgid "E-Mail addresses"
 msgstr ""
 
 #: models.py:262
-msgid "email confirmation"
+msgid "E-Mail confirmation"
 msgstr ""
 
 #: models.py:263
-msgid "email confirmations"
+msgid "E-Mail confirmations"
 msgstr ""
 
-#: models.py:294
+#: models.py:293
 #, python-brace-format
 msgid "Verification key {key} for {email} has been expired"
 msgstr ""
 
-#: models.py:334
+#: models.py:332
 msgid "birth date"
 msgstr ""
 
-#: models.py:335
+#: models.py:333
 msgid "time zone"
 msgstr ""
 
-#: models.py:337
+#: models.py:335
 msgid "location"
 msgstr ""
 
-#: models.py:341
+#: models.py:339
 msgid "profile image"
 msgstr ""
 
-#: models.py:343
+#: models.py:341
 msgid "language"
 msgstr ""
 
-#: models.py:346 models.py:347
+#: models.py:344 models.py:345
 msgid "user settings"
 msgstr ""
 
@@ -176,9 +178,9 @@ msgstr ""
 #: templates/aldryn_accounts/email/email_confirmation.body.txt:3
 #, python-format
 msgid ""
-"You recently added an email address associated with your %(site_name)s "
+"You recently added an E-Mail address associated with your %(site_name)s "
 "account.\n"
-"To confirm %(email)s as your email, click this link:\n"
+"To confirm %(email)s as your E-Mail, click this link:\n"
 "\n"
 "%(activate_url)s\n"
 "\n"
@@ -186,7 +188,7 @@ msgstr ""
 
 #: templates/aldryn_accounts/email/email_confirmation.subject.txt:1
 #, python-format
-msgid "Confirm your %(site_name)s email, %(name)s"
+msgid "Confirm your %(site_name)s E-Mail, %(name)s"
 msgstr ""
 
 #: templates/aldryn_accounts/email/invite_user.body.txt:1
@@ -203,7 +205,7 @@ msgid "You can accept invitation by following this link:"
 msgstr ""
 
 #: templates/aldryn_accounts/email/invite_user.body.txt:8
-msgid "If you don't want to signup, simply ignore this email."
+msgid "If you don't want to signup, simply ignore this E-Mail."
 msgstr ""
 
 #: templates/aldryn_accounts/email/invite_user.subject.txt:1
@@ -233,7 +235,7 @@ msgstr ""
 #: templates/aldryn_accounts/email/password_reset_recover.body.html:9
 #: templates/aldryn_accounts/email/password_reset_recover.body.txt:9
 msgid ""
-"If you don't want to reset your password, simply ignore this email and it "
+"If you don't want to reset your password, simply ignore this E-Mail and it "
 "will stay unchanged."
 msgstr ""
 
@@ -243,18 +245,18 @@ msgid "Password recovery on %(domain)s"
 msgstr ""
 
 #: templates/aldryn_accounts/email_confirm.html:4
-msgid "Confirm Email"
+msgid "Confirm E-Mail"
 msgstr ""
 
 #: templates/aldryn_accounts/email_confirm.html:8
 #: templates/aldryn_accounts/signup_email_sent.html:5
 #: templates/aldryn_accounts/signup_email_sent.html:8
-msgid "Email Validation"
+msgid "E-Mail Validation"
 msgstr ""
 
 #: templates/aldryn_accounts/email_confirm.html:12
 #, python-format
-msgid "Is %(email)s your email address?"
+msgid "Is %(email)s your E-Mail address?"
 msgstr ""
 
 #: templates/aldryn_accounts/email_confirm.html:15
@@ -264,7 +266,7 @@ msgstr ""
 #: templates/aldryn_accounts/inc/email_already_in_the_verification_phase.html:3
 #, python-format
 msgid ""
-"A verification email was already send to this address. Click <a href="
+"A verification E-Mail was already send to this address. Click <a href="
 "\"%(resend_url)s\">here</a> to resend it."
 msgstr ""
 
@@ -335,9 +337,9 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"        <strong>We've sent you a verification email to %(email)s. Please "
-"click on the link in the email to verify the address.</strong><br/>\n"
-"        If you're having trouble, see <a href=\"%(email)s\">email settings</"
+"        <strong>We've sent you a verification E-Mail to %(email)s. Please "
+"click on the link in the E-Mail to verify the address.</strong><br/>\n"
+"        If you're having trouble, see <a href=\"%(email)s\">E-Mail settings</"
 "a> on your profile.\n"
 "    "
 msgstr ""
@@ -396,7 +398,8 @@ msgstr ""
 
 #: templates/aldryn_accounts/password_reset_recover_sent.html:13
 #, python-format
-msgid "An email was sent %(ago)s ago.Use the link in it to set a new password."
+msgid ""
+"An E-Mail was sent %(ago)s ago.Use the link in it to set a new password."
 msgstr ""
 
 #: templates/aldryn_accounts/profile/base.html:4
@@ -417,11 +420,11 @@ msgid "set new password"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_confirmation_cancel.html:4
-msgid "Cancel email confirmation"
+msgid "Cancel E-Mail confirmation"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_confirmation_cancel.html:5
-msgid "Cancel an email confirmation"
+msgid "Cancel an E-Mail confirmation"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_confirmation_cancel.html:10
@@ -444,11 +447,11 @@ msgid "yes"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_confirmation_resend.html:4
-msgid "Re-send email confirmation"
+msgid "Re-send E-Mail confirmation"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_confirmation_resend.html:5
-msgid "Re-send an email confirmation"
+msgid "Re-send an E-Mail confirmation"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_confirmation_resend.html:10
@@ -457,21 +460,16 @@ msgid "Do you want to re-send the confirmation request for %(email)s?"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_delete.html:4
-msgid "Remove email"
+msgid "Remove E-Mail"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_delete.html:5
-msgid "Remove an email address"
+msgid "Remove an E-Mail address"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_delete.html:10
 #, python-format
 msgid "Do you really want to remove %(email)s from your account?"
-msgstr ""
-
-#: templates/aldryn_accounts/profile/email_list.html:4
-#: templates/aldryn_accounts/profile/email_list.html:8
-msgid "Email addresses"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/email_list.html:14
@@ -509,7 +507,7 @@ msgstr ""
 
 #: templates/aldryn_accounts/profile/email_make_primary.html:10
 #, python-format
-msgid "Do you really want to make %(email)s your primary email?"
+msgid "Do you really want to make %(email)s your primary E-Mail?"
 msgstr ""
 
 #: templates/aldryn_accounts/profile/includes/nav.html:5
@@ -561,36 +559,36 @@ msgid "Signup is currently closed"
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email.html:5
-msgid "Validate Email"
+msgid "Validate E-Mail"
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email.html:9
-msgid "Enter your email"
+msgid "Enter your E-Mail"
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email.html:17
-msgid "Use this email"
+msgid "Use this E-Mail"
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email_confirmation_sent.html:5
 #: templates/aldryn_accounts/signup_email_confirmation_sent.html:8
-msgid "Confirm your email address"
+msgid "Confirm your E-Mail address"
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email_confirmation_sent.html:10
 #, python-format
 msgid ""
-"We have sent you an email to <b>%(email)s</b> for verification. Follow the "
+"We have sent you an E-Mail to <b>%(email)s</b> for verification. Follow the "
 "link provided to finalize the signup process."
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email_resend_confirmation.html:5
-msgid "Send again the confirmation email"
+msgid "Send again the confirmation E-Mail"
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email_resend_confirmation.html:8
 #, python-format
-msgid "Send me the confirmation email to %(email)s again"
+msgid "Send me the confirmation E-Mail to %(email)s again"
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email_resend_confirmation.html:11
@@ -598,12 +596,12 @@ msgid "Are You sure?"
 msgstr ""
 
 #: templates/aldryn_accounts/signup_email_resend_confirmation.html:17
-msgid "Yes, send me the confirmation email again"
+msgid "Yes, send me the confirmation E-Mail again"
 msgstr ""
 
 #: views.py:61
 #, python-format
-msgid "Confirmation email sent to %(email)s."
+msgid "Confirmation E-Mail sent to %(email)s."
 msgstr ""
 
 #: views.py:65
@@ -617,7 +615,7 @@ msgid "The code %(code)s is invalid."
 msgstr ""
 
 #: views.py:262
-msgid "This email does not have any pending confirmations."
+msgid "This E-Mail does not have any pending confirmations."
 msgstr ""
 
 #: views.py:372
@@ -626,7 +624,7 @@ msgid "You have confirmed %(email)s."
 msgstr ""
 
 #: views.py:386
-msgid "This email has already been verified with an other account."
+msgid "This E-Mail has already been verified with an other account."
 msgstr ""
 
 #: views.py:389
@@ -639,5 +637,5 @@ msgstr ""
 
 #: views.py:617
 #, python-format
-msgid "Confirmation email re-sent to %(email)s."
+msgid "Confirmation E-Mail re-sent to %(email)s."
 msgstr ""
