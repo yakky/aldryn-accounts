@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-24 11:33+0300\n"
+"POT-Creation-Date: 2016-06-24 12:23+0300\n"
 "PO-Revision-Date: 2013-05-25 17:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -209,17 +209,17 @@ msgstr "Hallo"
 #: templates/aldryn_accounts/email/invite_user.body.txt:3
 #, python-format
 msgid "You have been invited to %(domain)s."
-msgstr "Sie haben %(domain)s bestätigt."
+msgstr "Sie wurden zu %(domain)s eingeladen."
 
 #: templates/aldryn_accounts/email/invite_user.body.txt:5
-msgid "You can accept invitation by following this link:"
-msgstr "Sie können Ihr Passwort unter folgendem Link zurücksetzen:"
+#| msgid "You can accept invitation by following this link:"
+msgid "You can accept the invitation by following this link:"
+msgstr "Sie können die Einladung unter folgendem Link annehmen:"
 
 #: templates/aldryn_accounts/email/invite_user.body.txt:8
 msgid "If you don't want to signup, simply ignore this E-Mail."
 msgstr ""
-"Falls Sie Ihr Passwort nicht zurücksetzen wollen, ignorieren Sie dieses E-"
-"Mail ganz einfach."
+"Falls Sie sich nicht registrieren möchten, ignorieren Sie dieses E-mail."
 
 #: templates/aldryn_accounts/email/invite_user.subject.txt:1
 #, python-format
@@ -424,8 +424,8 @@ msgstr "Passwort-Link gesendet"
 msgid ""
 "An E-Mail was sent %(ago)s ago.Use the link in it to set a new password."
 msgstr ""
-"Vor %(ago)s wurde eine E-Mail gesendet. "
-"Benützen Sie den darin enthaltenen Link um Ihr Passwort neu zu setzen."
+"Vor %(ago)s wurde eine E-Mail gesendet. Benützen Sie den darin enthaltenen "
+"Link um Ihr Passwort neu zu setzen."
 
 #: templates/aldryn_accounts/profile/base.html:4
 msgid "My account"
