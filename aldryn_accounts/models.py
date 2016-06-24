@@ -194,8 +194,8 @@ class EmailAddress(models.Model):
     objects = EmailAddressManager()
 
     class Meta:
-        verbose_name = _("email address")
-        verbose_name_plural = _("email addresses")
+        verbose_name = _("E-Mail address")
+        verbose_name_plural = _("E-Mail addresses")
 
     def clean(self):
         self.email = self.email.strip().lower()
@@ -259,8 +259,8 @@ class EmailConfirmation(models.Model):
     objects = EmailConfirmationManager()
 
     class Meta:
-        verbose_name = _("email confirmation")
-        verbose_name_plural = _("email confirmations")
+        verbose_name = _("E-Mail confirmation")
+        verbose_name_plural = _("E-Mail confirmations")
 
     def __str__(self):
         return "confirmation for %s (%s)" % (self.email, self.user)
@@ -290,11 +290,9 @@ class EmailConfirmation(models.Model):
                 EmailConfirmation.objects.filter(email=self.email).delete()
             return email_address
         else:
-            msg = _(
-                "Verification key {key} for {email} has been expired".format(
+            msg = _("Verification key {key} for {email} has been expired").format(
                     key=self.key, email=self.email)
-            )
-            raise VerificationKeyExpired()
+            raise VerificationKeyExpired(msg)
 
     def send(self, **kwargs):
         # TODO: send as HTML email

@@ -81,7 +81,7 @@ class EmailConfirmationAdmin(admin.ModelAdmin):
             else:
                 success += 1
         message = _(
-            "Sent {success} confirmation(s) sucessfuly; "
+            "Sent {success} confirmation(s) sucessfully; "
             "{failure} confirmation(s) have expired verification keys".format(
                 success=success, failure=failure))
         self.message_user(request, message=message)

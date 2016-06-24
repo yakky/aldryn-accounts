@@ -1,7 +1,7 @@
 {% load i18n %}{% blocktrans %}Hi, {{ name }}{% endblocktrans %}
 
-{% blocktrans %}You recently added an email address associated with your {{ site_name }} account.
-To confirm {{ email }} as your email, click this link:
+{% blocktrans %}You recently added an E-Mail address associated with your {{ site_name }} account.
+To confirm {{ email }} as your E-Mail, click this link:
 
 {{ activate_url }}
 

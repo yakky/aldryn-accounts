@@ -74,7 +74,7 @@ class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
             settings.ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR)
         if validation_error:
             raise forms.ValidationError(
-                    _("Sorry, this user doesn't have any verified email."))
+                    _("Sorry, this user doesn't have any verified E-Mail."))
         cleaned_data['email'] = email
         return cleaned_data
 
@@ -136,7 +136,7 @@ class ProfileEmailForm(EmailForm):
         email = self.cleaned_data.get('email')
         verified_qs = EmailAddress.objects.filter(email__iexact=email)
         if verified_qs.exists():
-            raise forms.ValidationError(_("This email address is already in use."))
+            raise forms.ValidationError(_("This E-Mail address is already in use."))
         return email
 
 
@@ -152,7 +152,7 @@ class SignupForm(forms.Form):
         value = self.cleaned_data["email"]
         verified_qs = EmailAddress.objects.filter(email__iexact=value)
         if verified_qs.exists():
-            raise forms.ValidationError(_("A user is already registered with this email address."))
+            raise forms.ValidationError(_("A user is already registered with this E-Mail address."))
         unverified_qs = EmailConfirmation.objects.filter(email__iexact=value)
         if unverified_qs.exists():
             resend_url = reverse('accounts_signup_email_resend_confirmation')
@@ -170,7 +170,7 @@ class SignupEmailResendConfirmationForm(forms.Form):
         email = self.cleaned_data["email"]
         verified_qs = EmailAddress.objects.filter(email__iexact=email)
         if verified_qs.exists():
-            raise forms.ValidationError(_("A user is already registered with this email address."))
+            raise forms.ValidationError(_("A user is already registered with this E-Mail address."))
         return email
 
 

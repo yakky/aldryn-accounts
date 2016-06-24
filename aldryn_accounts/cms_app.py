@@ -23,7 +23,7 @@ class AldrynAccountsUserProfileChangePasswordApphook(CMSApp):
 
 
 class AldrynAccountsUserProfileEmailSettingsApphook(CMSApp):
-    name = _("user profile: email settings")
+    name = _("user profile: E-Mail settings")
     urls = [urls.email_settings_urlpatterns]
 
 

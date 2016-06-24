@@ -2,11 +2,11 @@
 
 {% load i18n %}
 
-{% block title_extra %}{% trans "Validate Email" %}{% endblock %}
+{% block title_extra %}{% trans "Validate E-Mail" %}{% endblock %}
 
 {% block content %}
 	<form id="signup_form" method="post" action="{# leave empty #}" autocapitalize="off" class="form-horizontal">
-		<legend>{% trans "Enter your email" %}</legend>
+		<legend>{% trans "Enter your E-Mail" %}</legend>
 		<fieldset>
 			{% csrf_token %}
 			{{ form.as_p }}
@@ -14,7 +14,7 @@
 			<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 			{% endif %}
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">{% trans "Use this email" %}</button>
+				<button type="submit" class="btn btn-primary">{% trans "Use this E-Mail" %}</button>
 			</div>
 		</fieldset>
 	</form>
