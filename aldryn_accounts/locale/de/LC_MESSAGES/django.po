@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-24 12:23+0300\n"
+"POT-Creation-Date: 2016-06-27 12:43+0300\n"
 "PO-Revision-Date: 2013-05-25 17:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -212,7 +212,6 @@ msgid "You have been invited to %(domain)s."
 msgstr "Sie wurden zu %(domain)s eingeladen."
 
 #: templates/aldryn_accounts/email/invite_user.body.txt:5
-#| msgid "You can accept invitation by following this link:"
 msgid "You can accept the invitation by following this link:"
 msgstr "Sie können die Einladung unter folgendem Link annehmen:"
 
