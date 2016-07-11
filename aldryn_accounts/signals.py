@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import user_logged_in
 from django.db.models import signals
+from django.utils.encoding import force_text
 import django.dispatch
 
 
@@ -20,7 +21,7 @@ def set_user_timezone_on_login(sender, user, request, **kwargs):
     try:
         tz = user.settings.timezone
         if tz:
-            request.session['django_timezone'] = tz
+            request.session['django_timezone'] = force_text(tz)
             timezone.activate(tz)
     except ObjectDoesNotExist:
         pass
