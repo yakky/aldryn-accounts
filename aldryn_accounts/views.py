@@ -24,18 +24,16 @@ except ImportError:
     from django.contrib.sites.models import RequestSite
 from django.core import urlresolvers, signing
 from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
 from django.shortcuts import redirect
-from django.template import loader
-from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View, DetailView
 from django.views.generic.base import TemplateResponseMixin
 import class_based_auth_views.views
 import password_reset.views
+import emailit.api
 
 from .conf import settings
 from .context_processors import empty_login_and_signup_forms
@@ -316,9 +314,7 @@ class PasswordResetRecoverView(password_reset.views.Recover):
     form_class = PasswordRecoveryForm
     case_sensitive = False
     template_name = 'aldryn_accounts/password_reset_recover.html'
-    email_template_name = 'aldryn_accounts/email/password_reset_recover.body.txt'
-    email_html_template_name = 'aldryn_accounts/email/password_reset_recover.body.html'
-    email_subject_template_name = 'aldryn_accounts/email/password_reset_recover.subject.txt'
+    email_template_name = 'aldryn_accounts/email/password_reset_recover'
 
     def send_notification(self):
         context = {
@@ -327,12 +323,7 @@ class PasswordResetRecoverView(password_reset.views.Recover):
             'token': signing.dumps(self.user.pk, salt=self.salt),
             'secure': self.request.is_secure(),
         }
-        body = loader.render_to_string(self.email_template_name,
-                                       context).strip()
-        subject = loader.render_to_string(self.email_subject_template_name,
-                                          context).strip()
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
-                  [self.email])
+        emailit.api.send_mail([self.email], context, self.email_template_name)
 
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
@@ -449,9 +440,7 @@ class ProfileView(TemplateView):
 
 class ChangePasswordBaseView(FormView):
     template_name = "aldryn_accounts/profile/change_password.html"
-    email_template_name = "aldryn_accounts/email/change_password.body.txt"
-    email_html_template_name = "aldryn_accounts/email/change_password.body.html"
-    email_subject_template_name = "aldryn_accounts/email/change_password.subject.txt"
+    email_template_name = "aldryn_accounts/email/change_password"
     form_class = ChangePasswordForm
     redirect_field_name = "next"
     messages = {
@@ -533,10 +522,7 @@ class ChangePasswordBaseView(FormView):
             "site_domain": site.domain,
             "support_email": settings.ALDRYN_ACCOUNTS_SUPPORT_EMAIL,
         }
-        subject = render_to_string(self.email_subject_template_name, ctx)
-        subject = "".join(subject.splitlines())
-        message = render_to_string(self.email_template_name, ctx)
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+        emailit.api.send_mail([user.email], ctx, self.email_template_name)
 
 
 class ChangePasswordView(ChangePasswordBaseView):
