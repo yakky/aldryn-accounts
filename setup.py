@@ -17,6 +17,7 @@ setup(
         'django-appconf',
         'django-classy-tags',
         'django-class-based-auth-views>0.3',
+        'django-emailit',
         # 'django-gravatar2',
         'django-password-reset',
         'django-sekizai',
