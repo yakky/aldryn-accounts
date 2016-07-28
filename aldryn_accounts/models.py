@@ -14,15 +14,14 @@ from six.moves import reduce
 from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
-from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import get_language, override as force_language, ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible, force_text
 
+import emailit.api
 from annoying.fields import AutoOneToOneField
 
 from .conf import settings
@@ -125,12 +124,7 @@ class SignupCode(models.Model):
             "current_site": current_site,
             "signup_url": signup_url,
         }
-        subject = render_to_string(
-            "aldryn_accounts/email/invite_user.subject.txt", ctx)
-        subject = "".join(subject.splitlines())
-        message = render_to_string(
-            "aldryn_accounts/email/invite_user.body.txt", ctx)
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+        emailit.api.send_mail([self.email], ctx, "aldryn_accounts/email/invite_user")
         self.sent_at = timezone.now()
         self.save()
         signup_code_sent.send(sender=SignupCode, signup_code=self)
@@ -293,7 +287,6 @@ class EmailConfirmation(models.Model):
             raise VerificationKeyExpired()
 
     def send(self, **kwargs):
-        # TODO: send as HTML email
         site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
         language = self.user.settings.preferred_language or get_language()
@@ -313,12 +306,8 @@ class EmailConfirmation(models.Model):
                 "site_domain": site.domain,
                 "key": self.key,
             }
-            subject = render_to_string(
-                "aldryn_accounts/email/email_confirmation.subject.txt", ctx)
-            message = render_to_string(
-                "aldryn_accounts/email/email_confirmation.body.txt", ctx)
-        subject = "".join(subject.splitlines())  # remove superfluous line breaks
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+            emailit.api.send_mail([self.email], ctx,
+                                  "aldryn_accounts/email/email_confirmation")
         self.sent_at = timezone.now()
         self.save()
         email_confirmation_sent.send(sender=self.__class__, confirmation=self)

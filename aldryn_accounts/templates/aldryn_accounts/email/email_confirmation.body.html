@@ -1,0 +1,9 @@
+{% load i18n %}
+<p>{% blocktrans %}Hi, {{ name }}{% endblocktrans %}</p>
+
+<p>{% blocktrans %}You recently added an email address associated with your {{ site_name }} account.
+To confirm {{ email }} as your email, click this link:
+
+{{ activate_url }}
+
+{% endblocktrans %}</p>
