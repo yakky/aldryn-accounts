@@ -287,7 +287,6 @@ class EmailConfirmation(models.Model):
             raise VerificationKeyExpired()
 
     def send(self, **kwargs):
-        # TODO: send as HTML email
         site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
         language = self.user.settings.preferred_language or get_language()
