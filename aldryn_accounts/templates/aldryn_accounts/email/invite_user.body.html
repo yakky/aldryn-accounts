@@ -1,0 +1,9 @@
+{% load i18n %}
+<p>{% blocktrans %}Hello!{% endblocktrans %}</p>
+
+<p>{% blocktrans with domain=current_site.domain %}You have been invited to {{ domain }}.{% endblocktrans %}</p>
+
+<p>{% trans "You can accept invitation by following this link:" %}
+{{ signup_url }}</p>
+
+<p>{% trans "If you don't want to signup, simply ignore this email." %}</p>
