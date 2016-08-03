@@ -117,4 +117,5 @@ class Form(forms.BaseForm):
         settings['LOGIN_URL'] = '/login/'
         settings['LOGOUT_URL'] = '/logout/'
         settings['ADDON_URLS'].append('aldryn_accounts.urls')
+        settings['ADDON_URLS_I18N'].append('aldryn_accounts.urls_i18n')
         return settings
