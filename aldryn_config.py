@@ -20,13 +20,20 @@ class Form(forms.BaseForm):
         required=False,
         initial=True,
     )
-
     notify_password_change = forms.CheckboxField(
-        "Notify ",
+        "Notify password change",
         help_text=("whether a confirmation email should be sent out "
                    "whenever the password is changed"),
         required=False,
         initial=True,
+    )
+    password_change_redirect_url = forms.CharField(
+        "Password change redirect url",
+        help_text=(
+            "Where to redirect users after a successful changed password. "
+            "Leave empty for default."),
+        required=False,
+        initial='',
     )
     email_confirmation_email = forms.CheckboxField(
         "send confirmation email",
@@ -102,6 +109,7 @@ class Form(forms.BaseForm):
         settings['ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS'] = data['use_profile_apphooks']
         settings['ALDRYN_ACCOUNTS_OPEN_SIGNUP'] = data['open_signup']
         settings['ALDRYN_ACCOUNTS_NOTIFY_PASSWORD_CHANGE'] = data['notify_password_change']
+        settings['ALDRYN_ACCOUNTS_PASSWORD_CHANGE_REDIRECT_URL'] = data['password_change_redirect_url']
         settings['ALDRYN_ACCOUNTS_EMAIL_CONFIRMATION_EMAIL'] = data['email_confirmation_email']
         settings['ALDRYN_ACCOUNTS_EMAIL_CONFIRMATION_EXPIRE_DAYS'] = data['email_confirmation_expire_days']
         settings['ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR'] = data['restore_password_raise_validation_error']
