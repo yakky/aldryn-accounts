@@ -104,6 +104,13 @@ class Form(forms.BaseForm):
         required=False,
         initial=True,
     )
+    urls_prefix = forms.CharField(
+        "Prefix for all URLs",
+        help_text=(
+            "For example 'accounts' -> '/accounts/login'"
+        ),
+        required=False,
+    )
 
     def to_settings(self, data, settings):
         settings['ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS'] = data['use_profile_apphooks']
@@ -119,6 +126,7 @@ class Form(forms.BaseForm):
         settings['ALDRYN_ACCOUNTS_SIGNUP_REDIRECT_URL'] = data['signup_redirect_url']
         settings['ALDRYN_ACCOUNTS_DISPLAY_EMAIL_NOTIFICATION'] = data['display_email_notifications']
         settings['ALDRYN_ACCOUNTS_DISPLAY_PASSWORD_NOTIFICATION'] = data['display_password_notifications']
+        settings['ALDRYN_ACCOUNTS_URLS_PREFIX'] = data['urls_prefix']
 
         # setup accounts login features and other urls
         # we have to specify those urls because add-on urls
