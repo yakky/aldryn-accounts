@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-import urllib
-
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+
+from six.moves.urllib.parse import urlencode
 
 from .models import EmailAddress, EmailConfirmation, UserSettings
 from .utils import get_most_qualified_user_for_email
@@ -156,7 +156,7 @@ class SignupForm(forms.Form):
         unverified_qs = EmailConfirmation.objects.filter(email__iexact=value)
         if unverified_qs.exists():
             resend_url = reverse('accounts_signup_email_resend_confirmation')
-            resend_url += '?' + urllib.urlencode({'email': value})
+            resend_url += '?' + urlencode({'email': value})
             body = render_to_string('aldryn_accounts/inc/email_already_in_the_verification_phase.html',
                                     {'resend_url': resend_url})
             raise forms.ValidationError(body)
