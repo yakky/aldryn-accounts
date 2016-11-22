@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import User
-from .models import EmailAddress, EmailConfirmation
+
+from .models import EmailAddress
 from .utils import get_most_qualified_user_for_email_and_password
 
 
@@ -18,7 +18,7 @@ class EmailBackend(ModelBackend):
 class PermissionBackend(object):
     def authenticate(self):
         return None
-    
+
     def has_perm(self, user_obj, perm, obj=None):
         # TODO: cache
         if perm == 'aldryn_accounts.has_verified_email':

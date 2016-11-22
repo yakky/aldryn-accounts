@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth import user_logged_in
-from django.db.models import signals
-from django.utils.encoding import force_text
 import django.dispatch
+from django.contrib.auth import user_logged_in
+from django.db.models import signals, ObjectDoesNotExist
+from django.utils.encoding import force_text
+from django.utils import timezone
+from django.contrib.auth.models import User
+
+from .utils import generate_username
 
 
 user_signed_up = django.dispatch.Signal(providing_args=["user", "form"])
@@ -15,28 +19,29 @@ password_changed = django.dispatch.Signal(providing_args=["user"])
 
 
 def set_user_timezone_on_login(sender, user, request, **kwargs):
-    from django.utils import timezone
-    from django.db.models import ObjectDoesNotExist
+    try:
+        user_settings = user.settings
+    except (AttributeError, ObjectDoesNotExist):
+        return
 
     try:
-        tz = user.settings.timezone
-        if tz:
-            request.session['django_timezone'] = force_text(tz)
-            timezone.activate(tz)
-    except ObjectDoesNotExist:
-        pass
+        tz = user_settings.tz
+    except AttributeError:
+        return
+
+    if tz:
+        request.session['django_timezone'] = force_text(tz)
+        timezone.activate(tz)
 
 user_logged_in.connect(set_user_timezone_on_login, dispatch_uid='aldryn_accounts:set_user_timezone_on_login')
 
 
-def generate_username(sender, **kwargs):
-    from django.contrib.auth.models import User
-    import uuid
+def set_username_if_not_exists(sender, **kwargs):
     user = kwargs.get('instance')
     if isinstance(user, User):
         if not user.username:
-            user.username = uuid.uuid4().get_hex()[:30]
-signals.pre_save.connect(generate_username, dispatch_uid='aldryn_accounts:generate_username')
+            user.username = generate_username()
+signals.pre_save.connect(set_username_if_not_exists, dispatch_uid='aldryn_accounts:generate_username')
 
 
 # TODO: figure this out. actually we'd need to redirect to a url with the language prefix.

@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.core.urlresolvers import NoReverseMatch
 from django.template.loader import render_to_string
-from django.utils.translation import gettext_lazy as _
+
 
 DISPLAY_EMAIL_NOTIFICATION = getattr(
     settings, 'ALDRYN_ACCOUNTS_DISPLAY_EMAIL_NOTIFICATION', False)

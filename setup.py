@@ -21,6 +21,7 @@ setup(
         # 'django-gravatar2',
         'django-password-reset',
         'django-sekizai',
+        'python-social-auth',
         'django-standard-form',
         'django-timezone-field',
         'aldryn-common',

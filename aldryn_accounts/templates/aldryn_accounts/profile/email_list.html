@@ -15,12 +15,13 @@
 					{% if obj.is_primary %}
 						<span class="label label-info">{% trans 'primary' %}</span>
 					{% else %}
-						<a href="{% url 'accounts_email_make_primary' pk=obj.pk %}">{% trans 'set as primary' %}</a> <a href="{% url 'accounts_email_delete' pk=obj.pk %}"><span class="icon icon-close"></span></a>
+						<a href="{% url 'aldryn_accounts:accounts_email_make_primary' pk=obj.pk %}">{% trans 'set as primary' %}</a>
+                        <a href="{% url 'aaldryn_accounts:ccounts_email_delete' pk=obj.pk %}"><span class="icon icon-close"></span></a>
 					{% endif %}
 				{% else %}
 					<span class="label label-important">{% trans 'not verified yet' %}</span>
-					<a href="{% url 'accounts_email_confirmation_resend' pk=obj.pk %}">{% trans 're-send' %}</a>
-					<a href="{% url 'accounts_email_confirmation_cancel' pk=obj.pk %}">{% trans 'cancel' %}</a>
+					<a href="{% url 'aldryn_accounts:accounts_email_confirmation_resend' pk=obj.pk %}">{% trans 're-send' %}</a>
+					<a href="{% url 'aldryn_accounts:accounts_email_confirmation_cancel' pk=obj.pk %}">{% trans 'cancel' %}</a>
 				{% endif %}
 				</div>
 			</li>

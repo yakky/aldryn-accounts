@@ -1,11 +1,11 @@
 {% load i18n %}
 {% if request.user.is_authenticated %}
-	<li><a href="{% url 'accounts_profile' %}" title="{{ username }}">{% trans 'my profile' %}</a></li>
+	<li><a href="{% url 'aldryn_accounts:accounts_profile' %}" title="{{ username }}">{% trans 'my profile' %}</a></li>
 	{% if request.user.is_staff %}
 		<li><a href="{% url 'admin:index' %}">{% trans 'admin' %}</a></li>
 	{% endif %}
-	<li><a href="{% url 'logout' %}">{% trans 'logout' %}</a></li>
+	<li><a href="{% url 'aldryn_accounts:logout' %}">{% trans 'logout' %}</a></li>
 {% else %}
-	<li><a href="{% url 'login' %}">{% trans 'login' %}</a></li>
-	<li><a href="{% url 'accounts_signup' %}">{% trans 'signup' %}</a></li>
+	<li><a href="{% url 'aldryn_accounts:login' %}">{% trans 'login' %}</a></li>
+	<li><a href="{% url 'aldryn_accounts:accounts_signup' %}">{% trans 'signup' %}</a></li>
 {% endif %}

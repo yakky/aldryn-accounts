@@ -3,32 +3,31 @@ from __future__ import unicode_literals
 
 import datetime
 import operator
-try:
-    from urllib import urlencode
-except ImportError:
-    # Python 3
-    from urllib.parse import urlencode
-import timezone_field
 
-from six.moves import reduce
-from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode  # Python 2
+
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Q
 from django.utils import timezone
-from django.utils.translation import get_language, override as force_language, ugettext_lazy as _
+from django.utils.translation import get_language, override, ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible, force_text
 
+import timezone_field
 import emailit.api
+from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from annoying.fields import AutoOneToOneField
+from six.moves import reduce
 
 from .conf import settings
 from .signals import signup_code_used, signup_code_sent, email_confirmed, email_confirmation_sent
 from .utils import profile_image_upload_to, random_token, user_display
-
 from .monkeypatches import patch_user_unicode
+
 patch_user_unicode()
 
 
@@ -61,9 +60,9 @@ class SignupCode(models.Model):
     def exists(cls, code=None, email=None):
         checks = []
         if code:
-            checks.append(Q(code=code))
+            checks.append(models.Q(code=code))
         if email:
-            checks.append(Q(email=email))
+            checks.append(models.Q(email=email))
         return cls._default_manager.filter(reduce(operator.or_, checks)).exists()
 
     @classmethod
@@ -116,7 +115,7 @@ class SignupCode(models.Model):
         signup_url = "%s://%s%s?%s" % (
             protocol,
             force_text(current_site.domain),
-            reverse("accounts_signup"),
+            reverse("aldryn_accounts:accounts_signup"),
             urlencode({"code": self.code})
         )
         ctx = {
@@ -292,11 +291,11 @@ class EmailConfirmation(models.Model):
         site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
         protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
         language = self.user.settings.preferred_language or get_language()
-        with force_language(language):
+        with override(language):
             activate_url = "%s://%s%s" % (
                 protocol,
                 force_text(site.domain),
-                reverse("accounts_confirm_email", args=[self.key])
+                reverse("aldryn_accounts:accounts_confirm_email", args=[self.key])
             )
             ctx = {
                 "email": self.email,

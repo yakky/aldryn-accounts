@@ -1,17 +1,27 @@
 # -*- coding: utf-8 -*-
-from aldryn_accounts.admin_forms import UserCreationForm
+from __future__ import unicode_literals
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-
-from aldryn_accounts.exceptions import VerificationKeyExpired
-from .models import EmailConfirmation, EmailAddress, UserSettings
 from django.utils.translation import ugettext_lazy as _
+
+from social.apps.django_app.default.models import UserSocialAuth
+
+from .admin_forms import UserCreationForm
+from .exceptions import VerificationKeyExpired
+from .models import EmailConfirmation, EmailAddress, UserSettings
 
 
 class EmailInline(admin.TabularInline):
     model = EmailAddress
     extra = 1
+
+
+class UserSocialAuthInline(admin.TabularInline):
+    model = UserSocialAuth
+    extra = 0
+    max_num = 0
 
 
 class UserSettingsInline(admin.StackedInline):
@@ -21,9 +31,9 @@ class UserSettingsInline(admin.StackedInline):
 
 
 class AccountsUserAdmin(UserAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_staff',)
+    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'social_logins',)
     list_filter = ('is_staff', 'is_superuser', 'is_active')
-    inlines = [UserSettingsInline, EmailInline]
+    inlines = [UserSettingsInline, EmailInline, UserSocialAuthInline]
     readonly_fields = UserAdmin.readonly_fields + ('email', 'last_login', 'date_joined')
     add_readonly_fields = UserAdmin.readonly_fields + ('last_login', 'date_joined')
     search_fields = ('username', 'first_name', 'last_name', 'email', 'emailaddress__email')
@@ -45,18 +55,22 @@ class AccountsUserAdmin(UserAdmin):
     )
     add_form = UserCreationForm
 
+    def social_logins(self, obj):
+        return u', '.join([
+              '{} ({})'.format(i.provider, i.uid)
+              for i in obj.social_auth.all()
+        ])
+
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.pk:
             return self.readonly_fields
         else:
-            # add form
-            return self.add_readonly_fields
+            return self.add_readonly_fields  # add view
 
     def save_formset(self, request, form, formset, change):
         """
         Given an inline formset save it to the database.
         """
-        # do the regular save
         super(AccountsUserAdmin, self).save_formset(request, form, formset, change)
         if not change and formset.model == EmailAddress:
             # we are adding a new user and this is the EmailAddress formset
