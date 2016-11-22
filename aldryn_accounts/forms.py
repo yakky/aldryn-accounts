@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-import urllib
-
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+
+from six.moves.urllib.parse import urlencode
 
 from .models import EmailAddress, EmailConfirmation, UserSettings
 from .utils import get_most_qualified_user_for_email
@@ -36,13 +36,13 @@ def get_user_email(user, form_email):
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(label=_("Email"), max_length=255)
+    username = forms.CharField(label=_("E-Mail"), max_length=255)
 
 
 class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
     def __init__(self, *args, **kwargs):
         super(PasswordRecoveryForm, self).__init__(*args, **kwargs)
-        self.fields['username_or_email'].label = _('email')
+        self.fields['username_or_email'].label = _('E-Mail')
 
     def get_user_by_both(self, username):
         """
@@ -74,7 +74,7 @@ class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
             settings.ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR)
         if validation_error:
             raise forms.ValidationError(
-                    _("Sorry, this user doesn't have any verified email."))
+                    _("Sorry, this user doesn't have any verified E-Mail."))
         cleaned_data['email'] = email
         return cleaned_data
 
@@ -127,7 +127,7 @@ class CreatePasswordForm(ChangePasswordForm):
 
 
 class EmailForm(forms.Form):
-    email = forms.EmailField(label=_("Email"), required=True)
+    email = forms.EmailField(label=_("E-Mail"), required=True)
 
 
 class ProfileEmailForm(EmailForm):
@@ -136,12 +136,12 @@ class ProfileEmailForm(EmailForm):
         email = self.cleaned_data.get('email')
         verified_qs = EmailAddress.objects.filter(email__iexact=email)
         if verified_qs.exists():
-            raise forms.ValidationError(_("This email address is already in use."))
+            raise forms.ValidationError(_("This E-Mail address is already in use."))
         return email
 
 
 class SignupForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput(), required=True)
+    email = forms.EmailField(label=_("E-Mail"), widget=forms.TextInput(), required=True)
     code = forms.CharField(
         max_length=64,
         required=False,
@@ -152,11 +152,11 @@ class SignupForm(forms.Form):
         value = self.cleaned_data["email"]
         verified_qs = EmailAddress.objects.filter(email__iexact=value)
         if verified_qs.exists():
-            raise forms.ValidationError(_("A user is already registered with this email address."))
+            raise forms.ValidationError(_("A user is already registered with this E-Mail address."))
         unverified_qs = EmailConfirmation.objects.filter(email__iexact=value)
         if unverified_qs.exists():
             resend_url = reverse('accounts_signup_email_resend_confirmation')
-            resend_url += '?' + urllib.urlencode({'email': value})
+            resend_url += '?' + urlencode({'email': value})
             body = render_to_string('aldryn_accounts/inc/email_already_in_the_verification_phase.html',
                                     {'resend_url': resend_url})
             raise forms.ValidationError(body)
@@ -164,13 +164,13 @@ class SignupForm(forms.Form):
 
 
 class SignupEmailResendConfirmationForm(forms.Form):
-    email = forms.EmailField(required=True, widget=forms.HiddenInput())
+    email = forms.EmailField(label=_("E-Mail"), required=True, widget=forms.HiddenInput())
 
     def clean_email(self):
         email = self.cleaned_data["email"]
         verified_qs = EmailAddress.objects.filter(email__iexact=email)
         if verified_qs.exists():
-            raise forms.ValidationError(_("A user is already registered with this email address."))
+            raise forms.ValidationError(_("A user is already registered with this E-Mail address."))
         return email
 
 

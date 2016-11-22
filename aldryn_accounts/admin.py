@@ -3,6 +3,8 @@ from aldryn_accounts.admin_forms import UserCreationForm
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+
+from aldryn_accounts.exceptions import VerificationKeyExpired
 from .models import EmailConfirmation, EmailAddress, UserSettings
 from django.utils.translation import ugettext_lazy as _
 
@@ -69,8 +71,20 @@ class EmailConfirmationAdmin(admin.ModelAdmin):
     raw_id_fields = ('user',)
 
     def manual_confirmation(self, request, queryset):
+        success = 0
+        failure = 0
         for obj in queryset:
-            obj.confirm(method='manual')
+            try:
+                obj.confirm(verification_method='manual')
+            except VerificationKeyExpired:
+                failure += 1
+            else:
+                success += 1
+        message = _(
+            "Sent {success} confirmation(s) sucessfully; "
+            "{failure} confirmation(s) have expired verification keys".format(
+                success=success, failure=failure))
+        self.message_user(request, message=message)
 
 
 class UserProxy(User):

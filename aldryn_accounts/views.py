@@ -56,7 +56,7 @@ class SignupView(FormView):
     messages = {
         "email_confirmation_sent": {
             "level": messages.INFO,
-            "text": _("Confirmation email sent to %(email)s.")
+            "text": _("Confirmation E-Mail sent to %(email)s.")
         },
         "logged_in": {
             "level": messages.SUCCESS,
@@ -257,7 +257,7 @@ class SignupEmailResendConfirmationView(FormView):
 
         email_confirmations = EmailConfirmation.objects.filter(email=email)
         if not email_confirmations.exists():
-            messages.error(self.request, _('This email does not have any pending confirmations.'))
+            messages.error(self.request, _('This E-Mail does not have any pending confirmations.'))
             return self.form_invalid(form)
 
         for email_confirmation in email_confirmations:
@@ -374,7 +374,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         try:
             email_address = confirmation.confirm(verification_method="email")
         except EmailAlreadyVerified:
-            messages.error(self.request, _('This email has already been verified with an other account.'))
+            messages.error(self.request, _('This E-Mail has already been verified with an other account.'))
             return HttpResponseRedirect(self.request.path)
         except VerificationKeyExpired:
             messages.error(self.request, _('The activation key has expired.'))
@@ -600,7 +600,7 @@ class ProfileEmailConfirmationResendView(OnlyOwnedObjectsMixin, DetailView):
     messages = {
         "email_confirmation_resent": {
             "level": messages.INFO,
-            "text": _("Confirmation email re-sent to %(email)s.")
+            "text": _("Confirmation E-Mail re-sent to %(email)s.")
         },
     }
 

@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.core.urlresolvers import NoReverseMatch
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
+
+DISPLAY_EMAIL_NOTIFICATION = getattr(
+    settings, 'ALDRYN_ACCOUNTS_DISPLAY_EMAIL_NOTIFICATION', False)
+DISPLAY_PASSWORD_NOTIFICATION = getattr(
+    settings, 'ALDRYN_ACCOUNTS_DISPLAY_PASSWORD_NOTIFICATION', False)
+
 
 class Notification(object):
     def __init__(self, body, level=0):
@@ -11,15 +18,18 @@ class Notification(object):
 
 def check_notifications(user):
     # TODO: caching/optimisation
-    if not user.is_anonymous():
+    notifications = []
+    if user.is_anonymous():
+        return []
+    if DISPLAY_EMAIL_NOTIFICATION:
         email_notification = check_email_verification(user)
         if email_notification:
-            # if we don't have a verified email yet, not having a password set yet is secondary
-            return [email_notification]
+            notifications.append(email_notification)
+    if DISPLAY_PASSWORD_NOTIFICATION:
         password_notification = check_password(user)
         if password_notification:
-            return [password_notification]
-    return []
+            notifications.append(password_notification)
+    return notifications
 
 
 def check_password(user):

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from aldryn_accounts.urls import email_settings_urlpatterns
 from cms.app_base import CMSApp
 from cms.apphook_pool import apphook_pool
 from django.utils.translation import ugettext_lazy as _
 from .conf import settings
-from . import urls
+from . import urls_i18n as urls
 
 
 class AldrynAccountsUserProfileIndexApphook(CMSApp):
@@ -23,7 +22,7 @@ class AldrynAccountsUserProfileChangePasswordApphook(CMSApp):
 
 
 class AldrynAccountsUserProfileEmailSettingsApphook(CMSApp):
-    name = _("user profile: email settings")
+    name = _("user profile: E-Mail settings")
     urls = [urls.email_settings_urlpatterns]
 
 

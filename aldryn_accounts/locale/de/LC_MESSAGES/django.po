@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-11 22:12-0500\n"
+"POT-Creation-Date: 2016-06-27 12:43+0300\n"
 "PO-Revision-Date: 2013-05-25 17:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -17,331 +17,144 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: admin.py:37 admin.py:47
+#: admin.py:32 admin.py:42
 msgid "Personal info"
 msgstr "Persönliche Daten"
 
-#: admin.py:38 admin.py:48
+#: admin.py:33 admin.py:43
 msgid "Permissions"
 msgstr "Rechte"
 
-#: admin.py:40
+#: admin.py:35
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
-#: admin.py:89
+#: admin.py:84
+#, python-brace-format
+msgid ""
+"Sent {success} confirmation(s) sucessfully; {failure} confirmation(s) have "
+"expired verification keys"
+msgstr ""
+
+#: admin.py:93
 msgid "User"
 msgstr "Benutzer"
 
-#: admin.py:90
+#: admin.py:94
 msgid "Users"
 msgstr "Benutzer"
 
-#: admin_forms.py:16 forms.py:103 forms.py:121
-msgid "A user is already registered with this email address."
-msgstr "Ein Benutzer mit dieser Email ist bereits bei uns registriert."
+#: admin_forms.py:16 forms.py:155 forms.py:173
+msgid "A user is already registered with this E-Mail address."
+msgstr "Ein Benutzer mit dieser E-Mail ist bereits bei uns registriert."
 
 #: admin_forms.py:19
 msgid "Password"
 msgstr "Passwort"
 
 #: cms_app.py:11
-#, fuzzy
 msgid "user profile: index"
-msgstr "Profilbild"
+msgstr "Benutzerprofil: Index"
 
 #: cms_app.py:16
-#, fuzzy
 msgid "user profile: settings"
-msgstr "Benutzereinstellungen"
+msgstr "Benutzerprofil: Einstellungen"
 
 #: cms_app.py:21
-#, fuzzy
 msgid "user profile: change password"
-msgstr "Passwort ändern"
+msgstr "Benutzerprofil: Passwort ändern"
 
 #: cms_app.py:26
-#, fuzzy
-msgid "user profile: email settings"
-msgstr "Benutzereinstellungen"
+msgid "user profile: E-Mail settings"
+msgstr "Benutzerprofil: E-Mail Einstellungen"
 
-#: forms.py:17 forms.py:88
-msgid "Email"
-msgstr "Email"
+#: forms.py:39 forms.py:45 forms.py:130 forms.py:144 forms.py:167
+msgid "E-Mail"
+msgstr "E-Mail"
 
-#: forms.py:23
-msgid "email"
-msgstr "Email"
-
-#: forms.py:37
+#: forms.py:60
 msgid "Sorry, this user doesn't exist."
 msgstr "Dieser Benutzer existiert nicht."
 
-#: forms.py:42
+#: forms.py:77
+msgid "Sorry, this user doesn't have any verified E-Mail."
+msgstr "Dieser Benutzer hat keine geprüfte E-Mail."
+
+#: forms.py:84
 msgid "New password"
 msgstr "Neues Passwort"
 
-#: forms.py:59
+#: forms.py:101
 msgid "Current Password"
 msgstr "Aktuelles Passwort"
 
-#: forms.py:63
+#: forms.py:105
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: forms.py:73
+#: forms.py:115
 msgid "Please type your current password."
 msgstr "Geben Sie Ihr aktuelles Passwort ein."
 
-#: forms.py:126
+#: forms.py:139
+msgid "This E-Mail address is already in use."
+msgstr "Diese E-Mail-Adresse wird bereits verwendet."
+
+#: forms.py:178
 msgid "First name"
 msgstr "Vorname"
 
-#: forms.py:127
+#: forms.py:179
 msgid "Last name"
 msgstr "Nachname"
 
-#: models.py:181
-msgid "email address"
-msgstr "E-Mail"
+#: models.py:197
+msgid "E-Mail address"
+msgstr "E-Mail-Adresse"
 
-#: models.py:182 templates/aldryn_accounts/profile/includes/nav.html:19
-msgid "email addresses"
-msgstr "E-Mails"
+#: models.py:198 templates/aldryn_accounts/profile/email_list.html:4
+#: templates/aldryn_accounts/profile/email_list.html:8
+#: templates/aldryn_accounts/profile/includes/nav.html:14
+msgid "E-Mail addresses"
+msgstr "E-Mail-Adressen"
 
-#: models.py:245
-msgid "email confirmation"
+#: models.py:262
+msgid "E-Mail confirmation"
 msgstr "E-Mail Bestätigung"
 
-#: models.py:246
-msgid "email confirmations"
+#: models.py:263
+msgid "E-Mail confirmations"
 msgstr "E-Mail Bestätigungen"
 
-#: models.py:305
+#: models.py:293
+#, python-brace-format
+msgid "Verification key {key} for {email} has been expired"
+msgstr ""
+"Der Verifizierungsschlüssel {key} für {email} E-Mail ist nicht mehr gültig"
+
+#: models.py:332
 msgid "birth date"
 msgstr "Geburtsdatum"
 
-#: models.py:306
+#: models.py:333
 msgid "time zone"
 msgstr "Zeitzone"
 
-#: models.py:308
+#: models.py:335
 msgid "location"
 msgstr "Ort"
 
-#: models.py:312
+#: models.py:339
 msgid "profile image"
 msgstr "Profilbild"
 
-#: models.py:314
+#: models.py:341
 msgid "language"
 msgstr "Sprache"
 
-#: models.py:317 models.py:318
+#: models.py:344 models.py:345
 msgid "user settings"
 msgstr "Benutzereinstellungen"
-
-#: views.py:52
-#, python-format
-msgid "Confirmation email sent to %(email)s."
-msgstr "Bestätigungsmail gesendet an %(email)s."
-
-#: views.py:56
-#, python-format
-msgid "Logged in as %(user)s."
-msgstr "Angemeldet als %(user)s."
-
-#: views.py:60
-#, python-format
-msgid "The code %(code)s is invalid."
-msgstr "Der Code %(code)s ist ungültig."
-
-#: views.py:291
-msgid "This email does not have any pending confirmations."
-msgstr "Diese Email hat keine hängenden Bestätigungen."
-
-#: views.py:397
-#, python-format
-msgid "You have confirmed %(email)s."
-msgstr "Sie haben %(email)s bestätigt."
-
-#: views.py:411
-msgid "This email has already been verified with an other account."
-msgstr "Diese E-Mail wurde bereits von einem anderen Konto aktiviert."
-
-#: views.py:414
-msgid "The activation key has expired."
-msgstr "Der Aktivierungsschlüssel ist obligatorisch."
-
-#: views.py:485
-msgid "Password successfully changed."
-msgstr "Passwort wurde neu gesetzt."
-
-#: views.py:630
-#, fuzzy, python-format
-msgid "Confirmation email re-sent to %(email)s."
-msgstr "Bestätigungsmail gesendet an %(email)s."
-
-#: templates/aldryn_accounts/email_confirm.html:6
-msgid "Confirm Email"
-msgstr "E-Mail bestätigen"
-
-#: templates/aldryn_accounts/email_confirm.html:10
-#: templates/aldryn_accounts/signup_email_sent.html:6
-#: templates/aldryn_accounts/signup_email_sent.html:9
-msgid "Email Validation"
-msgstr "E-Mail Validierung"
-
-#: templates/aldryn_accounts/email_confirm.html:14
-#, python-format
-msgid "Is %(email)s your email address?"
-msgstr "Ist %(email)s Ihre Email-Adresse?"
-
-#: templates/aldryn_accounts/email_confirm.html:17
-msgid "confirm and login"
-msgstr "Bestätigen und anmelden"
-
-#: templates/aldryn_accounts/login_and_signup.html:5
-#: templates/aldryn_accounts/logout.html:6
-msgid "Log in"
-msgstr "Anmelden"
-
-#: templates/aldryn_accounts/login_and_signup.html:11
-msgctxt "login/signup view"
-msgid "Welcome"
-msgstr "Willkommen"
-
-#: templates/aldryn_accounts/login_and_signup.html:12
-msgctxt "login/signup view"
-msgid "Let's get started!"
-msgstr "Los geht's!"
-
-#: templates/aldryn_accounts/login_and_signup.html:24
-msgid "Already a member?"
-msgstr "Bereits Mitglied?"
-
-#: templates/aldryn_accounts/login_and_signup.html:35
-msgid "Login via Social"
-msgstr "Social Login"
-
-#: templates/aldryn_accounts/login_and_signup.html:45
-msgid "New? Register now"
-msgstr "Neu hier?"
-
-#: templates/aldryn_accounts/logout.html:10
-msgid "Are you sure you want to logout?"
-msgstr "Wollen Sie sich wirklich abmelden?"
-
-#: templates/aldryn_accounts/logout.html:15
-msgid "Log out"
-msgstr "Abmelden"
-
-#: templates/aldryn_accounts/password_reset_change.html:5
-#, python-format
-msgid ""
-"Sorry, this password reset link is invalid. You can still <a href="
-"\"%(recovery_url)s\">request a new one</a>."
-msgstr ""
-"Dieser Passwort-Link ist leider ungültig. Sie können jedoch einen <a href="
-"\"%(recovery_url)s\">neuen Link</a> anfordern."
-
-#: templates/aldryn_accounts/password_reset_change.html:11
-#, python-format
-msgid "Hi, %(username)s. Please choose your new password."
-msgstr "Hallo %(username)s. Bitte wählen Sie Ihr neues Passwort."
-
-#: templates/aldryn_accounts/password_reset_change.html:14
-msgid "Please choose your new password."
-msgstr "Wählen Sie Ihr neues Passwort."
-
-#: templates/aldryn_accounts/password_reset_change.html:20
-msgid "Set new password"
-msgstr "Neues Passwort setzen."
-
-#: templates/aldryn_accounts/password_reset_change_done.html:3
-msgid "New password set"
-msgstr "Neues Passwort gesetzt"
-
-#: templates/aldryn_accounts/password_reset_change_done.html:6
-#, python-format
-msgid ""
-"Your password has successfully been reset. You can use it right now on the "
-"<a href=\"%(login_url)s\">login page</a>."
-msgstr ""
-"Ihr Passwort wurde neu gesetzt. Sie können sich gleich damit <a href="
-"\"%(login_url)s\">anmelden</a>."
-
-#: templates/aldryn_accounts/password_reset_recover.html:5
-msgid "Password recovery"
-msgstr "Passwort"
-
-#: templates/aldryn_accounts/password_reset_recover.html:11
-msgid "Recover my password"
-msgstr "Passwort zurücksetzen"
-
-#: templates/aldryn_accounts/password_reset_recover_sent.html:4
-msgid "Password recovery sent"
-msgstr "Passwort-Link gesendet"
-
-#: templates/aldryn_accounts/password_reset_recover_sent.html:7
-#, python-format
-msgid ""
-"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
-"it to set a new password."
-msgstr ""
-"Vor %(ago)s wurde eine Email an <strong>%(email)s</strong> gesendet. "
-"Benützen Sie den darin enthaltenen Link um Ihr Passwort neu zu setzen."
-
-#: templates/aldryn_accounts/signup_closed.html:5
-msgid "Signup Closed"
-msgstr ""
-
-#: templates/aldryn_accounts/signup_closed.html:8
-msgid "Signup is currently closed"
-msgstr ""
-
-#: templates/aldryn_accounts/signup_email.html:6
-msgid "Validate Email"
-msgstr "E-Mail validieren"
-
-#: templates/aldryn_accounts/signup_email.html:10
-msgid "Enter your email"
-msgstr "E-Mail Adresse eingeben"
-
-#: templates/aldryn_accounts/signup_email.html:18
-msgid "Use this email"
-msgstr "Diese E-Mail benutzen"
-
-#: templates/aldryn_accounts/signup_email_confirmation_sent.html:6
-#: templates/aldryn_accounts/signup_email_confirmation_sent.html:9
-msgid "Confirm your email address"
-msgstr "E-Mail Adresse bestätigen"
-
-#: templates/aldryn_accounts/signup_email_confirmation_sent.html:11
-#, python-format
-msgid ""
-"We have sent you an email to <b>%(email)s</b> for verification. Follow the "
-"link provided to finalize the signup process."
-msgstr ""
-"Wir haben Ihnen zur Bestätigung eine Mail an <b>%(email)s</b> geschickt. "
-"Folgen Sie dem Link um die Anmeldung abzuschliessen."
-
-#: templates/aldryn_accounts/signup_email_resend_confirmation.html:6
-msgid "Send again the confirmation email"
-msgstr "E-Mail-Bestätigung erneut senden"
-
-#: templates/aldryn_accounts/signup_email_resend_confirmation.html:9
-#, python-format
-msgid "Send me the confirmation email to %(email)s again"
-msgstr "Bestätigungsmail erneut an %(email)s senden."
-
-#: templates/aldryn_accounts/signup_email_resend_confirmation.html:12
-msgid "Are You sure?"
-msgstr "Sind Sie sicher?"
-
-#: templates/aldryn_accounts/signup_email_resend_confirmation.html:18
-msgid "Yes, send me the confirmation email again"
-msgstr "Ja, Bestätigung erneut senden"
 
 #: templates/aldryn_accounts/email/change_password.body.txt:1
 #: templates/aldryn_accounts/email/email_confirmation.body.txt:1
@@ -370,24 +183,47 @@ msgstr "Ihr Passwort auf %(site_name)s wurde geändert"
 #: templates/aldryn_accounts/email/email_confirmation.body.txt:3
 #, python-format
 msgid ""
-"You recently added an email address associated with your %(site_name)s "
+"You recently added an E-Mail address associated with your %(site_name)s "
 "account.\n"
-"To confirm %(email)s as your email, click this link:\n"
+"To confirm %(email)s as your E-Mail, click this link:\n"
 "\n"
 "%(activate_url)s\n"
 "\n"
 msgstr ""
 "Sie haben vor Kurzem eine neue E-Mail Adresse zu Ihrem Konto auf "
 "%(site_name)s hinzugefügt.\n"
-"Um %(email)s als Ihre E-Mail zu bestätigen, folgen Sie diesem Link:\n"
+"Um %(email)s als Ihre E-Mail zu bestätigen, klicken Sie auf diesen Link:\n"
 "\n"
 "%(activate_url)s\n"
 "\n"
 
 #: templates/aldryn_accounts/email/email_confirmation.subject.txt:1
 #, python-format
-msgid "Confirm your %(site_name)s email, %(name)s"
+msgid "Confirm your %(site_name)s E-Mail, %(name)s"
 msgstr "Bestätigen Sie Ihre E-Mail auf %(site_name)s, %(name)s"
+
+#: templates/aldryn_accounts/email/invite_user.body.txt:1
+msgid "Hello!"
+msgstr "Hallo"
+
+#: templates/aldryn_accounts/email/invite_user.body.txt:3
+#, python-format
+msgid "You have been invited to %(domain)s."
+msgstr "Sie wurden zu %(domain)s eingeladen."
+
+#: templates/aldryn_accounts/email/invite_user.body.txt:5
+msgid "You can accept the invitation by following this link:"
+msgstr "Sie können die Einladung unter folgendem Link annehmen:"
+
+#: templates/aldryn_accounts/email/invite_user.body.txt:8
+msgid "If you don't want to signup, simply ignore this E-Mail."
+msgstr ""
+"Falls Sie sich nicht registrieren möchten, ignorieren Sie dieses E-mail."
+
+#: templates/aldryn_accounts/email/invite_user.subject.txt:1
+#, python-format
+msgid "You've been invited to %(domain)s!"
+msgstr "Sie wurden zu %(domain)s eingeladen!"
 
 #: templates/aldryn_accounts/email/password_reset_recover.body.html:1
 #: templates/aldryn_accounts/email/password_reset_recover.body.txt:1
@@ -402,34 +238,54 @@ msgid ""
 "You -- or someone pretending to be you -- has requested a password reset on "
 "%(domain)s."
 msgstr ""
-"Jemand, wahrscheinlich Sie, will das Passwort auf %(domain)s zurücksetzen."
+"Sie, oder Jemand der angibt Sie zu sein, will das Passwort auf %(domain)s "
+"zurücksetzen."
 
 #: templates/aldryn_accounts/email/password_reset_recover.body.html:5
 #: templates/aldryn_accounts/email/password_reset_recover.body.txt:5
 msgid "You can set your new password by following this link:"
-msgstr "Sie können Ihr Passwort unter folgendem Link zurück setzen:"
+msgstr "Sie können Ihr Passwort unter folgendem Link zurücksetzen:"
 
 #: templates/aldryn_accounts/email/password_reset_recover.body.html:9
 #: templates/aldryn_accounts/email/password_reset_recover.body.txt:9
 msgid ""
-"If you don't want to reset your password, simply ignore this email and it "
+"If you don't want to reset your password, simply ignore this E-Mail and it "
 "will stay unchanged."
 msgstr ""
-"Falls Sie Ihr Passwort nicht zurück setzen wollen, ignorieren Sie dieses E-"
-"Mail ganz einfach."
+"Falls Sie Ihr Passwort nicht zurücksetzen möchten, ignorieren Sie dieses E-"
+"Mail und das Passwort wird nicht geändert."
 
 #: templates/aldryn_accounts/email/password_reset_recover.subject.txt:1
 #, python-format
 msgid "Password recovery on %(domain)s"
-msgstr "Passwort zurück setzen auf %(domain)s"
+msgstr "Passwort wiederherstellen auf %(domain)s"
 
-#: templates/aldryn_accounts/inc/email_already_in_the_verification_phase.html:4
+#: templates/aldryn_accounts/email_confirm.html:4
+msgid "Confirm E-Mail"
+msgstr "E-Mail bestätigen"
+
+#: templates/aldryn_accounts/email_confirm.html:8
+#: templates/aldryn_accounts/signup_email_sent.html:5
+#: templates/aldryn_accounts/signup_email_sent.html:8
+msgid "E-Mail Validation"
+msgstr "E-Mail Validierung"
+
+#: templates/aldryn_accounts/email_confirm.html:12
+#, python-format
+msgid "Is %(email)s your E-Mail address?"
+msgstr "Ist %(email)s Ihre E-Mail-Adresse?"
+
+#: templates/aldryn_accounts/email_confirm.html:15
+msgid "confirm and login"
+msgstr "Bestätigen und anmelden"
+
+#: templates/aldryn_accounts/inc/email_already_in_the_verification_phase.html:3
 #, python-format
 msgid ""
-"A verification email was already send to this address. Click <a href="
+"A verification E-Mail was already send to this address. Click <a href="
 "\"%(resend_url)s\">here</a> to resend it."
 msgstr ""
-"Eine Bestätigungs-Email wurde bereits an diese Adresse verschickt. <a href="
+"Eine Bestätigungs-E-Mail wurde bereits an diese Adresse verschickt. <a href="
 "\"%(resend_url)s\">Nochmals senden</a>."
 
 #: templates/aldryn_accounts/inc/login_form.html:9
@@ -464,178 +320,381 @@ msgstr "Anmelden"
 msgid "signup"
 msgstr "Registrieren"
 
-#: templates/aldryn_accounts/profile/base.html:5
+#: templates/aldryn_accounts/login_and_signup.html:4
+#: templates/aldryn_accounts/logout.html:4
+msgid "Log in"
+msgstr "Anmelden"
+
+#: templates/aldryn_accounts/login_and_signup.html:10
+msgctxt "login/signup view"
+msgid "Welcome"
+msgstr "Willkommen"
+
+#: templates/aldryn_accounts/login_and_signup.html:11
+msgctxt "login/signup view"
+msgid "Let's get started!"
+msgstr "Los geht's!"
+
+#: templates/aldryn_accounts/login_and_signup.html:23
+msgid "Already a member?"
+msgstr "Bereits Mitglied?"
+
+#: templates/aldryn_accounts/login_and_signup.html:33
+msgid "New? Register now"
+msgstr "Neu hier? Registrieren Sie sich jetzt"
+
+#: templates/aldryn_accounts/logout.html:8
+msgid "Are you sure you want to logout?"
+msgstr "Wollen Sie sich wirklich abmelden?"
+
+#: templates/aldryn_accounts/logout.html:13
+msgid "Log out"
+msgstr "Abmelden"
+
+#: templates/aldryn_accounts/notifications/email_verification_in_progress.html:4
+#, python-format
+msgid ""
+"\n"
+"        <strong>We've sent you a verification E-Mail to %(email)s. Please "
+"click on the link in the E-Mail to verify the address.</strong><br/>\n"
+"        If you're having trouble, see <a href=\"%(email)s\">E-Mail settings</"
+"a> on your profile.\n"
+"    "
+msgstr ""
+
+#: templates/aldryn_accounts/notifications/no_password.html:4
+#, python-format
+msgid ""
+"\n"
+"        You don't have a password set.\n"
+"        You can set one <a href=\"%(create_password_link)s\">here</a>.\n"
+"    "
+msgstr ""
+
+#: templates/aldryn_accounts/password_reset_change.html:6
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr ""
+"Dieser Passwort-Link ist leider ungültig. Sie können jedoch einen <a href="
+"\"%(recovery_url)s\">neuen Link</a> anfordern."
+
+#: templates/aldryn_accounts/password_reset_change.html:12
+#, python-format
+msgid "Hi, %(username)s. Please choose your new password."
+msgstr "Hallo %(username)s. Bitte wählen Sie Ihr neues Passwort."
+
+#: templates/aldryn_accounts/password_reset_change.html:15
+msgid "Please choose your new password."
+msgstr "Wählen Sie Ihr neues Passwort."
+
+#: templates/aldryn_accounts/password_reset_change.html:21
+msgid "Set new password"
+msgstr "Neues Passwort setzen."
+
+#: templates/aldryn_accounts/password_reset_change_done.html:4
+msgid "New password set"
+msgstr "Neues Passwort gesetzt"
+
+#: templates/aldryn_accounts/password_reset_change_done.html:8
+#, python-format
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"<a href=\"%(login_url)s\">login page</a>."
+msgstr ""
+"Ihr Passwort wurde neu gesetzt. Sie können sich gleich damit <a href="
+"\"%(login_url)s\">anmelden</a>."
+
+#: templates/aldryn_accounts/password_reset_recover.html:4
+msgid "Password recovery"
+msgstr "Passwort Wiederherstellung"
+
+#: templates/aldryn_accounts/password_reset_recover.html:10
+msgid "Recover my password"
+msgstr "Mein Passwort wiederherstellen"
+
+#: templates/aldryn_accounts/password_reset_recover_sent.html:4
+msgid "Password recovery sent"
+msgstr "Passwort-Link gesendet"
+
+#: templates/aldryn_accounts/password_reset_recover_sent.html:13
+#, python-format
+msgid ""
+"An E-Mail was sent %(ago)s ago.Use the link in it to set a new password."
+msgstr ""
+"Vor %(ago)s wurde eine E-Mail gesendet. Benützen Sie den darin enthaltenen "
+"Link um Ihr Passwort neu zu setzen."
+
+#: templates/aldryn_accounts/profile/base.html:4
 msgid "My account"
 msgstr "Mein Konto"
 
-#: templates/aldryn_accounts/profile/change_password.html:3
 #: templates/aldryn_accounts/profile/change_password.html:4
+#: templates/aldryn_accounts/profile/change_password.html:5
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: templates/aldryn_accounts/profile/change_password.html:8
+#: templates/aldryn_accounts/profile/change_password.html:9
 msgid "Here you can change your account password."
 msgstr "Hier können Sie Ihr Passwort ändern."
 
-#: templates/aldryn_accounts/profile/change_password.html:16
+#: templates/aldryn_accounts/profile/change_password.html:17
 msgid "set new password"
 msgstr "Neues Passwort setzen"
 
-#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:6
-msgid "Cancel email confirmation"
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:4
+msgid "Cancel E-Mail confirmation"
 msgstr "E-Mail Bestätigung abbrechen"
 
-#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:7
-msgid "Cancel an email confirmation"
-msgstr "E-Mail Bestätigung abbrechen"
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:5
+msgid "Cancel an E-Mail confirmation"
+msgstr "E-Mail-Bestätigung abbrechen"
 
-#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:12
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:10
 #, python-format
 msgid "Do you really want to cancel the confirmation request for %(email)s?"
 msgstr "Wollen Sie wirklich die Bestätigung der E-Mail %(email)s abbrechen?"
 
-#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:13
-#: templates/aldryn_accounts/profile/email_confirmation_resend.html:13
-#: templates/aldryn_accounts/profile/email_delete.html:13
-#: templates/aldryn_accounts/profile/email_make_primary.html:12
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:11
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:11
+#: templates/aldryn_accounts/profile/email_delete.html:11
+#: templates/aldryn_accounts/profile/email_make_primary.html:11
 msgid "back"
 msgstr "Zurück"
 
-#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:14
-#: templates/aldryn_accounts/profile/email_confirmation_resend.html:14
-#: templates/aldryn_accounts/profile/email_delete.html:14
-#: templates/aldryn_accounts/profile/email_make_primary.html:13
+#: templates/aldryn_accounts/profile/email_confirmation_cancel.html:12
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:12
+#: templates/aldryn_accounts/profile/email_delete.html:12
+#: templates/aldryn_accounts/profile/email_make_primary.html:12
 msgid "yes"
 msgstr "Ja"
 
-#: templates/aldryn_accounts/profile/email_confirmation_resend.html:6
-#, fuzzy
-msgid "Re-send email confirmation"
-msgstr "E-Mail Bestätigung"
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:4
+msgid "Re-send E-Mail confirmation"
+msgstr "E-Mail Bestätigung erneut senden"
 
-#: templates/aldryn_accounts/profile/email_confirmation_resend.html:7
-#, fuzzy
-msgid "Re-send an email confirmation"
-msgstr "E-Mail Bestätigung abbrechen"
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:5
+msgid "Re-send an E-Mail confirmation"
+msgstr "E-Mail Bestätigung erneut senden"
 
-#: templates/aldryn_accounts/profile/email_confirmation_resend.html:12
-#, fuzzy, python-format
+#: templates/aldryn_accounts/profile/email_confirmation_resend.html:10
+#, python-format
 msgid "Do you want to re-send the confirmation request for %(email)s?"
-msgstr "Wollen Sie wirklich die Bestätigung der E-Mail %(email)s abbrechen?"
+msgstr ""
+"Wollen Sie wirklich die Bestätigung der E-Mail %(email)s erneut senden?"
 
-#: templates/aldryn_accounts/profile/email_delete.html:6
-msgid "Remove email"
+#: templates/aldryn_accounts/profile/email_delete.html:4
+msgid "Remove E-Mail"
 msgstr "E-Mail Adresse entfernen"
 
-#: templates/aldryn_accounts/profile/email_delete.html:7
-msgid "Remove an email address"
+#: templates/aldryn_accounts/profile/email_delete.html:5
+msgid "Remove an E-Mail address"
 msgstr "E-Mail Adresse entfernen"
 
-#: templates/aldryn_accounts/profile/email_delete.html:12
+#: templates/aldryn_accounts/profile/email_delete.html:10
 #, python-format
 msgid "Do you really want to remove %(email)s from your account?"
 msgstr "Wollen Sie wirklich die E-Mail %(email)s von Ihrem Konto entfernen?"
 
-#: templates/aldryn_accounts/profile/email_list.html:6
-#: templates/aldryn_accounts/profile/email_list.html:7
-msgid "Email addresses"
-msgstr "E-Mail-Adressen"
-
-#: templates/aldryn_accounts/profile/email_list.html:16
+#: templates/aldryn_accounts/profile/email_list.html:14
 msgid "verified"
 msgstr "Bestätigt"
 
-#: templates/aldryn_accounts/profile/email_list.html:18
+#: templates/aldryn_accounts/profile/email_list.html:16
 msgid "primary"
 msgstr "Primär"
 
-#: templates/aldryn_accounts/profile/email_list.html:20
+#: templates/aldryn_accounts/profile/email_list.html:18
 msgid "set as primary"
 msgstr "Als Primär-Adresse setzen"
 
-#: templates/aldryn_accounts/profile/email_list.html:23
+#: templates/aldryn_accounts/profile/email_list.html:21
 msgid "not verified yet"
 msgstr "Noch nicht bestätigt"
 
-#: templates/aldryn_accounts/profile/email_list.html:24
+#: templates/aldryn_accounts/profile/email_list.html:22
 msgid "re-send"
 msgstr "nochmal senden"
 
-#: templates/aldryn_accounts/profile/email_list.html:25
+#: templates/aldryn_accounts/profile/email_list.html:23
 msgid "cancel"
 msgstr "Abbrechen"
 
-#: templates/aldryn_accounts/profile/email_list.html:36
+#: templates/aldryn_accounts/profile/email_list.html:34
 msgid "add"
 msgstr "hinzufügen"
 
+#: templates/aldryn_accounts/profile/email_make_primary.html:5
 #: templates/aldryn_accounts/profile/email_make_primary.html:6
-#: templates/aldryn_accounts/profile/email_make_primary.html:7
 msgid "Set as primary email"
 msgstr "Als Primär-Adresse setzen"
 
-#: templates/aldryn_accounts/profile/email_make_primary.html:11
+#: templates/aldryn_accounts/profile/email_make_primary.html:10
 #, python-format
-msgid "Do you really want to make %(email)s your primary email?"
-msgstr "Wollen Sie wirklich %(email)s zu Ihrer primären E-Mail Adresse machen?"
-
-#: templates/aldryn_accounts/profile/index.html:6
-#: templates/aldryn_accounts/profile/usersettings_form.html:6
-msgid "Edit settings"
-msgstr "Einstellungen"
-
-#: templates/aldryn_accounts/profile/social_accounts.html:5
-#: templates/aldryn_accounts/profile/social_accounts.html:6
-msgid "Connected accounts"
-msgstr "Verknüpfte Konten"
-
-#: templates/aldryn_accounts/profile/social_accounts.html:14
-#: templates/aldryn_accounts/profile/includes/nav.html:8
-msgid "change password"
-msgstr "Passwort ändern"
-
-#: templates/aldryn_accounts/profile/social_accounts.html:17
-msgid "you don't have a password yet"
-msgstr "Sie haben noch kein Passwort"
-
-#: templates/aldryn_accounts/profile/social_accounts.html:18
-msgid "set a password"
-msgstr "Passwort setzen"
-
-#: templates/aldryn_accounts/profile/social_accounts.html:28
-msgid "connected"
-msgstr "Verknüpft"
-
-#: templates/aldryn_accounts/profile/social_accounts.html:35
-msgid "connect"
-msgstr "Verknüpfen"
-
-#: templates/aldryn_accounts/profile/usersettings_form.html:7
-msgid "Settings"
-msgstr "Einstellungen"
-
-#: templates/aldryn_accounts/profile/usersettings_form.html:16
-msgid "save"
-msgstr "sichern"
+msgid "Do you really want to make %(email)s your primary E-Mail?"
+msgstr "Wollen Sie wirklich %(email)s zu Ihrer primären E-Mail-Adresse machen?"
 
 #: templates/aldryn_accounts/profile/includes/nav.html:5
 msgctxt "User Profile"
 msgid "settings"
 msgstr "Einstellungen"
 
+#: templates/aldryn_accounts/profile/includes/nav.html:8
+#: templates/aldryn_accounts/profile/social_accounts.html:13
+msgid "change password"
+msgstr "Passwort ändern"
+
 #: templates/aldryn_accounts/profile/includes/nav.html:10
 msgid "create a password"
 msgstr "Passwort erstellen"
 
-#: templates/aldryn_accounts/profile/includes/nav.html:15
-msgid "connected accounts"
+#: templates/aldryn_accounts/profile/index.html:5
+#: templates/aldryn_accounts/profile/usersettings_form.html:5
+msgid "Edit settings"
+msgstr "Einstellungen bearbeiten"
+
+#: templates/aldryn_accounts/profile/social_accounts.html:4
+#: templates/aldryn_accounts/profile/social_accounts.html:5
+msgid "Connected accounts"
 msgstr "Verknüpfte Konten"
 
+#: templates/aldryn_accounts/profile/social_accounts.html:16
+msgid "you don't have a password yet"
+msgstr "Sie haben noch kein Passwort"
+
+#: templates/aldryn_accounts/profile/social_accounts.html:17
+msgid "set a password"
+msgstr "Passwort setzen"
+
+#: templates/aldryn_accounts/profile/usersettings_form.html:9
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: templates/aldryn_accounts/profile/usersettings_form.html:15
+msgid "save"
+msgstr "sichern"
+
+#: templates/aldryn_accounts/signup_closed.html:4
+msgid "Signup Closed"
+msgstr "Anmeldung geschlossen"
+
+#: templates/aldryn_accounts/signup_closed.html:7
+msgid "Signup is currently closed"
+msgstr "Die Anmeldung ist zur Zeit geschlossen"
+
+#: templates/aldryn_accounts/signup_email.html:5
+msgid "Validate E-Mail"
+msgstr "E-Mail validieren"
+
+#: templates/aldryn_accounts/signup_email.html:9
+msgid "Enter your E-Mail"
+msgstr "E-Mail-Adresse eingeben"
+
+#: templates/aldryn_accounts/signup_email.html:17
+msgid "Use this E-Mail"
+msgstr "Diese E-Mail benutzen"
+
+#: templates/aldryn_accounts/signup_email_confirmation_sent.html:5
+#: templates/aldryn_accounts/signup_email_confirmation_sent.html:8
+msgid "Confirm your E-Mail address"
+msgstr "E-Mail-Adresse bestätigen"
+
+#: templates/aldryn_accounts/signup_email_confirmation_sent.html:10
+#, python-format
+msgid ""
+"We have sent you an E-Mail to <b>%(email)s</b> for verification. Follow the "
+"link provided to finalize the signup process."
+msgstr ""
+"Wir haben Ihnen zur Bestätigung eine Mail an <b>%(email)s</b> geschickt. "
+"Folgen Sie dem Link um die Anmeldung abzuschliessen."
+
+#: templates/aldryn_accounts/signup_email_resend_confirmation.html:5
+msgid "Send again the confirmation E-Mail"
+msgstr "E-Mail-Bestätigung erneut senden"
+
+#: templates/aldryn_accounts/signup_email_resend_confirmation.html:8
+#, python-format
+msgid "Send me the confirmation E-Mail to %(email)s again"
+msgstr "Bestätigungsmail erneut an %(email)s senden."
+
+#: templates/aldryn_accounts/signup_email_resend_confirmation.html:11
+msgid "Are You sure?"
+msgstr "Sind Sie sicher?"
+
+#: templates/aldryn_accounts/signup_email_resend_confirmation.html:17
+msgid "Yes, send me the confirmation E-Mail again"
+msgstr "Ja, bitte die Bestätigungs-E-Mail erneut senden"
+
+#: views.py:61
+#, python-format
+msgid "Confirmation E-Mail sent to %(email)s."
+msgstr "Bestätigungs-E-Mail wurde an an %(email)s gesendet."
+
+#: views.py:65
+#, python-format
+msgid "Logged in as %(user)s."
+msgstr "Angemeldet als %(user)s."
+
+#: views.py:69
+#, python-format
+msgid "The code %(code)s is invalid."
+msgstr "Der Code %(code)s ist ungültig."
+
+#: views.py:262
+msgid "This E-Mail does not have any pending confirmations."
+msgstr "Diese E-Mail hat keine pendenten Bestätigungen."
+
+#: views.py:372
+#, python-format
+msgid "You have confirmed %(email)s."
+msgstr "Sie haben %(email)s bestätigt."
+
+#: views.py:386
+msgid "This E-Mail has already been verified with an other account."
+msgstr "Diese E-Mail wurde bereits von einem anderen Konto aktiviert."
+
+#: views.py:389
+msgid "The activation key has expired."
+msgstr "Der Aktivierungsschlüssel ist nicht mehr gültig."
+
+#: views.py:460
+msgid "Password successfully changed."
+msgstr "Passwort wurde neu gesetzt."
+
+#: views.py:617
+#, python-format
+msgid "Confirmation E-Mail re-sent to %(email)s."
+msgstr "Bestätigungs-E-Mail wurde erneut an %(email)s gesendet."
+
+#, fuzzy
+#~| msgid "E-Mail addresses"
+#~ msgid "email addresses"
+#~ msgstr "E-Mail-Adressen"
+
+#~ msgid "E-mail"
+#~ msgstr "E-Mail"
+
+#~ msgid "email"
+#~ msgstr "E-Mail"
+
+#~ msgid "Login via Social"
+#~ msgstr "Social Login"
+
+#~ msgid "connected"
+#~ msgstr "Verknüpft"
+
+#~ msgid "connect"
+#~ msgstr "Verknüpfen"
+
+#~ msgid "connected accounts"
+#~ msgstr "Verknüpfte Konten"
+
 #~ msgid "Add email address"
-#~ msgstr "E-Mail Adresse hinzufügen"
+#~ msgstr "E-Mail-Adresse hinzufügen"
 
 #~ msgid "Add an email address"
-#~ msgstr "E-Mail Adresse hinzufügen"
+#~ msgstr "E-Mail-Adresse hinzufügen"
 
 #~ msgid "Edit Settings"
-#~ msgstr "Einstellungen"
+#~ msgstr "Einstellungen bearbeiten"
