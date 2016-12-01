@@ -117,3 +117,7 @@ def import_from_path(path_to_class):
 
 def get_signup_view():
     return import_from_path(settings.ALDRYN_ACCOUNTS_SIGNUP_VIEW)
+
+
+def get_login_view():
+    return import_from_path(settings.ALDRYN_ACCOUNTS_LOGIN_VIEW)

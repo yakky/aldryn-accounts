@@ -6,7 +6,7 @@ from django.contrib.auth import get_backends
 
 from social.apps.django_app.default.models import UserSocialAuth
 
-from .utils import user_display, get_signup_view
+from .utils import user_display, get_signup_view, get_login_view
 from .notifications import check_notifications
 
 
@@ -43,10 +43,8 @@ def social_auth_info(request):
 
 
 def empty_login_and_signup_forms(request):
-    from .views import LoginView
-
     return {
-        'empty_login_form': LoginView.form_class(),  # TODO: make this configurable
+        'empty_login_form': get_login_view().form_class(),
         'empty_signup_form': get_signup_view().form_class(),
     }
 
