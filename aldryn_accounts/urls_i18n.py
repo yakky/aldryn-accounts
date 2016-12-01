@@ -18,10 +18,11 @@ accounts_urlpatterns = [
     url(r'^login/$', views.LoginView.as_view(), name='login'),
     url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
 
-    url(r'^password-reset/$', views.PasswordResetRecoverView.as_view(), name='accounts_password_reset_recover'),
-    url(r'^password-reset/sent/(?P<signature>.+)/$', views.PasswordResetRecoverSentView.as_view(), name='accounts_password_reset_recover_sent'),
-    url(r'^password-reset/change/(?P<token>[\w:-]+)/$', views.PasswordResetChangeView.as_view(), name='accounts_password_reset_change'),
-    url(r'^password-reset/done/$', views.PasswordResetChangeDoneView.as_view(), name='accounts_password_reset_change_done'),
+    url(r'^password-reset/$', views.password_reset, name='accounts_password_reset_recover'),  # new name should be password_reset
+    url(r'^password-reset/sent/$', views.password_reset_done, name='password_reset_done'),
+    url(r'^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.password_reset_confirm, name='password_reset_confirm'),
+    url(r'^password-reset/done/$', views.password_reset_complete, name='password_reset_complete'),
 
     url(r'^email/confirm/(?P<key>\w+)/$', views.ConfirmEmailView.as_view(), name='accounts_confirm_email'),
 ]

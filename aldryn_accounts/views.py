@@ -30,10 +30,10 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View, DetailView
 from django.views.generic.base import TemplateResponseMixin
+from django.contrib.auth import views as auth_views
 
 import class_based_auth_views.views
 import emailit.api
-import password_reset.views
 from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from class_based_auth_views.utils import default_redirect
 from dj.chain import chain
@@ -314,48 +314,36 @@ class LogoutView(class_based_auth_views.views.LogoutView):
     template_name = 'aldryn_accounts/logout.html'
 
 
-class PasswordResetRecoverView(password_reset.views.Recover):
-    form_class = PasswordRecoveryForm
-    case_sensitive = False
-    template_name = 'aldryn_accounts/password_reset_recover.html'
-    email_template_name = 'aldryn_accounts/email/password_reset_recover'
-
-    def send_notification(self):
-        context = {
-            'site': RequestSite(self.request),
-            'user': self.user,
-            'token': signing.dumps(self.user.pk, salt=self.salt),
-            'secure': self.request.is_secure(),
-        }
-        emailit.api.send_mail([self.email], context, self.email_template_name)
-
-    def form_valid(self, form):
-        self.user = form.cleaned_data['user']
-        self.email = form.cleaned_data['email']
-        if self.email:
-            self.send_notification()
-        self.mail_signature = signing.dumps(self.email, salt=self.url_salt)
-        return super(password_reset.views.Recover, self).form_valid(form)
-
-    def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_password_reset_recover_sent',
-                                    args=[self.mail_signature])
+def password_reset(request, *args, **kwargs):
+    kwargs.update({
+        'post_reset_redirect': 'aldryn_accounts:password_reset_done',
+        'template_name': 'aldryn_accounts/reset/password_reset_form.html',
+        'email_template_name': 'aldryn_accounts/reset/password_reset_email.html',
+        'subject_template_name': 'aldryn_accounts/reset/password_reset_subject.txt',
+    })
+    return auth_views.password_reset(request, *args, **kwargs)
 
 
-class PasswordResetRecoverSentView(password_reset.views.RecoverDone):
-    template_name = "aldryn_accounts/password_reset_recover_sent.html"
+def password_reset_done(request, *args, **kwargs):
+    kwargs.update({
+        'template_name': 'aldryn_accounts/reset/password_reset_done.html',
+    })
+    return auth_views.password_reset_done(request, *args, **kwargs)
 
 
-class PasswordResetChangeView(password_reset.views.Reset):
-    form_class = PasswordResetForm
-    template_name = 'aldryn_accounts/password_reset_change.html'
+def password_reset_confirm(request, *args, **kwargs):
+    kwargs.update({
+        'template_name': 'aldryn_accounts/reset/password_reset_confirm.html',
+        'post_reset_redirect': 'aldryn_accounts:password_reset_complete',
+    })
+    return auth_views.password_reset_confirm(request, *args, **kwargs)
 
-    def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_password_reset_change_done')
 
-
-class PasswordResetChangeDoneView(password_reset.views.ResetDone):
-    template_name = 'aldryn_accounts/password_reset_change_done.html'
+def password_reset_complete(request, *args, **kwargs):
+    kwargs.update({
+        'template_name': 'aldryn_accounts/reset/password_reset_complete.html',
+    })
+    return auth_views.password_reset_complete(request, *args, **kwargs)
 
 
 class ConfirmEmailView(TemplateResponseMixin, View):
