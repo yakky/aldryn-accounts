@@ -41,14 +41,13 @@ from dj.chain import chain
 from .conf import settings
 from .context_processors import empty_login_and_signup_forms
 from .forms import (
-    EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm, EmailForm,
-    PasswordRecoveryForm, SignupForm, SignupEmailResendConfirmationForm,
-    UserSettingsForm, PasswordResetForm, ProfileEmailForm)
+    EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm,
+    SignupForm, SignupEmailResendConfirmationForm,
+    UserSettingsForm, ProfileEmailForm)
 from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
 from .signals import user_sign_up_attempt, user_signed_up, password_changed
 from . import utils
 from .view_mixins import OnlyOwnedObjectsMixin
-
 
 
 class SignupView(FormView):
