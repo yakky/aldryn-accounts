@@ -493,7 +493,7 @@ class ChangePasswordBaseView(FormView):
         redirect_field_name = self.get_redirect_field_name()
         ctx.update({
             "redirect_field_name": redirect_field_name,
-            "redirect_field_value": self.request.REQUEST.get(redirect_field_name),
+            "redirect_field_value": self.request.GET.get(redirect_field_name),
         })
         return ctx
 
