@@ -43,6 +43,7 @@ class AccountsAppConf(AppConf):
     OPEN_SIGNUP = True  # whether any user may signup. If set to False only users with an invite code may sign up.
     SIGNUP_REDIRECT_URL = 'accounts_profile'
     SIGNUP_VIEW = 'aldryn_accounts.views.SignupView'
+    LOGIN_VIEW = 'aldryn_accounts.views.LoginView'
     NOTIFY_PASSWORD_CHANGE = True  # whether a confirmation email should be sent out whenever the password is changed
     PASSWORD_CHANGE_REDIRECT_URL = 'accounts_profile'
     EMAIL_CONFIRMATION_REQUIRED = True  # whether emails need to be confirmed in order to get an active account. False IS NOT SUPPORTED YET!

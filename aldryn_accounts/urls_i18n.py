@@ -15,7 +15,7 @@ accounts_urlpatterns = [
     url(r'^signup/email/confirmation-sent/$', views.SignupEmailConfirmationSentView.as_view(), name='accounts_signup_email_confirmation_sent'),
     url(r'^signup/email/sent/$', views.SignupEmailSentView.as_view(), name='accounts_signup_email_sent'),
 
-    url(r'^login/$', views.LoginView.as_view(), name='login'),
+    url(r'^login/$', utils.get_login_view().as_view(), name='login'),
     url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
 
     url(r'^password-reset/$', views.password_reset, name='accounts_password_reset_recover'),  # new name should be password_reset
