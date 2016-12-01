@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
+import password_reset.forms
 from six.moves.urllib.parse import urlencode
 
 from .models import EmailAddress, EmailConfirmation, UserSettings
 from .utils import get_most_qualified_user_for_email
-from .conf import settings
-import password_reset.forms
 
 
 def get_user_email(user, form_email):
@@ -37,6 +38,12 @@ def get_user_email(user, form_email):
 
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.CharField(label=_("E-Mail"), max_length=255)
+    remember_me = forms.BooleanField(
+        label=_('Remember me?'),
+        initial=True,
+        widget=forms.CheckboxInput(),
+        required=False,
+    )
 
 
 class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
@@ -141,21 +148,24 @@ class ProfileEmailForm(EmailForm):
 
 
 class SignupForm(forms.Form):
-    email = forms.EmailField(label=_("E-Mail"), widget=forms.TextInput(), required=True)
+    email = forms.EmailField(label=_("E-Mail"), widget=forms.TextInput, required=True)
     code = forms.CharField(
         max_length=64,
         required=False,
         widget=forms.HiddenInput()
     )
+    error_messages = {
+        'email_exists': _("A user is already registered with this E-Mail address.")
+    }
 
     def clean_email(self):
         value = self.cleaned_data["email"]
         verified_qs = EmailAddress.objects.filter(email__iexact=value)
         if verified_qs.exists():
-            raise forms.ValidationError(_("A user is already registered with this E-Mail address."))
+            raise forms.ValidationError(self.error_messages['email_exists'])
         unverified_qs = EmailConfirmation.objects.filter(email__iexact=value)
         if unverified_qs.exists():
-            resend_url = reverse('accounts_signup_email_resend_confirmation')
+            resend_url = reverse('aldryn_accounts:accounts_signup_email_resend_confirmation')
             resend_url += '?' + urlencode({'email': value})
             body = render_to_string('aldryn_accounts/inc/email_already_in_the_verification_phase.html',
                                     {'resend_url': resend_url})

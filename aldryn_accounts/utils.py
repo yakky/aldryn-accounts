@@ -3,8 +3,9 @@ import hashlib
 import logging
 import os
 import uuid
+import importlib
 
-from .conf import settings
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.crypto import random
 
@@ -97,3 +98,22 @@ def get_most_qualified_user_for_email(email):
     for email_confirmation in EmailConfirmation.objects.filter(email__iexact=email):
         return email_confirmation.user
     return None
+
+
+def generate_username():
+    uuid_obj = uuid.uuid4()
+    if hasattr(uuid_obj, 'get_hex'):  # Python 2
+        uuid_str = uuid_obj.get_hex()
+    else:
+        uuid_str = uuid_obj.hex
+    return uuid_str[:30]  # django User.username.max_length
+
+
+def import_from_path(path_to_class):
+    path, cls = path_to_class.rsplit('.', 1)
+    module = importlib.import_module(path)
+    return getattr(module, cls)
+
+
+def get_signup_view():
+    return import_from_path(settings.ALDRYN_ACCOUNTS_SIGNUP_VIEW)

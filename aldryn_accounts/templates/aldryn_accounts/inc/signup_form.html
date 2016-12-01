@@ -1,5 +1,5 @@
 {% load standard_form i18n %}
-<form method="post" action="{% url 'accounts_signup' %}{# TODO: add the 'next' get parameter #}" class="frm" autocapitalize="off">
+<form method="post" action="{% url 'aldryn_accounts:accounts_signup' %}{# TODO: add the 'next' get parameter #}" class="frm" autocapitalize="off">
 	{% csrf_token %}
 	{% if redirect_field_value %}
 		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />

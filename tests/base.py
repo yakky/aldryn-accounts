@@ -129,15 +129,6 @@ class CleanUpMixin(object):
                 del sys.modules[module]
 
 
-# for cms 3.0 add get_standard_user method onto the class
-def get_standard_user(self):
-    """Creates standard user"""
-    standard = self._create_user("standard", is_staff=False, is_superuser=False)
-    return standard
-if not hasattr(CMSTestCase, 'get_standard_user'):
-    CMSTestCase.get_standard_user = get_standard_user
-
-
 class AcountsSetupMixin(object):
     set_up_apphooks = True
 

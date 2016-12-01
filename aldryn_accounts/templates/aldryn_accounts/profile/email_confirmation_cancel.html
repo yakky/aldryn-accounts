@@ -8,7 +8,7 @@
 {% block content %}
 <form method="post" action="" spellcheck="false">{% csrf_token %}
 	<p>{% blocktrans with email=object.email %}Do you really want to cancel the confirmation request for {{ email }}?{% endblocktrans %}</p>
-	<a href="{% url 'accounts_email_list' %}">{% trans 'back' %}</a>
+	<a href="{% url 'aldryn_accounts:accounts_email_list' %}">{% trans 'back' %}</a>
 	<button type="submit" class="btn">{% trans 'yes' %}</button>
 </form>
 {% endblock %}

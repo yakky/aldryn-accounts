@@ -1,27 +1,26 @@
 # -*- coding: utf-8 -*-
-from uuid import uuid4
 import datetime
-try:
-    from urllib import urlencode, unquote
-except ImportError:
-    # Python 3
-    from urllib.parse import urlencode, unquote
+from uuid import uuid4
 
-from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
-from class_based_auth_views.utils import default_redirect
-from dj.chain import chain
-from django import forms
-from django.contrib import messages, auth
-from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from social.exceptions import SocialAuthBaseException
+
+try:
+    from urllib.parse import urlencode, unquote
+except ImportError:
+    from urllib import urlencode, unquote  # Python 2
+
 try:
     from django.contrib.sites.shortcuts import get_current_site
     from django.contrib.sites.requests import RequestSite
 except ImportError:
     # Django 1.6
-    from django.contrib.sites.models import get_current_site
-    from django.contrib.sites.models import RequestSite
+    from django.contrib.sites.models import get_current_site, RequestSite
+
+from django import forms
+from django.contrib import messages, auth
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core import urlresolvers, signing
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
@@ -31,9 +30,13 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View, DetailView
 from django.views.generic.base import TemplateResponseMixin
+
 import class_based_auth_views.views
-import password_reset.views
 import emailit.api
+import password_reset.views
+from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
+from class_based_auth_views.utils import default_redirect
+from dj.chain import chain
 
 from .conf import settings
 from .context_processors import empty_login_and_signup_forms
@@ -43,8 +46,9 @@ from .forms import (
     UserSettingsForm, PasswordResetForm, ProfileEmailForm)
 from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
 from .signals import user_sign_up_attempt, user_signed_up, password_changed
-from .utils import user_display
+from . import utils
 from .view_mixins import OnlyOwnedObjectsMixin
+
 
 
 class SignupView(FormView):
@@ -99,12 +103,10 @@ class SignupView(FormView):
         # adds the empty login and signup forms to the context, so that
         # the shared login/signup view works even if the context processor
         # was not added globally
-        ctx.update(empty_login_and_signup_forms(self.request))  # TODO: make configurable?
-        redirect_field_value = self.request.POST.get(
-            redirect_field_name, self.request.GET.get(redirect_field_name, ''))
+        ctx.update(empty_login_and_signup_forms(self.request))
         ctx.update({
             "redirect_field_name": redirect_field_name,
-            "redirect_field_value": redirect_field_value,
+            "redirect_field_value": self.request.GET.get(redirect_field_name),
         })
         return ctx
 
@@ -160,7 +162,7 @@ class SignupView(FormView):
         user = User(**kwargs)
         username = form.cleaned_data.get("username")
         if username is None:
-            username = self.generate_username(form)
+            username = utils.generate_username()
         user.username = username
         password = form.cleaned_data.get("password")
         if password:
@@ -171,16 +173,8 @@ class SignupView(FormView):
             user.save()
         return user
 
-    def generate_username(self, form):
-        uuid = uuid4()
-        if hasattr(uuid, 'get_hex'):
-            # Python 2
-            return uuid.get_hex()[:30]
-        return uuid.hex[:30]
-
     def after_signup(self, form):
-        # TODO: SignupForm as sender might suck, because it might be replaced by something else.
-        user_signed_up.send(sender=SignupForm, user=self.created_user, form=form)
+        user_signed_up.send(user=self.created_user, form=form, sender=self)
 
     def login_user(self, show_message=True):
         # set backend on User object to bypass needing to call auth.authenticate
@@ -193,7 +187,7 @@ class SignupView(FormView):
                 self.request,
                 self.messages["logged_in"]["level"],
                 self.messages["logged_in"]["text"] % {
-                    "user": user_display(self.created_user)
+                    "user": utils.user_display(self.created_user)
                 }
             )
 
@@ -201,7 +195,6 @@ class SignupView(FormView):
         code = self.request.POST.get("code", self.request.GET.get("code", ""))
         if not code:
             return settings.ALDRYN_ACCOUNTS_OPEN_SIGNUP
-        signup_code = None
         code_is_valid = False
         try:
             signup_code = SignupCode.objects.get(code=code)
@@ -248,7 +241,7 @@ class SignupEmailResendConfirmationView(FormView):
 
     def get_success_url(self):
         email = self._get_email()
-        url = reverse('accounts_signup_email_confirmation_sent')
+        url = reverse('aldryn_accounts:accounts_signup_email_confirmation_sent')
         url += '?' + urlencode({'email': email})
         return url
 
@@ -268,7 +261,7 @@ class SignupEmailResendConfirmationView(FormView):
     def form_invalid(self, form):
         # This shouldn't happen unless someone was tampering with the email parameter
         # or somehow managed to have invalid email in the database
-        return HttpResponseRedirect(reverse('accounts_signup'))
+        return HttpResponseRedirect(reverse('aldryn_accounts:accounts_signup'))
 
 
 class SignupEmailConfirmationSentView(TemplateView):
@@ -305,6 +298,17 @@ class LoginView(class_based_auth_views.views.LoginView):
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form, login_form=form))
 
+    def form_valid(self, form):
+        # https://docs.djangoproject.com/en/1.10/topics/http/sessions/#django.contrib.sessions.backends.base.SessionBase.set_expiry
+        if not form.cleaned_data.get('remember_me'):
+            # set expiry
+            expiry = settings.ALDRYN_ACCOUNTS_NO_REMEMBER_ME_COOKIE_AGE
+        else:
+            # reset to global default
+            expiry = None
+        self.request.session.set_expiry(expiry)
+        return super().form_valid(form)
+
 
 class LogoutView(class_based_auth_views.views.LogoutView):
     template_name = 'aldryn_accounts/logout.html'
@@ -334,7 +338,7 @@ class PasswordResetRecoverView(password_reset.views.Recover):
         return super(password_reset.views.Recover, self).form_valid(form)
 
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_password_reset_recover_sent',
+        return urlresolvers.reverse('aldryn_accounts:accounts_password_reset_recover_sent',
                                     args=[self.mail_signature])
 
 
@@ -347,7 +351,7 @@ class PasswordResetChangeView(password_reset.views.Reset):
     template_name = 'aldryn_accounts/password_reset_change.html'
 
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_password_reset_change_done')
+        return urlresolvers.reverse('aldryn_accounts:accounts_password_reset_change_done')
 
 
 class PasswordResetChangeDoneView(password_reset.views.ResetDone):
@@ -409,9 +413,9 @@ class ConfirmEmailView(TemplateResponseMixin, View):
 
     def get_redirect_url(self):
         if self.request.user.is_authenticated():
-            return urlresolvers.reverse('accounts_email_list')
+            return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
         else:
-            return urlresolvers.reverse('login')
+            return urlresolvers.reverse('aldryn_accounts:login')
 
     def has_successfully_confirmed(self, confirmation):
         """
@@ -450,7 +454,6 @@ class ChangePasswordBaseView(FormView):
         }
     }
 
-
     def post(self, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return HttpResponseForbidden()
@@ -488,11 +491,9 @@ class ChangePasswordBaseView(FormView):
     def get_context_data(self, **kwargs):
         ctx = kwargs
         redirect_field_name = self.get_redirect_field_name()
-        redirect_value = self.request.POST.get(
-            redirect_field_name, self.request.GET.get(redirect_field_name, ''))
         ctx.update({
             "redirect_field_name": redirect_field_name,
-            "redirect_field_value": redirect_value,
+            "redirect_field_value": self.request.GET.get(redirect_field_name),
         })
         return ctx
 
@@ -513,7 +514,7 @@ class ChangePasswordBaseView(FormView):
         site_url = u"%s://%s%s" % (protocol, site.domain, '/')
         ctx = {
             "user": user,
-            "name": user_display(user),
+            "name": utils.user_display(user),
             "now": datetime.datetime.now(),
             "protocol": protocol,
             "current_site": site,
@@ -547,7 +548,7 @@ class CreatePasswordView(ChangePasswordBaseView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.has_usable_password():
             # user who already have a password must use ChangePasswordView
-            return redirect(urlresolvers.reverse('accounts_change_password'))
+            return redirect(urlresolvers.reverse('aldryn_accounts:accounts_change_password'))
         else:
             return super(CreatePasswordView, self).dispatch(request, *args, **kwargs)
 
@@ -586,7 +587,7 @@ class ProfileEmailListView(OnlyOwnedObjectsMixin, ListView):
         return redirect(self.get_success_url())
 
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_email_list')
+        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
 
     def get_context_data(self, **kwargs):
         context = super(ProfileEmailListView, self).get_context_data(**kwargs)
@@ -623,7 +624,7 @@ class ProfileEmailConfirmationResendView(OnlyOwnedObjectsMixin, DetailView):
         return redirect(self.get_success_url())
 
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_email_list')
+        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
 
 
 class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
@@ -635,7 +636,7 @@ class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
         return super(ProfileEmailConfirmationCancelView, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_email_list')
+        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
 
 
 class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
@@ -654,7 +655,7 @@ class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
         return MiniForm
 
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_email_list')
+        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
 
     def form_valid(self, form):
         self.object.set_as_primary()
@@ -670,7 +671,7 @@ class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
         return super(ProfileEmailDeleteView, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_email_list')
+        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
 
     def get_queryset(self):
         # don't allow deleting the primary email address
@@ -700,12 +701,5 @@ class UserSettingsView(UpdateView):
             self.object.timezone = self.request.session.get('django_timezone')
         return kwargs
 
-    def form_valid(self, form):
-        self.object = form.save()
-        # set timezone
-        if self.object.timezone:
-            self.request.session['django_timezone'] = self.object.timezone
-        return HttpResponseRedirect(self.get_success_url())
-
     def get_success_url(self):
-        return urlresolvers.reverse('accounts_profile')
+        return urlresolvers.reverse('aldryn_accounts:accounts_profile')

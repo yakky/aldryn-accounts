@@ -4,7 +4,7 @@
 {% block title_extra %}{% trans "Log in" %}{% endblock %}
 
 {% block content %}
-	<form method="POST" action="{% url 'logout' %}" autocapitalize="off">
+	<form method="POST" action="{% url 'aldryn_accounts:logout' %}" autocapitalize="off">
 		<legend>{% trans "Are you sure you want to logout?" %}</legend>
 		{% csrf_token %}
 		{% if redirect_field_value %}

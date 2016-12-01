@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from .utils import geoip
-from pytz import UnknownTimeZoneError
 from django.utils import timezone
-from .conf import settings
+from django.conf import settings
+
+from pytz import UnknownTimeZoneError
+
+from .utils import geoip
 
 
 class TimezoneMiddleware(object):

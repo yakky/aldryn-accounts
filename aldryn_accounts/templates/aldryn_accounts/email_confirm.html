@@ -4,7 +4,7 @@
 {% block title_extra %}{% trans "Confirm E-Mail" %}{% endblock %}
 
 {% block content %}
-	<form method="post" action="{% url 'accounts_confirm_email' key=confirmation.key %}">
+	<form method="post" action="{% url 'aldryn_accounts:accounts_confirm_email' key=confirmation.key %}">
 		<legend>{% trans "E-Mail Validation" %}</legend>
 		<fieldset>
 			{% csrf_token %}

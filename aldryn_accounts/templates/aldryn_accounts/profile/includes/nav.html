@@ -2,16 +2,21 @@
 {# TODO: this should be replaced by some sort of more flexible cms menu/apphook powered system #}
 <nav class="subnav">
 	<ul>
-		<li{% if active == "profile_settings" %} class="active"{% endif %}><a href="{% url 'accounts_settings' %}"><span>{% trans 'settings' context "User Profile" %}</span></a></li>
+		<li{% if active == "profile_settings" %} class="active"{% endif %}><a href="{% url 'aldryn_accounts:accounts_settings' %}"><span>{% trans 'settings' context "User Profile" %}</span></a></li>
 		<li{% if active == 'password_change' %} class="active"{% endif %}>
 			{% if request.user.has_usable_password %}
-				<a href="{% url 'accounts_change_password' %}"><span>{% trans 'change password' %}</span></a>
+				<a href="{% url 'aldryn_accounts:accounts_change_password' %}"><span>{% trans 'change password' %}</span></a>
 			{% else %}
-				<a href="{% url 'accounts_create_password' %}"><span>{% trans 'create a password' %}</span></a>
+				<a href="{% url 'aldryn_accounts:accounts_create_password' %}"><span>{% trans 'create a password' %}</span></a>
 			{% endif %}
 		</li>
+		{% if settings.ALDRYN_ACCOUNTS_ENABLE_SOCIAL_AUTH %}
+			<li{% if active == 'profile_associations' %} class="active"{% endif %}>
+				<a href="{% url 'aldryn_accounts:accounts_profile_associations' %}"><span>{% trans 'connected accounts' %}</span></a>
+			</li>
+		{% endif %}
 		<li{% if active == 'email' %} class="active"{% endif %}>
-			<a href="{% url 'accounts_email_list' %}"><span>{% trans 'E-Mail addresses' %}</span></a>
+			<a href="{% url 'aldryn_accounts:accounts_email_list' %}"><span>{% trans 'E-Mail addresses' %}</span></a>
 		</li>
 	{% show_menu_below_id "profile_navigation" 0 100 100 100 "includes/menu/navigation.html" %}
 	</ul>

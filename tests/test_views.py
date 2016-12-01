@@ -7,9 +7,9 @@ from django.contrib.auth import SESSION_KEY
 from django.contrib.messages import get_messages
 
 from django.core import mail
-from django.test.utils import override_settings
+from django.test import  override_settings
 from django.core.urlresolvers import reverse
-from unittest import skip
+from django.utils import unittest
 from django.utils.translation import override
 
 from aldryn_accounts.models import SignupCode, EmailConfirmation, EmailAddress
@@ -36,11 +36,7 @@ class ViewsAssertionsMixin(object):
         """
         Test if provided text is in response messages.
         """
-        try:
-            storage = get_messages(response.wsgi_request)
-        except AttributeError:
-            # Django 1.6
-            storage = get_messages(response._request)
+        storage = get_messages(response.wsgi_request)
         messages = [msg.message for msg in storage]
         self.assertIn(text, messages)
 
@@ -123,7 +119,7 @@ class SignupViewTestCase(GetViewUrlMixin, AllAccountsApphooksTestCase):
 
 class SignupEmailResendConfirmationViewTestCase(GetViewUrlMixin,
                                                 AllAccountsApphooksTestCase):
-    view_name = "accounts_signup_email_resend_confirmation"
+    view_name = "aldryn_accounts:accounts_signup_email_resend_confirmation"
 
     def test_get_with_not_existing_email_in_get_params(self):
         """
@@ -175,7 +171,7 @@ class SignupEmailResendConfirmationViewTestCase(GetViewUrlMixin,
 
 class SignupEmailConfirmationSentViewTestCase(GetViewUrlMixin,
                                               AllAccountsApphooksTestCase):
-    view_name = 'accounts_signup_email_confirmation_sent'
+    view_name = 'aldryn_accounts:accounts_signup_email_confirmation_sent'
 
     def test_get_no_email(self):
         # TODO: Check the desired behavior, adjust accordingly
@@ -667,7 +663,7 @@ class ProfileViewTestCase(GetViewUrlMixin,
         self.assertContains(response, expected_user_email)
 
 
-@skip("Since social auth is not working - don't run this test cases.")
+@unittest.skip("Since social auth is not working - don't run this test cases.")
 @override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
 class ProfileAssociationsViewTestCase(GetViewUrlMixin,
                                       ProfileViewsCommonMixin,

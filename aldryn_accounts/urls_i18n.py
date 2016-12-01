@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
+
 try:
     from django.conf.urls import include, url
 except ImportError:
     from django.conf.urls.defaults import include, url
 
-from . import views
-from .conf import settings
+from . import views, utils
 
 
 accounts_urlpatterns = [
-    url(r'^signup/$', views.SignupView.as_view(), name='accounts_signup'),
+    url(r'^signup/$', utils.get_signup_view().as_view(), name='accounts_signup'),
     url(r'^signup/email/resend-confirmation/$', views.SignupEmailResendConfirmationView.as_view(), name='accounts_signup_email_resend_confirmation'),
     url(r'^signup/email/confirmation-sent/$', views.SignupEmailConfirmationSentView.as_view(), name='accounts_signup_email_confirmation_sent'),
     url(r'^signup/email/sent/$', views.SignupEmailSentView.as_view(), name='accounts_signup_email_sent'),
@@ -66,9 +67,8 @@ if not ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS:
     ]
 
 prefix = getattr(settings, 'ALDRYN_ACCOUNTS_URLS_PREFIX', '')
-if prefix:
-    prefix = '{}/'.format(prefix)
+prefix = '{}/'.format(prefix) if prefix else ''
 
 urlpatterns = [
-    url(r'^{}'.format(prefix), include(accounts_urlpatterns))
+    url(r'^{}'.format(prefix), include(accounts_urlpatterns, namespace='aldryn_accounts'))
 ]

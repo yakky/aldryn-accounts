@@ -1,5 +1,5 @@
 {% load standard_form i18n %}
-<form method="post" action="{% url 'login' %}?{{ request.GET.urlencode }}" class="frm" autocapitalize="off">
+<form method="post" action="{% url 'aldryn_accounts:login' %}?{{ request.GET.urlencode }}" class="frm" autocapitalize="off">
 	{% csrf_token %}
 	{% if redirect_field_value %}<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />{% endif %}
 	<fieldset class="frm-vertical">
@@ -7,6 +7,6 @@
 	</fieldset>
 	<p>
 		<button type="submit" class="btn btn-large">{% trans "Login" %}</button>&nbsp;&nbsp;&nbsp;&nbsp;
-		<a href="{% url 'accounts_password_reset_recover' %}">{% trans "Forgot your password?" %}</a><br/>
+		<a href="{% url 'aldryn_accounts:accounts_password_reset_recover' %}">{% trans "Forgot your password?" %}</a><br/>
 	</p>
 </form>

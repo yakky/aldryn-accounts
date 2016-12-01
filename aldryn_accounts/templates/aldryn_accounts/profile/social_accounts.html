@@ -10,15 +10,32 @@
 		<li>
 			<img src="{% static 'favicon.png' %}" style="width: 24px;" /> {{ site_settings.site.name }}
 			{% if request.user.has_usable_password %}
-				<a class="btn right" href="{% url 'accounts_change_password' %}"><span>{% trans 'change password' %}</span></a>
+				<a class="btn right" href="{% url 'aldryn_accounts:accounts_change_password' %}"><span>{% trans 'change password' %}</span></a>
 			{% else %}
 				<div class="right">
 					<strong>{% trans "you don't have a password yet"|capfirst %}</strong>
-					<a class="btn" href="{% url 'accounts_create_password' %}">{% trans 'set a password'|capfirst %}</a>
+					<a class="btn" href="{% url 'aldryn_accounts:accounts_create_password' %}">{% trans 'set a password'|capfirst %}</a>
 				</div>
 			{% endif %}
 			<div class="clearfix"></div>
 		</li>
+		{% for backend_name, backend_obj in social_auth.items %}
+			<li>
+				{% if backend_obj %}
+					<span class="btn-auth btn-{{ backend_obj.provider }}">{{ backend_obj.provider }}</span>
+					<div class="right">
+						{% trans "connected"|capfirst %}
+						<a href="{% url 'socialauth_disconnect' backend_obj.provider %}">
+							<span class="icon icon-close"></span>
+						</a>
+					</div>
+				{% else %}
+					<a class="btn-auth btn-{{ backend_name }}" href="{% url 'socialauth_begin' backend_name %}?{{ redirect_querystring }}">{{ backend_name }}</a>
+					<a class="btn right" href="{% url 'socialauth_begin' backend_name %}?{{ redirect_querystring }}"><span>{% trans 'connect' %}</span></a>
+				{% endif %}
+			</li>
+		{% endfor %}
 	</ul>
 
+	{% include 'aldryn_accounts/inc/social_auth_styles.html' %}
 {% endblock %}
