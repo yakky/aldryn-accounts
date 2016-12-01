@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-import password_reset.forms
 from six.moves.urllib.parse import urlencode
 
 from .models import EmailAddress, EmailConfirmation, UserSettings
-from .utils import get_most_qualified_user_for_email
 
 
 def get_user_email(user, form_email):
@@ -44,46 +40,6 @@ class EmailAuthenticationForm(AuthenticationForm):
         widget=forms.CheckboxInput(),
         required=False,
     )
-
-
-class PasswordRecoveryForm(password_reset.forms.PasswordRecoveryForm):
-    def __init__(self, *args, **kwargs):
-        super(PasswordRecoveryForm, self).__init__(*args, **kwargs)
-        self.fields['username_or_email'].label = _('E-Mail')
-
-    def get_user_by_both(self, username):
-        """
-        we care about case with the username, but not for the email (emails are saved in all lowercase).
-        :param username:
-        """
-        try:
-            user = User.objects.get(username=username)
-            return user
-        except User.DoesNotExist:
-            user = get_most_qualified_user_for_email(username)
-        if not user:
-            if settings.ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR:
-                raise forms.ValidationError(
-                    _("Sorry, this user doesn't exist."))
-            return None
-        return user
-
-    def clean(self):
-        cleaned_data = super(PasswordRecoveryForm, self).clean()
-        user = cleaned_data.get('user')
-        if not user:
-            return cleaned_data
-        form_email = cleaned_data.get('username_or_email', '')
-        email = get_user_email(user, form_email)
-        # check if wee need to raise validation error.
-        validation_error = (
-            not email and
-            settings.ALDRYN_ACCOUNTS_RESTORE_PASSWORD_RAISE_VALIDATION_ERROR)
-        if validation_error:
-            raise forms.ValidationError(
-                    _("Sorry, this user doesn't have any verified E-Mail."))
-        cleaned_data['email'] = email
-        return cleaned_data
 
 
 class PasswordResetForm(forms.Form):

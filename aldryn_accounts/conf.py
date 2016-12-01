@@ -8,7 +8,6 @@ ADD_TO_INSTALLED_APPS = [
     'aldryn_accounts',
     'easy_thumbnails',
     'absolute',
-    'password_reset',
     'standard_form',
     'aldryn_common',
     'social',
