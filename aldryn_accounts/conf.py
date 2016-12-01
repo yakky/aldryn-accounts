@@ -17,7 +17,7 @@ ADD_TO_INSTALLED_APPS = [
 ADD_TO_MIDDLEWARE_CLASSES = [
     'aldryn_accounts.middleware.GeoIPMiddleware',
     'aldryn_accounts.middleware.TimezoneMiddleware',  # TimezoneMiddleware relies on GeoIP location.
-    'aldryn_accounts.middleware.SocialAuthExceptionMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 ]
 
 # should be used if social login is configured
