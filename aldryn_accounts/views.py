@@ -21,7 +21,7 @@ from django.contrib import messages, auth
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core import urlresolvers, signing
+from django.core import urlresolvers
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
@@ -42,7 +42,7 @@ from .conf import settings
 from .context_processors import empty_login_and_signup_forms
 from .forms import (
     EmailAuthenticationForm, ChangePasswordForm, CreatePasswordForm,
-    SignupForm, SignupEmailResendConfirmationForm,
+    SignupForm, SignupEmailResendConfirmationForm, PasswordRecoveryResetForm,
     UserSettingsForm, ProfileEmailForm)
 from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
 from .signals import user_sign_up_attempt, user_signed_up, password_changed
@@ -319,6 +319,7 @@ def password_reset(request, *args, **kwargs):
         'template_name': 'aldryn_accounts/reset/password_reset_form.html',
         'email_template_name': 'aldryn_accounts/reset/password_reset_email.html',
         'subject_template_name': 'aldryn_accounts/reset/password_reset_subject.txt',
+        'password_reset_form': PasswordRecoveryResetForm,
     })
     return auth_views.password_reset(request, *args, **kwargs)
 

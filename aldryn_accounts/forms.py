@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm as DjangoPasswordResetForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
@@ -138,6 +139,34 @@ class SignupEmailResendConfirmationForm(forms.Form):
         if verified_qs.exists():
             raise forms.ValidationError(_("A user is already registered with this E-Mail address."))
         return email
+
+
+class PasswordRecoveryResetForm(DjangoPasswordResetForm):
+    def get_users(self, email):
+        """
+        Given an email, return matching user(s) who should receive a reset.
+
+        Removes users without a usable password (set e.g. in admin)
+        and no social auth
+        """
+        users = get_user_model()._default_manager.filter(
+            email__iexact=email, is_active=True
+        )
+
+        def is_active_user(user):
+            if user.has_usable_password():
+                # mimic super class
+                return True
+
+            try:
+                # check for connected social accounts
+                return user.social_auth.exists()
+            except AttributeError:  # social auth not configured
+                pass
+
+            return False
+
+        return filter(is_active_user, users)
 
 
 class UserSettingsForm(forms.ModelForm):
