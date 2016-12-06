@@ -117,16 +117,24 @@ class SignupForm(forms.Form):
 
     def clean_email(self):
         value = self.cleaned_data["email"]
-        verified_qs = EmailAddress.objects.filter(email__iexact=value)
-        if verified_qs.exists():
-            raise forms.ValidationError(self.error_messages['email_exists'])
         unverified_qs = EmailConfirmation.objects.filter(email__iexact=value)
+        # check for incomplete signups
         if unverified_qs.exists():
             resend_url = reverse('aldryn_accounts:accounts_signup_email_resend_confirmation')
             resend_url += '?' + urlencode({'email': value})
-            body = render_to_string('aldryn_accounts/inc/email_already_in_the_verification_phase.html',
-                                    {'resend_url': resend_url})
+            body = render_to_string(
+                'aldryn_accounts/inc/email_already_in_the_verification_phase.html',
+                {'resend_url': resend_url}
+            )
             raise forms.ValidationError(body)
+        # check for complete signups
+        verified_qs = EmailAddress.objects.filter(email__iexact=value)
+        if verified_qs.exists():
+            raise forms.ValidationError(self.error_messages['email_exists'])
+        # check for other users (e.g aldryn-sso)
+        user_qs = User.objects.filter(email__iexact=value)
+        if user_qs.exists():
+            raise forms.ValidationError(self.error_messages['email_exists'])
         return value
 
 
