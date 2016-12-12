@@ -48,7 +48,7 @@ class AccountsAppConf(AppConf):
     EMAIL_CONFIRMATION_REQUIRED = True  # whether emails need to be confirmed in order to get an active account. False IS NOT SUPPORTED YET!
     EMAIL_CONFIRMATION_EMAIL = True  # whether to send out a confirmation email when a user signs up
     EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # how long a confirmation email code is valid
-    SOCIAL_BACKENDS_WITH_TRUSTED_EMAIL = ['google']  # which backends can be trusted to provide validated email addresses
+    SOCIAL_BACKENDS_WITH_TRUSTED_EMAIL = ['facebook', 'google-oauth2']  # which backends can be trusted to provide validated email addresses
     SUPPORT_EMAIL = settings.DEFAULT_FROM_EMAIL
     # raise validation error on password restore if user has no confirmed email
     RESTORE_PASSWORD_RAISE_VALIDATION_ERROR = True

@@ -221,9 +221,4 @@ class Form(forms.BaseForm):
                 'aldryn_accounts.social_auth_pipelines.redirect_to_email_form',
             ]
 
-            settings['ALDRYN_ACCOUNTS_SOCIAL_BACKENDS_WITH_TRUSTED_EMAIL'] = (
-                'facebook',
-                'google-oauth2',
-            )
-
         return settings
