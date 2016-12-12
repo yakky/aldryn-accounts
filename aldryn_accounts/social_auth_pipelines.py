@@ -80,8 +80,19 @@ def create_user(username, details, backend, user=None, *args, **kwargs):
 
     email = details.get('email')
     verified_email = _get_verified_email(email=email)
+    is_trusted_email_backend = _is_trusted_email_backend(backend)
 
-    user = User.objects.create_user(username=username, email='')
+    connect_accounts = (
+        settings.ALDRYN_ACCOUNTS_SOCIAL_BACKENDS_WITH_TRUSTED_EMAIL and
+        is_trusted_email_backend and
+        email
+    )
+
+    if connect_accounts:
+        user = verified_email.user
+    else:
+        user = User.objects.create_user(username=username, email='')
+
     if email and _is_trusted_email_backend(backend):
         email_address = EmailAddress.objects.add_email(user=user, email=email)
         verified_email = email_address.email
