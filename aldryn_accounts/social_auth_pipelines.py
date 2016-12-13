@@ -85,7 +85,7 @@ def create_user(username, details, backend, user=None, *args, **kwargs):
     connect_accounts = (
         settings.ALDRYN_ACCOUNTS_SOCIAL_BACKENDS_WITH_TRUSTED_EMAIL and
         is_trusted_email_backend and
-        email
+        verified_email
     )
 
     if connect_accounts:
