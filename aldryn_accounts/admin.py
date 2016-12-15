@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
@@ -31,9 +32,9 @@ class UserSettingsInline(admin.StackedInline):
 
 
 class AccountsUserAdmin(UserAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'social_logins',)
+    list_display = ['email', 'first_name', 'last_name', 'is_staff']
     list_filter = ('is_staff', 'is_superuser', 'is_active')
-    inlines = [UserSettingsInline, EmailInline, UserSocialAuthInline]
+    inlines = [UserSettingsInline, EmailInline]
     readonly_fields = UserAdmin.readonly_fields + ('email', 'last_login', 'date_joined')
     add_readonly_fields = UserAdmin.readonly_fields + ('last_login', 'date_joined')
     search_fields = ('username', 'first_name', 'last_name', 'email', 'emailaddress__email')
@@ -54,6 +55,12 @@ class AccountsUserAdmin(UserAdmin):
                                        'groups', 'user_permissions')}),
     )
     add_form = UserCreationForm
+
+    def __init__(self, model, admin_site):
+        if settings.ALDRYN_ACCOUNTS_ENABLE_PYTHON_SOCIAL_AUTH:
+            self.inlines.append(UserSocialAuthInline)
+            self.list_display.append('social_logins')
+        super(AccountsUserAdmin, self).__init__(model, admin_site)
 
     def social_logins(self, obj):
         return u', '.join([
