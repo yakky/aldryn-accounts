@@ -306,7 +306,7 @@ class LoginView(class_based_auth_views.views.LoginView):
             # reset to global default
             expiry = None
         self.request.session.set_expiry(expiry)
-        return super().form_valid(form)
+        return super(LoginView, self).form_valid(form)
 
 
 class LogoutView(class_based_auth_views.views.LogoutView):
