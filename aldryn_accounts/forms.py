@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from six.moves.urllib.parse import urlencode
 
@@ -166,11 +167,12 @@ class PasswordRecoveryResetForm(DjangoPasswordResetForm):
                 # mimic super class
                 return True
 
-            try:
-                # check for connected social accounts
-                return user.social_auth.exists()
-            except AttributeError:  # social auth not configured
-                pass
+            if settings.ALDRYN_ACCOUNTS_ENABLE_PYTHON_SOCIAL_AUTH:
+                try:
+                    # check for connected social accounts
+                    return user.social_auth.exists()
+                except AttributeError:  # social auth not configured
+                    pass
 
             return False
 
