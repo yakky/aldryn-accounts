@@ -400,10 +400,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         return ctx
 
     def get_redirect_url(self):
-        if self.request.user.is_authenticated():
-            return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
-        else:
-            return urlresolvers.reverse('aldryn_accounts:login')
+        return urlresolvers.reverse(settings.EMAIL_CONFIRMATION_REDIRECT_URL)
 
     def has_successfully_confirmed(self, confirmation):
         """

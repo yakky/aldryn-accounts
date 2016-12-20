@@ -40,11 +40,12 @@ ADD_TO_AUTHENTICATION_BACKENDS = [
 class AccountsAppConf(AppConf):
     AUTOCONFIGURE = True  # whether to provide simplefied configuration by auto setting many config
     OPEN_SIGNUP = True  # whether any user may signup. If set to False only users with an invite code may sign up.
-    SIGNUP_REDIRECT_URL = 'accounts_profile'
+    SIGNUP_REDIRECT_URL = 'aldryn_accounts:accounts_profile'
+    EMAIL_CONFIRMATION_REDIRECT_URL = 'aldryn_accounts:accounts_email_list'
     SIGNUP_VIEW = 'aldryn_accounts.views.SignupView'
     LOGIN_VIEW = 'aldryn_accounts.views.LoginView'
     NOTIFY_PASSWORD_CHANGE = True  # whether a confirmation email should be sent out whenever the password is changed
-    PASSWORD_CHANGE_REDIRECT_URL = 'accounts_profile'
+    PASSWORD_CHANGE_REDIRECT_URL = 'aldryn_accounts:accounts_profile'
     EMAIL_CONFIRMATION_REQUIRED = True  # whether emails need to be confirmed in order to get an active account. False IS NOT SUPPORTED YET!
     EMAIL_CONFIRMATION_EMAIL = True  # whether to send out a confirmation email when a user signs up
     EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # how long a confirmation email code is valid
