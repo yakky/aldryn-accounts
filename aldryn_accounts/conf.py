@@ -16,12 +16,12 @@ ADD_TO_INSTALLED_APPS = [
 ADD_TO_MIDDLEWARE_CLASSES = [
     'aldryn_accounts.middleware.GeoIPMiddleware',
     'aldryn_accounts.middleware.TimezoneMiddleware',  # TimezoneMiddleware relies on GeoIP location.
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 # should be used if social login is configured
 SOCIAL_CONTEXT_PROCESSORS = [
-    'social.apps.django_app.context_processors.login_redirect',
+    'social_django.context_processors.login_redirect',
     'aldryn_accounts.context_processors.social_auth_info',
 ]
 
@@ -84,19 +84,19 @@ class AccountsAppConf(AppConf):
 
     def configure_enable_github_login(self, value):
         if value:
-            self.enable_authentication_backend('social.backends.github.GithubOAuth2')
+            self.enable_authentication_backend('social_core.backends.github.GithubOAuth2')
 
     def configure_enable_facebook_login(self, value):
         if value:
-            self.enable_authentication_backend('social.backends.facebook.FacebookOAuth2')
+            self.enable_authentication_backend('social_core.backends.facebook.FacebookOAuth2')
 
     def configure_enable_twitter_login(self, value):
         if value:
-            self.enable_authentication_backend('social.backends.twitter.TwitterOAuth')
+            self.enable_authentication_backend('social_core.backends.twitter.TwitterOAuth')
 
     def configure_enable_google_login(self, value):
         if value:
-            self.enable_authentication_backend('social.backends.google.GoogleOAuth2')
+            self.enable_authentication_backend('social_core.backends.google.GoogleOAuth2')
 
     def configure(self):
         if not self.configured_data['AUTOCONFIGURE']:

@@ -19,7 +19,7 @@ setup(
         'django-class-based-auth-views>0.3',
         'django-emailit',
         'django-sekizai',
-        'python-social-auth',
+        'social-auth-app-django',
         'django-standard-form',
         'django-timezone-field',
         'aldryn-common',

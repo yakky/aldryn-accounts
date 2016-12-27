@@ -11,5 +11,5 @@ urlpatterns = []
 ALDRYN_ACCOUNTS_ENABLE_PYTHON_SOCIAL_AUTH = getattr(settings, 'ALDRYN_ACCOUNTS_ENABLE_PYTHON_SOCIAL_AUTH', False)
 if ALDRYN_ACCOUNTS_ENABLE_PYTHON_SOCIAL_AUTH:
     urlpatterns += [
-        url('_psa/', include('social.apps.django_app.urls', namespace='social'))
+        url('_psa/', include('social_django.urls', namespace='social'))
     ]

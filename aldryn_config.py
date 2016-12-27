@@ -189,35 +189,35 @@ class Form(forms.BaseForm):
         settings['ALDRYN_ACCOUNTS_ENABLE_PYTHON_SOCIAL_AUTH'] = enable_psa
 
         if enable_psa:
-            settings['INSTALLED_APPS'].append('social.apps.django_app.default')
+            settings['INSTALLED_APPS'].append('social_django')
             add_to_auth_backends = settings['AUTHENTICATION_BACKENDS'].append
 
             if data['psa_google_oauth2']:
-                add_to_auth_backends('social.backends.google.GoogleOAuth2')
+                add_to_auth_backends('social_core.backends.google.GoogleOAuth2')
                 self.set_psa_settings('SOCIAL_AUTH_GOOGLE_OAUTH2', settings)
 
             if data['psa_facebook_oauth2']:
-                add_to_auth_backends('social.backends.facebook.FacebookOAuth2')
+                add_to_auth_backends('social_core.backends.facebook.FacebookOAuth2')
                 self.set_psa_settings('SOCIAL_AUTH_FACEBOOK', settings)
 
             self.extend_context_processors(settings, (
-                'social.apps.django_app.context_processors.backends',
-                'social.apps.django_app.context_processors.login_redirect',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ))
 
             settings['SOCIAL_AUTH_PIPELINE'] = [
-                'social.pipeline.social_auth.social_details',
-                'social.pipeline.social_auth.social_uid',
-                'social.pipeline.social_auth.auth_allowed',
-                'social.pipeline.social_auth.social_user',
+                'social_core.pipeline.social_auth.social_details',
+                'social_core.pipeline.social_auth.social_uid',
+                'social_core.pipeline.social_auth.auth_allowed',
+                'social_core.pipeline.social_auth.social_user',
                 'aldryn_accounts.social_auth_pipelines.get_username',
                 'aldryn_accounts.social_auth_pipelines.require_email',
                 'aldryn_accounts.social_auth_pipelines.link_to_existing_user_by_email_if_backend_is_trusted',
                 'aldryn_accounts.social_auth_pipelines.create_user',
                 'aldryn_accounts.social_auth_pipelines.set_profile_image',
-                'social.pipeline.social_auth.associate_user',
-                'social.pipeline.social_auth.load_extra_data',
-                'social.pipeline.user.user_details',
+                'social_core.pipeline.social_auth.associate_user',
+                'social_core.pipeline.social_auth.load_extra_data',
+                'social_core.pipeline.user.user_details',
                 'aldryn_accounts.social_auth_pipelines.redirect_to_email_form',
             ]
 

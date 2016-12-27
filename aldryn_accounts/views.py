@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-from uuid import uuid4
 
-from social.exceptions import SocialAuthBaseException
 
 try:
     from urllib.parse import urlencode, unquote

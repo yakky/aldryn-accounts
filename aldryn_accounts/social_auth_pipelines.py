@@ -7,7 +7,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 
 import requests
-from social.exceptions import AuthException
+from social_core.exceptions import AuthException
 
 from .models import EmailAddress
 from .signals import user_signed_up
