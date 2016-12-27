@@ -10,7 +10,7 @@ ADD_TO_INSTALLED_APPS = [
     'absolute',
     'standard_form',
     'aldryn_common',
-    'social',
+    'social_django',
 ]
 
 ADD_TO_MIDDLEWARE_CLASSES = [
