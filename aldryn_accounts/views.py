@@ -31,11 +31,11 @@ from django.views.generic.base import TemplateResponseMixin
 from django.contrib.auth import views as auth_views
 
 import class_based_auth_views.views
-import emailit.api
 from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from class_based_auth_views.utils import default_redirect
 from dj.chain import chain
 
+from . import utils
 from .conf import settings
 from .context_processors import empty_login_and_signup_forms
 from .forms import (
@@ -44,8 +44,8 @@ from .forms import (
     UserSettingsForm, ProfileEmailForm)
 from .models import EmailAddress, EmailConfirmation, SignupCode, UserSettings
 from .signals import user_sign_up_attempt, user_signed_up, password_changed
-from . import utils
 from .view_mixins import OnlyOwnedObjectsMixin
+from .emails import EmailSender
 
 
 class SignupView(FormView):
@@ -490,23 +490,11 @@ class ChangePasswordBaseView(FormView):
         return default_redirect(self.request, fallback_url, **kwargs)
 
     def send_email(self, user):
-        # TODO: send html mail
-        protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
-        site = get_current_site(self.request)
-        # TODO: use a shared tool to generate an absulute url
-        site_url = u"%s://%s%s" % (protocol, site.domain, '/')
-        ctx = {
-            "user": user,
-            "name": utils.user_display(user),
-            "now": datetime.datetime.now(),
-            "protocol": protocol,
-            "current_site": site,
-            "site_url": site_url,
-            "site_name": site.name,
-            "site_domain": site.domain,
-            "support_email": settings.ALDRYN_ACCOUNTS_SUPPORT_EMAIL,
-        }
-        emailit.api.send_mail([user.email], ctx, self.email_template_name)
+        EmailSender.send_password_changed(
+            user=user,
+            template=self.email_template_name,
+            request=self.request,
+        )
 
 
 class ChangePasswordView(ChangePasswordBaseView):

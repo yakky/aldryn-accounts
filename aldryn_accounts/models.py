@@ -10,23 +10,21 @@ except ImportError:
     from urllib import urlencode  # Python 2
 
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import get_language, override, ugettext_lazy as _
-from django.utils.encoding import python_2_unicode_compatible, force_text
+from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import python_2_unicode_compatible
 
 import timezone_field
-import emailit.api
-from aldryn_accounts.exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from annoying.fields import AutoOneToOneField
 from six.moves import reduce
 
 from .conf import settings
+from .exceptions import EmailAlreadyVerified, VerificationKeyExpired
 from .signals import signup_code_used, signup_code_sent, email_confirmed, email_confirmation_sent
-from .utils import profile_image_upload_to, random_token, user_display
+from .utils import profile_image_upload_to, random_token
 from .monkeypatches import patch_user_unicode
+from .emails import EmailSender
 
 patch_user_unicode()
 
@@ -110,23 +108,11 @@ class SignupCode(models.Model):
         signup_code_used.send(sender=result.__class__, signup_code_result=result)
 
     def send(self, **kwargs):
-        protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
-        current_site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
-        signup_url = "%s://%s%s?%s" % (
-            protocol,
-            force_text(current_site.domain),
-            reverse("aldryn_accounts:accounts_signup"),
-            urlencode({"code": self.code})
+        EmailSender.send_signup_code(**kwargs)
+        signup_code_sent.send(
+            sender=self.__class__,
+            signup_code=self,
         )
-        ctx = {
-            "signup_code": self,
-            "current_site": current_site,
-            "signup_url": signup_url,
-        }
-        emailit.api.send_mail([self.email], ctx, "aldryn_accounts/email/invite_user")
-        self.sent_at = timezone.now()
-        self.save()
-        signup_code_sent.send(sender=SignupCode, signup_code=self)
 
 
 class SignupCodeResult(models.Model):
@@ -288,30 +274,12 @@ class EmailConfirmation(models.Model):
             raise VerificationKeyExpired(msg)
 
     def send(self, **kwargs):
-        site = kwargs["site"] if "site" in kwargs else Site.objects.get_current()
-        protocol = getattr(settings, "DEFAULT_HTTP_PROTOCOL", "http")
-        language = self.user.settings.preferred_language or get_language()
-        with override(language):
-            activate_url = "%s://%s%s" % (
-                protocol,
-                force_text(site.domain),
-                reverse("aldryn_accounts:accounts_confirm_email", args=[self.key])
-            )
-            ctx = {
-                "email": self.email,
-                "user": self.user,
-                "name": user_display(self.user),
-                "activate_url": activate_url,
-                "site": site,
-                "site_name": site.name,
-                "site_domain": site.domain,
-                "key": self.key,
-            }
-            emailit.api.send_mail([self.email], ctx,
-                                  "aldryn_accounts/email/email_confirmation")
-        self.sent_at = timezone.now()
-        self.save()
-        email_confirmation_sent.send(sender=self.__class__, confirmation=self)
+        kwargs['verification'] = self
+        EmailSender.send_email_verification(**kwargs)
+        email_confirmation_sent.send(
+            sender=self.__class__,
+            confirmation=self,
+        )
 
 
 @python_2_unicode_compatible

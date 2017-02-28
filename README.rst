@@ -104,10 +104,17 @@ Overriding
 To override login/signup and the core profile view (and anything else really), a custom ``urls`` can be defined and
 included before the builtin ``aldryn_accounts.urls``. Overriding the builtin Views with customized subclasses.
 
+Email Sending
+-------------
 
+Email sending is handled in ``aldryn_accounts.email.EmailSender`` and can be inherited and overwritten. To make
+``aldryn-accounts`` use your custom ``EmailSender`` class, specify a setting like so::
+
+  ALDRYN_ACCOUNTS_EMAIL_SENDER = 'path.to.MyEmailSender'
 
 
 Related Apps:
+=============
 
 * https://github.com/omab/django-social-auth
-# TODO: add all the other dependencies
+* TODO: add all the other dependencies

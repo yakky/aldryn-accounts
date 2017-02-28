@@ -11,6 +11,7 @@ from django.conf import settings
 from six.moves.urllib.parse import urlencode
 
 from .models import EmailAddress, EmailConfirmation, UserSettings
+from .emails import EmailSender
 
 
 def get_user_email(user, form_email):
@@ -177,6 +178,17 @@ class PasswordRecoveryResetForm(DjangoPasswordResetForm):
             return False
 
         return filter(is_active_user, users)
+
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        return EmailSender.send_password_recovery_reset(
+            subject_template_name=subject_template_name,
+            email_template_name=email_template_name,
+            context=context,
+            from_email=from_email,
+            to_email=to_email,
+            html_email_template_name=None,
+        )
 
 
 class UserSettingsForm(forms.ModelForm):
