@@ -95,7 +95,7 @@ class SignupView(FormView):
         return initial
 
     def get_context_data(self, **kwargs):
-        ctx = kwargs
+        ctx = super(SignupView, self).get_context_data(**kwargs)
         redirect_field_name = self.get_redirect_field_name()
         # adds the empty login and signup forms to the context, so that
         # the shared login/signup view works even if the context processor
@@ -393,7 +393,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         return qs
 
     def get_context_data(self, **kwargs):
-        ctx = kwargs
+        ctx = super(ConfirmEmailView, self).get_context_data(**kwargs)
         ctx["confirmation"] = self.object
         return ctx
 
@@ -472,7 +472,7 @@ class ChangePasswordBaseView(FormView):
         return redirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
-        ctx = kwargs
+        ctx = super(ChangePasswordBaseView, self).get_context_data(**kwargs)
         redirect_field_name = self.get_redirect_field_name()
         ctx.update({
             "redirect_field_name": redirect_field_name,

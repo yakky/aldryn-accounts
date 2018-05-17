@@ -27,7 +27,6 @@ SOCIAL_CONTEXT_PROCESSORS = [
 
 ADD_TO_TEMPLATE_CONTEXT_PROCESSORS = [
     'aldryn_accounts.context_processors.account_info',
-    'aldryn_accounts.context_processors.django_settings',
     'aldryn_accounts.context_processors.notifications',
 ]
 
@@ -114,9 +113,15 @@ class AccountsAppConf(AppConf):
                 pos += 1
         # add social context processors if needed.
         if self.configured_data['USE_SOCIAL_CONTEXT_PROCESSORS']:
-            s.TEMPLATE_CONTEXT_PROCESSORS.extend(SOCIAL_CONTEXT_PROCESSORS)
+            if hasattr(s, 'TEMPLATES'):
+                s.TEMPLATES[0]['OPTIONS']['context_processors'].extend(SOCIAL_CONTEXT_PROCESSORS)
+            else:
+                s.TEMPLATE_CONTEXT_PROCESSORS.extend(SOCIAL_CONTEXT_PROCESSORS)
         # insert our template context processors
-        s.TEMPLATE_CONTEXT_PROCESSORS.extend(ADD_TO_TEMPLATE_CONTEXT_PROCESSORS)
+        if hasattr(s, 'TEMPLATES'):
+            s.TEMPLATES[0]['OPTIONS']['context_processors'].extend(ADD_TO_TEMPLATE_CONTEXT_PROCESSORS)
+        else:
+            s.TEMPLATE_CONTEXT_PROCESSORS.extend(ADD_TO_TEMPLATE_CONTEXT_PROCESSORS)
         if not getattr(s, 'GITHUB_EXTENDED_PERMISSIONS', None):
             s.GITHUB_EXTENDED_PERMISSIONS = ['user:email']
         if not getattr(s, 'FACEBOOK_EXTENDED_PERMISSIONS', None):
