@@ -85,11 +85,11 @@ class CreatePasswordForm(ChangePasswordForm):
 
 
 class EmailForm(forms.Form):
-    email = forms.EmailField(label=_("Email"), required=True)
+    email = forms.EmailField(label=_("Email"), required=True, max_length=200)
 
 
 class SignupForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput(), required=True)
+    email = forms.EmailField(widget=forms.TextInput(), required=True, max_length=200)
     code = forms.CharField(
         max_length=64,
         required=False,
@@ -112,7 +112,7 @@ class SignupForm(forms.Form):
 
 
 class SignupEmailResendConfirmationForm(forms.Form):
-    email = forms.EmailField(required=True, widget=forms.HiddenInput())
+    email = forms.EmailField(required=True, widget=forms.HiddenInput(), max_length=200)
 
     def clean_email(self):
         email = self.cleaned_data["email"]

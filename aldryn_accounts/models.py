@@ -36,7 +36,7 @@ class SignupCode(models.Model):
     max_uses = models.PositiveIntegerField(default=0)
     expires_at = models.DateTimeField(null=True, blank=True)
     invited_by = models.ForeignKey(User, null=True, blank=True)
-    email = models.EmailField(blank=True)
+    email = models.EmailField(blank=True, max_length=200)
     notes = models.TextField(blank=True)
     sent_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
@@ -170,7 +170,7 @@ class EmailAddress(models.Model):
     """
     is_verified = True
     user = models.ForeignKey(User)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, max_length=200)
     verified_at = models.DateTimeField(null=True, blank=True)
     verification_method = models.CharField(max_length=255, blank=True, default='unknown')
     is_primary = models.BooleanField(default=False)
@@ -232,7 +232,7 @@ class EmailConfirmationManager(models.Manager):
 
 class EmailConfirmation(models.Model):
     user = models.ForeignKey(User, related_name="email_verifications")
-    email = models.EmailField()
+    email = models.EmailField(max_length=200)
     is_primary = models.BooleanField(default=True)
     # TODO: rename this to EmailVerification
     created_at = models.DateTimeField(default=timezone.now())

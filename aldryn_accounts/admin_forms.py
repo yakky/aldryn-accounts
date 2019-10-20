@@ -15,7 +15,7 @@ class UserCreationForm(forms.ModelForm):
     error_messages = {
         'duplicate_email': _("A user is already registered with this email address."),
     }
-    email = forms.EmailField()
+    email = forms.EmailField(max_length=200)
     password = forms.CharField(label=_("Password"),
         widget=forms.PasswordInput)
 
